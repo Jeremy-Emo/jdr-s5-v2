@@ -1,0 +1,15 @@
+{% extends 'bootstrap_4_layout.html.twig' %}
+
+{% block form_label %}
+    {{ parent() }}
+    {% if required %}
+        <span class="required" title="Champ requis">*</span>
+    {% endif %}
+{% endblock %}
+
+{% block checkbox_widget %}
+    <input type="checkbox" {{ block('widget_attributes') }}{% if value is defined %} value="{{ value }}"{% endif %}{% if checked %} checked="checked"{% endif %} />
+    <div class="state p-success">
+        {{ block('form_label') }}
+    </div>
+{% endblock %}

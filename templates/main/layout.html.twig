@@ -1,0 +1,32 @@
+{% extends 'main/base.html.twig' %}
+
+{% block moreCSS %}
+    {{ encore_entry_link_tags('app') }}
+{% endblock %}
+
+{% block body %}
+
+    {% if app.user %}
+        {% include "main/nav.html.twig" %}
+    {% endif %}
+
+    <div class="row ma-10-top">
+        <div class="col">
+            <h1>{% block page_title %}{% endblock %}</h1>
+        </div>
+    </div>
+
+    <div id="content">
+        <div class="container">
+            {% block content %}{% endblock %}
+        </div>
+    </div>
+
+    <footer>
+        <p class="t-align-center">Jeremy Emo - 2017-{{ "now"|date("Y") }}</p>
+    </footer>
+{% endblock %}
+
+{% block moreJS %}
+    {{ encore_entry_script_tags('app') }}
+{% endblock %}

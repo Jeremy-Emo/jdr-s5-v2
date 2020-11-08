@@ -1,0 +1,467 @@
+@import "~bootstrap/scss/bootstrap";
+@import '~pretty-checkbox/src/pretty-checkbox.scss';
+
+@import "variables";
+
+/* =====================================================================================================================
+                                              General CSS
+===================================================================================================================== */
+
+html {
+  height : 100%;
+  box-sizing: border-box;
+}
+
+body {
+  background-color: $lightGrey;
+  min-height: 100%;
+  font-family: $txt-font;
+  position: relative;
+  margin: 0;
+  padding: 0 0 100px 0;
+}
+
+footer {
+  position: absolute;
+  bottom: 0;
+  width : 100%;
+  left : 0;
+  right : 0;
+  background-color: $lightWhite;
+  & > p {
+    margin-top : 10px;
+  }
+}
+
+h1 {
+  font-size : 22px;
+}
+
+h2 {
+  font-size : 20px;
+}
+
+/* =====================================================================================================================
+                                              Bootstrap erasures
+===================================================================================================================== */
+.row {
+  margin : 0;
+}
+
+.navbar {
+  padding : 0;
+}
+
+.navbar-brand {
+  padding : 15px 25px;
+  background : $blue;
+  color : $white;
+  text-decoration: none;
+}
+
+.nav-item.dropdown {
+  & > a {
+    padding : 18px 25px;
+    text-decoration: none;
+    color : $black;
+    &:hover {
+      background-color: $lightGrey;
+    }
+  }
+}
+
+.container-fluid {
+  max-width : 1600px;
+}
+
+#top-menu {
+  .dropdown-menu.show {
+    border-radius: 1px;
+    margin-top: 17px;
+    background-color: $lightWhite;
+    min-width : 230px;
+    & > li {
+      border-bottom: 1px solid $lightGrey;
+      &:hover {
+        background-color: $lightGrey;
+      }
+      & > a {
+        padding: 5px 25px;
+        width : 100%;
+        display : inline-block;
+        height : 100%;
+        text-decoration: none;
+        color : $black;
+      }
+    }
+  }
+}
+
+
+@media screen and (max-width : 991px) {
+  .nav-item.dropdown {
+    & > a {
+      width : 100%;
+      display : inline-block;
+      padding : 5px 10px;
+    }
+  }
+  .dropdown-menu.show {
+    margin-top: 0;
+    padding : 0;
+    & > li {
+      border : none;
+      & > a {
+        padding : 5px 20px;
+      }
+    }
+  }
+}
+
+#navbarNavDropdown {
+  background-color : $lightWhite;
+}
+
+/* =====================================================================================================================
+                                              General classes
+===================================================================================================================== */
+.pa-5 {
+  padding : 5px;
+}
+
+.pa-10 {
+  padding : 10px;
+}
+
+.pa-15 {
+  padding : 15px;
+}
+
+.pa-20 {
+  padding : 20px;
+}
+
+.pa-25 {
+  padding : 25px;
+}
+
+.ma-5 {
+  margin : 5px;
+}
+
+.ma-10 {
+  margin : 10px;
+}
+
+.ma-15 {
+  margin : 15px;
+}
+
+.ma-20 {
+  margin : 20px;
+}
+
+.ma-25 {
+  margin : 25px;
+}
+
+.pa-5-top {
+  padding-top : 5px;
+}
+
+.pa-5-right {
+  padding-right : 5px;
+}
+
+.pa-5-bottom {
+  padding-bottom : 5px;
+}
+
+.pa-5-left {
+  padding-left : 5px;
+}
+
+.pa-10-top {
+  padding-top : 10px;
+}
+
+.pa-10-right {
+  padding-right : 10px;
+}
+
+.pa-10-bottom {
+  padding-bottom : 10px;
+}
+
+.pa-10-left {
+  padding-left : 10px;
+}
+
+.pa-15-top {
+  padding-top : 15px;
+}
+
+.pa-15-right {
+  padding-right : 15px;
+}
+
+.pa-15-bottom {
+  padding-bottom : 15px;
+}
+
+.pa-15-left {
+  padding-left : 15px;
+}
+
+.pa-20-top {
+  padding-top : 20px;
+}
+
+.pa-20-right {
+  padding-right : 20px;
+}
+
+.pa-20-bottom {
+  padding-bottom : 20px;
+}
+
+.pa-20-left {
+  padding-left : 20px;
+}
+
+.pa-25-top {
+  padding-top : 25px;
+}
+
+.pa-25-right {
+  padding-right : 25px;
+}
+
+.pa-25-bottom {
+  padding-bottom : 25px;
+}
+
+.pa-25-left {
+  padding-left : 25px;
+}
+
+.ma-5-top {
+  margin-top : 5px;
+}
+
+.ma-5-right {
+  margin-right : 5px;
+}
+
+.ma-5-bottom {
+  margin-bottom : 5px;
+}
+
+.ma-5-left {
+  margin-left : 5px;
+}
+
+.ma-10-top {
+  margin-top : 10px;
+}
+
+.ma-10-right {
+  margin-right : 10px;
+}
+
+.ma-10-bottom {
+  margin-bottom : 10px;
+}
+
+.ma-10-left {
+  margin-left : 10px;
+}
+
+.ma-15-top {
+  margin-top : 15px;
+}
+
+.ma-15-right {
+  margin-right : 15px;
+}
+
+.ma-15-bottom {
+  margin-bottom : 15px;
+}
+
+.ma-15-left {
+  margin-left : 15px;
+}
+
+.ma-20-top {
+  margin-top : 20px;
+}
+
+.ma-20-right {
+  margin-right : 20px;
+}
+
+.ma-20-bottom {
+  margin-bottom : 20px;
+}
+
+.ma-20-left {
+  margin-left : 20px;
+}
+
+.ma-25-top {
+  margin-top : 25px;
+}
+
+.ma-25-right {
+  margin-right : 25px;
+}
+
+.ma-25-bottom {
+  margin-bottom : 25px;
+}
+
+.ma-25-left {
+  margin-left : 25px;
+}
+
+.bg-white {
+  background-color : $lightWhite;
+}
+
+.bg-note {
+  background-color : $note;
+}
+
+.flex {
+  display : flex;
+}
+
+.block {
+  display : block;
+}
+
+.none {
+  display : none;
+}
+
+.center {
+  display : flex;
+  text-align : center;
+  justify-content: center;
+  align-items: center;
+}
+
+.border-top-blue {
+  top : 1px solid $lightBlue;
+}
+
+.border-right-blue {
+  border-right : 1px solid $lightBlue;
+}
+
+.border-bot-blue {
+  border-bottom : 1px solid $lightBlue;
+}
+
+.border-left-blue {
+  border-left : 1px solid $lightBlue;
+}
+
+.border-blue {
+  border : 1px solid $lightBlue;
+}
+
+.bg-white {
+  background-color: $lightWhite !important;
+}
+
+.full-height {
+  height : 100%;
+}
+
+.full-width {
+  width : 100%;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.f-right {
+  float : right;
+}
+
+.f-left {
+  float : left;
+}
+
+.t-align-right {
+  text-align : right;
+}
+
+.t-align-left {
+  text-align : left;
+}
+
+.t-align-center {
+  text-align : center;
+}
+
+.red {
+  color : $red;
+}
+
+.orange {
+  color : $orange;
+}
+
+.green {
+  color : $green;
+}
+
+.cursor-click {
+  cursor : pointer;
+}
+
+.no-margin {
+  margin : 0;
+}
+
+.no-margin-bottom {
+  margin-bottom : 0;
+}
+
+.no-margin-top {
+  margin-top : 0;
+}
+
+.no-margin-left {
+  margin-left : 0;
+}
+
+.no-margin-right {
+  margin-right : 0;
+}
+
+.like-a-link {
+  color: #007bff;
+  text-decoration: none;
+  background-color: transparent;
+  cursor: pointer;
+  &:hover {
+    color: #0056b3;
+    text-decoration: underline;
+  }
+}
+
+.element-box {
+  width : 20px;
+  height : 20px;
+}
+
+@media screen and (min-width: 992px){
+  .f-right-desktop {
+    float : right;
+  }
+}

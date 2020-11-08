@@ -1,0 +1,31 @@
+@import "variables";
+
+$navHeight : 60px;
+
+nav {
+  height : $navHeight;
+  position: fixed;
+  top : 0;
+  left: 0;
+  width : 100%;
+  z-index: 5000;
+  background-color: $lightWhite;
+  border-bottom: 1px solid $lightBlue;
+}
+
+#content {
+  margin-top : $navHeight;
+}
+
+@media screen and (min-width : 992px) {
+  .user-navbox {
+    margin-left: auto !important;
+    padding-right : 20px;
+  }
+}
+
+@media screen and (max-width : 991px) {
+  .user-navbox {
+    padding : 5px 10px;
+  }
+}

@@ -1,0 +1,35 @@
+<?php
+
+namespace App\Fixtures;
+
+use App\Entity\Account;
+use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Persistence\ObjectManager;
+use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
+
+class AccountFixture extends Fixture
+{
+    protected UserPasswordEncoderInterface $passwordEncoder;
+
+    /**
+     * @param UserPasswordEncoderInterface $encoder
+     * @required
+     */
+    public function setInterfaces(UserPasswordEncoderInterface $encoder): void
+    {
+        $this->passwordEncoder = $encoder;
+    }
+
+    public function load(ObjectManager $manager)
+    {
+        $account = new Account();
+        $account
+            ->setIsAdmin(true)
+            ->setUsername('MoiLeFabuleux')
+        ;
+        $account->setPassword($this->passwordEncoder->encodePassword($account, 'password'));
+
+        $manager->persist($account);
+        $manager->flush();
+    }
+}

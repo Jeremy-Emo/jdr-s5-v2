@@ -1,0 +1,30 @@
+@import "variables";
+
+.hf_box {
+  width : 40px;
+  height : 40px;
+  margin : 5px;
+  display : inline-block;
+  cursor : pointer;
+
+  &:not(.inactive) {
+    border : 1px solid green;
+  }
+}
+
+.hf_box.inactive {
+  filter: grayscale(1);
+  border : 1px solid red;
+}
+
+.redScores {
+  background-color: $redScores;
+}
+
+.orangeScores {
+  background-color: $orangeScores;
+}
+
+.greenScores {
+  background-color: $greenScores;
+}

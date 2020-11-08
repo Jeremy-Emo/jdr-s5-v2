@@ -1,0 +1,44 @@
+/**
+  Fonts
+ */
+@font-face {
+  font-family: 'title-font';
+  font-display: swap;
+  src: url(../webfonts/OpenSans-Bold.ttf) format('truetype');
+}
+
+@font-face {
+  font-family: 'txt-font';
+  font-display: swap;
+  src: url(../webfonts/OpenSans-Regular.ttf) format('truetype');
+}
+
+$title-font: 'title-font';
+$txt-font: 'txt-font';
+
+
+/**
+  Colors
+ */
+$lightGrey : #9EB3C2;
+$grey : #ccc;
+$lightBlue : #62929E;
+$white : #fff;
+$lightWhite : #eee;
+$dark : #212529;
+$black : #111;
+$orangeScores : rgba(255, 175, 0, 0.1);
+$redScores : rgba(255, 0, 0, 0.1);
+$greenScores : rgba(0, 204, 0, 0.1);
+$orange : rgba(255, 175, 0, 1);
+$red : rgba(255, 0, 0, 1);
+$green : rgba(0, 204, 0, 1);
+$note : #d1f4ec;
+
+$black : #111;
+$dark : #333;
+$red : #f13e54;
+$white : #eee;
+$green : #40dd5a;
+$orange : #fa9765;
+$grey : #ccc;

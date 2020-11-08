@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <title>{% block page_title 'Accueil' %} | {{ site_title }}</title>
+    <link rel="shortcut icon" type="image/ico" href="{{ asset('build/assets/img/favicon.ico') }}"/>
+    {% block moreCSS %}{% endblock %}
+</head>
+<body>
+{% block body %}{% endblock %}
+{% block moreJS %}{% endblock %}
+</body>
+</html>
