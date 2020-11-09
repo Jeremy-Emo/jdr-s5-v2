@@ -64,6 +64,11 @@ class Account implements UserInterface
      */
     private ?\DateTimeInterface $createdAt;
 
+    /**
+     * @ORM\Column(type="datetime", nullable=true)
+     */
+    private $lastVisitAt;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -172,6 +177,18 @@ class Account implements UserInterface
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getLastVisitAt(): ?\DateTimeInterface
+    {
+        return $this->lastVisitAt;
+    }
+
+    public function setLastVisitAt(?\DateTimeInterface $lastVisitAt): self
+    {
+        $this->lastVisitAt = $lastVisitAt;
 
         return $this;
     }

@@ -130,6 +130,12 @@ class AccountAuthenticator extends AbstractFormLoginAuthenticator implements Pas
      */
     public function onAuthenticationSuccess(Request $request, TokenInterface $token, string $providerKey)
     {
+        /** @var Account $user */
+        $user = $token->getUser();
+        if ($user->getIsPasswordChangeNeeded()) {
+            return new RedirectResponse($this->urlGenerator->generate('newPassword'));
+        }
+
         if ($targetPath = $this->getTargetPath($request->getSession(), $providerKey)) {
             return new RedirectResponse($targetPath);
         }
