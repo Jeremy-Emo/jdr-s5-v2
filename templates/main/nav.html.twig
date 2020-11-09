@@ -3,6 +3,7 @@
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
     </button>
+    {% if app.user %}
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav full-width">
             <li class="nav-item dropdown">
@@ -25,4 +26,5 @@
             </li>
         </ul>
     </div>
+    {% endif %}
 </nav>

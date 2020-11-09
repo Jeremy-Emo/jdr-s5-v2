@@ -6,13 +6,11 @@
 
 {% block body %}
 
-    {% if app.user %}
-        {% include "main/nav.html.twig" %}
-    {% endif %}
+    {% include "main/nav.html.twig" %}
 
     <div class="row ma-10-top">
         <div class="col">
-            <h1>{% block page_title %}{% endblock %}</h1>
+            <h1 class="ma-10-top ma-10-left"><i class="fas fa-angle-double-right"></i> {% block page_title %}{% endblock %}</h1>
         </div>
     </div>
 
