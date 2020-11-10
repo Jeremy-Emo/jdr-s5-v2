@@ -15,17 +15,17 @@ class Monster
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\OneToOne(targetEntity=FighterInfos::class, mappedBy="monster", cascade={"persist", "remove"})
      */
-    private $fighterInfos;
+    private ?FighterInfos $fighterInfos;
 
     public function getId(): ?int
     {

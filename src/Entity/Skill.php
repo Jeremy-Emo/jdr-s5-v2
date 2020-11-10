@@ -7,25 +7,42 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=SkillRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Skill
 {
+    /**
+     * @ORM\PrePersist
+     */
+    public function setDefaults(): void
+    {
+        if (empty($this->cost)) {
+            $this->cost = 1;
+        }
+    }
+
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $description;
+    private ?string $description;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private ?int $cost;
 
     public function getId(): ?int
     {
@@ -52,6 +69,18 @@ class Skill
     public function setDescription(string $description): self
     {
         $this->description = $description;
+
+        return $this;
+    }
+
+    public function getCost(): ?int
+    {
+        return $this->cost;
+    }
+
+    public function setCost(int $cost): self
+    {
+        $this->cost = $cost;
 
         return $this;
     }
