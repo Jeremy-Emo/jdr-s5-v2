@@ -1,5 +1,5 @@
 <nav id="top-menu" class="navbar navbar-expand-lg">
-    <a class="navbar-brand" href="{{ path('index') }}">{{ site_title }}</a>
+    <a class="navbar-brand" href="{{ path('index') }}">{{ site_title }} - Accueil</a>
     <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown" aria-expanded="false" aria-label="Toggle navigation">
         <span class="navbar-toggler-icon"><i class="fas fa-bars"></i></span>
     </button>
@@ -7,11 +7,34 @@
     <div class="collapse navbar-collapse" id="navbarNavDropdown">
         <ul class="navbar-nav full-width">
             <li class="nav-item dropdown">
-                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown"> Autres <span class="caret"></span></a>
+                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown"> Joueur <span class="caret"></span></a>
                 <ul role="menu" class="dropdown-menu">
-                    <li><a href="#" class="text-uppercase">TEST</a></li>
+                    <li><a href="#" class="text-uppercase">Liste de mes personnages</a></li>
                 </ul>
             </li>
+            <li class="nav-item dropdown">
+                <a aria-expanded="false" role="button" href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown"> Personnage actif <span class="caret"></span></a>
+                <ul role="menu" class="dropdown-menu">
+                    <li><a href="#" class="text-uppercase">Inventaire</a></li>
+                    <li><a href="#" class="text-uppercase">Compétences</a></li>
+                </ul>
+            </li>
+            {% if is_granted("ROLE_MJ") %}
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" role="button" href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown"> MJ <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="#" class="text-uppercase">Groupes</a></li>
+                    </ul>
+                </li>
+                <li class="nav-item dropdown">
+                    <a aria-expanded="false" role="button" href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown"> MJ - Groupe actif <span class="caret"></span></a>
+                    <ul role="menu" class="dropdown-menu">
+                        <li><a href="#" class="text-uppercase">Personnages</a></li>
+                        <li><a href="#" class="text-uppercase">Inventaire</a></li>
+                        <li><a href="#" class="text-uppercase">Combat</a></li>
+                    </ul>
+                </li>
+            {% endif %}
             {% if is_granted("ROLE_ADMIN") %}
                 <li class="nav-item dropdown">
                     <a aria-expanded="false" role="button" href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown"> Administration <span class="caret"></span></a>
