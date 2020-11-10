@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Admin\Accounts;
 
 use App\AbstractClass\AbstractController;
 use App\Exception\ControllerException;

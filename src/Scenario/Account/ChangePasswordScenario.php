@@ -39,10 +39,11 @@ class ChangePasswordScenario extends AbstractScenario
     /**
      * @param UserInterface $user
      * @param FormInterface $form
+     * @param string $routeToRedirect
      * @return Response
      * @throws ScenarioException
      */
-    public function handle(UserInterface $user, FormInterface $form): Response
+    public function handle(UserInterface $user, FormInterface $form, string $routeToRedirect = 'index'): Response
     {
         if($form->isSubmitted() && $form->isValid()) {
             $user->setPassword(
@@ -54,7 +55,7 @@ class ChangePasswordScenario extends AbstractScenario
             $this->manager->persist($user);
             $this->manager->flush();
 
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute($routeToRedirect);
         }
 
         return $this->renderNewResponse('account/newPassword.html.twig', [
