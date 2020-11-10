@@ -51,7 +51,12 @@ class Hero
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private ?\DateTimeInterface $createdAt;
+
+    /**
+     * @ORM\OneToOne(targetEntity=FighterInfos::class, mappedBy="hero", cascade={"persist", "remove"})
+     */
+    private ?FighterInfos $fighterInfos;
 
     public function getId(): ?int
     {
@@ -106,6 +111,24 @@ class Hero
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getFighterInfos(): ?FighterInfos
+    {
+        return $this->fighterInfos;
+    }
+
+    public function setFighterInfos(?FighterInfos $fighterInfos): self
+    {
+        $this->fighterInfos = $fighterInfos;
+
+        // set (or unset) the owning side of the relation if necessary
+        $newHero = null === $fighterInfos ? null : $this;
+        if ($fighterInfos->getHero() !== $newHero) {
+            $fighterInfos->setHero($newHero);
+        }
 
         return $this;
     }
