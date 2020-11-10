@@ -22,12 +22,12 @@ class AccountFixture extends Fixture
 
     public function load(ObjectManager $manager)
     {
-        $account = new Account();
-        $account
+        $account = (new Account())
             ->setIsAdmin(true)
             ->setUsername('MoiLeFabuleux')
+            ->setIsPasswordChangeNeeded(false)
         ;
-        $account->setPassword($this->passwordEncoder->encodePassword($account, 'password'));
+        $account->setPassword($this->passwordEncoder->encodePassword($account, 'password1'));
 
         $manager->persist($account);
         $manager->flush();

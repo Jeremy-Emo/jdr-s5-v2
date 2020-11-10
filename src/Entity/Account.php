@@ -79,12 +79,12 @@ class Account implements UserInterface
     /**
      * @ORM\Column(type="datetime", nullable=true)
      */
-    private $lastVisitAt;
+    private ?\DateTimeInterface $lastVisitAt;
 
     /**
      * @ORM\OneToMany(targetEntity=Hero::class, mappedBy="account", orphanRemoval=true)
      */
-    private $heroes;
+    private Collection $heroes;
 
     public function __construct()
     {

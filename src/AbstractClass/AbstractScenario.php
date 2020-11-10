@@ -4,6 +4,7 @@ namespace App\AbstractClass;
 
 use App\Exception\ScenarioException;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\RedirectResponse;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -14,21 +15,25 @@ abstract class AbstractScenario
     protected EntityManagerInterface $manager;
     protected UrlGeneratorInterface $urlGenerator;
     protected ?Environment $twig = null;
+    protected LoggerInterface $logger;
 
     /**
      * @param EntityManagerInterface $entityManager
      * @param UrlGeneratorInterface $urlGenerator
      * @param Environment $twig
+     * @param LoggerInterface $logger
      * @required
      */
     public function __construct(
         EntityManagerInterface $entityManager,
         UrlGeneratorInterface $urlGenerator,
-        Environment $twig
+        Environment $twig,
+        LoggerInterface $logger
     ) {
         $this->manager = $entityManager;
         $this->urlGenerator = $urlGenerator;
         $this->twig = $twig;
+        $this->logger = $logger;
     }
 
     /**

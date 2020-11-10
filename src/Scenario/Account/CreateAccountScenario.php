@@ -5,6 +5,7 @@ namespace App\Scenario\Account;
 use App\AbstractClass\AbstractScenario;
 use App\Exception\ScenarioException;
 use Doctrine\ORM\EntityManagerInterface;
+use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -13,22 +14,17 @@ use Twig\Environment;
 
 class CreateAccountScenario extends AbstractScenario
 {
-    public function __construct(EntityManagerInterface $entityManager, UrlGeneratorInterface $urlGenerator, Environment $twig)
-    {
-        parent::__construct($entityManager, $urlGenerator, $twig);
+    public function __construct(
+        EntityManagerInterface $entityManager,
+        UrlGeneratorInterface $urlGenerator,
+        Environment $twig,
+        LoggerInterface $logger
+    ) {
+        parent::__construct($entityManager, $urlGenerator, $twig, $logger);
     }
 
-    protected UserPasswordEncoderInterface $encoder;
-
-    /**
-     * @required
-     * @param UserPasswordEncoderInterface $passwordEncoder
-     */
-    public function setInterfaces(
-        UserPasswordEncoderInterface $passwordEncoder
-    ): void {
-        $this->encoder = $passwordEncoder;
-    }
+    /** @required */
+    public UserPasswordEncoderInterface $encoder;
 
     /**
      * @param FormInterface $form
