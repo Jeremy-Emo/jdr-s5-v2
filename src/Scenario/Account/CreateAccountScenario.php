@@ -47,7 +47,7 @@ class CreateAccountScenario extends AbstractScenario
             $this->manager->persist($account);
             $this->manager->flush();
 
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('admin_listAccounts');
         }
 
         return $this->renderNewResponse('admin/createAccount.html.twig', [
