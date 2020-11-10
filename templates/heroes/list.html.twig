@@ -13,10 +13,10 @@
             {% for hero in heroes %}
             <div class="col-md-4 ma-25-top">
                 <div class="pa-20 bg-white full-height">
-                    <p><span class="bold"><i class="fas fa-id-card"></i> Nom</span> : {{ hero.name }}</p>
-                    <p><span class="bold"><i class="fas fa-clock"></i> Date de création</span> : {{ hero.createdAt|date("d/m/Y") }}</p>
+                    <p><span class="bold"><i class="w-20 fas fa-id-card"></i> Nom</span> : {{ hero.name }}</p>
+                    <p><span class="bold"><i class="w-20 fas fa-clock"></i> Date de création</span> : {{ hero.createdAt|date("d/m/Y") }}</p>
                     {% if hero.isCurrent %}
-                        <p><span class="bold red"><i class="fas fa-star"></i> Héros actif</span></p>
+                        <p><span class="bold red"><i class="w-20 fas fa-star"></i> Héros actif</span></p>
                     {% endif %}
                 </div>
             </div>
