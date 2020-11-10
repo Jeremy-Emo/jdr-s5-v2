@@ -17,16 +17,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class ListAccountsController extends AbstractController
 {
-    protected AccountRepository $accountRepository;
-
-    /**
-     * @param AccountRepository $accountRepository
-     * @required
-     */
-    public function setRepository(AccountRepository $accountRepository): void
-    {
-        $this->accountRepository = $accountRepository;
-    }
+    /** @required */
+    public AccountRepository $accountRepository;
 
     public function __invoke(): Response
     {

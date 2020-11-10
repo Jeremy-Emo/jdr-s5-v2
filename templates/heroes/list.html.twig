@@ -1,0 +1,27 @@
+{% extends 'main/layout.html.twig' %}
+
+{% block page_title %}{% trans from 'heroes' %}list{% endtrans %}{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <a href="{{ path('createHero') }}"><button type="button" class="btn btn-primary">Créer un nouveau héros</button></a>
+            </div>
+        </div>
+        <div class="row">
+            {% for hero in heroes %}
+            <div class="col-md-4 ma-25-top">
+                <div class="pa-20 bg-white full-height">
+                    <p><span class="bold"><i class="fas fa-id-card"></i> Nom</span> : {{ hero.name }}</p>
+                    <p><span class="bold"><i class="fas fa-clock"></i> Date de création</span> : {{ hero.createdAt|date("d/m/Y") }}</p>
+                    {% if hero.isCurrent %}
+                        <p><span class="bold red"><i class="fas fa-star"></i> Héros actif</span></p>
+                    {% endif %}
+                </div>
+            </div>
+            {% endfor %}
+        </div>
+    </div>
+
+{% endblock %}

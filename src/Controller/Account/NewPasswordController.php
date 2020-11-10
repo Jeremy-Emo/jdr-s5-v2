@@ -18,16 +18,8 @@ use Symfony\Component\Routing\Annotation\Route;
  */
 class NewPasswordController extends AbstractController implements ControllerInterface
 {
-    protected ChangePasswordScenario $scenario;
-
-    /**
-     * @param ChangePasswordScenario $changePassword
-     * @required
-     */
-    public function setControllerInterfaces(ChangePasswordScenario $changePassword): void
-    {
-        $this->scenario = $changePassword;
-    }
+    /** @required */
+    public ChangePasswordScenario $scenario;
 
     /**
      * @param Request $request

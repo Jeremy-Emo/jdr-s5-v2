@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Controller\Admin;
+namespace App\Controller\Heroes;
 
 use App\AbstractClass\AbstractController;
 use App\Exception\ScenarioException;
-use App\Form\Type\CreateAccountType;
+use App\Form\Type\CreateHeroType;
 use App\Interfaces\ControllerInterface;
-use App\Scenario\Account\CreateAccountScenario;
+use App\Scenario\Heroes\CreateHeroScenario;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class CreateAccountController
- * @package App\Controller\Admin
- * @Route("/admin/creation-de-compte", name="admin_createAccount")
- * @IsGranted("ROLE_ADMIN")
+ * Class CreateHeroController
+ * @package App\Controller\Heroes
+ * @Route("/creer-personnage", name="createHero")
+ * @IsGranted("ROLE_USER")
  */
-class CreateAccountController extends AbstractController implements ControllerInterface
+class CreateHeroController extends AbstractController implements ControllerInterface
 {
     /** @required */
-    public CreateAccountScenario $scenario;
+    public CreateHeroScenario $scenario;
 
     /**
      * @param Request $request
@@ -30,9 +30,9 @@ class CreateAccountController extends AbstractController implements ControllerIn
      */
     public function __invoke(Request $request): Response
     {
-        $form = $this->createForm(CreateAccountType::class);
+        $form = $this->createForm(CreateHeroType::class);
         $form->handleRequest($request);
 
-        return $this->scenario->handle($form);
+        return $this->scenario->handle($form, $this->getUser());
     }
 }

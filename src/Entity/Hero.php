@@ -1,0 +1,112 @@
+<?php
+
+namespace App\Entity;
+
+use App\Repository\HeroRepository;
+use Doctrine\ORM\Mapping as ORM;
+use Symfony\Component\Security\Core\User\UserInterface;
+
+/**
+ * @ORM\Entity(repositoryClass=HeroRepository::class)
+ * @ORM\HasLifecycleCallbacks()
+ */
+class Hero
+{
+    /**
+     * @ORM\PrePersist
+     */
+    public function setDefaults(): void
+    {
+        if (empty($this->isCurrent)) {
+            $this->isCurrent = false;
+        }
+        if (empty($this->createdAt)) {
+            $this->createdAt = new \DateTime();
+        }
+    }
+
+    /**
+     * @ORM\Id
+     * @ORM\GeneratedValue
+     * @ORM\Column(type="integer")
+     */
+    private ?int $id;
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private ?string $name;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $isCurrent;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Account::class, inversedBy="heroes")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private ?Account $account;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
+
+    public function getId(): ?int
+    {
+        return $this->id;
+    }
+
+    public function getName(): ?string
+    {
+        return $this->name;
+    }
+
+    public function setName(string $name): self
+    {
+        $this->name = $name;
+
+        return $this;
+    }
+
+    public function getIsCurrent(): ?bool
+    {
+        return $this->isCurrent;
+    }
+
+    public function setIsCurrent(bool $isCurrent): self
+    {
+        $this->isCurrent = $isCurrent;
+
+        return $this;
+    }
+
+    public function getAccount(): ?Account
+    {
+        return $this->account;
+    }
+
+    /**
+     * @param Account|null|UserInterface $account
+     * @return $this
+     */
+    public function setAccount(?Account $account): self
+    {
+        $this->account = $account;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
+
+        return $this;
+    }
+}

@@ -9,9 +9,10 @@
             <li class="nav-item dropdown">
                 <a aria-expanded="false" role="button" href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown"> Joueur <span class="caret"></span></a>
                 <ul role="menu" class="dropdown-menu">
-                    <li><a href="#" class="text-uppercase">Liste de mes personnages</a></li>
+                    <li><a href="{{ path('listHeroes') }}" class="text-uppercase">Liste de mes personnages</a></li>
                 </ul>
             </li>
+            {% if app.user.getCurrentHero %}
             <li class="nav-item dropdown">
                 <a aria-expanded="false" role="button" href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown"> Personnage actif <span class="caret"></span></a>
                 <ul role="menu" class="dropdown-menu">
@@ -19,6 +20,7 @@
                     <li><a href="#" class="text-uppercase">Compétences</a></li>
                 </ul>
             </li>
+            {% endif %}
             {% if is_granted("ROLE_MJ") %}
                 <li class="nav-item dropdown">
                     <a aria-expanded="false" role="button" href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown"> MJ <span class="caret"></span></a>

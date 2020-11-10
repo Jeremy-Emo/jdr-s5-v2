@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\AccountRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -12,6 +14,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class Account implements UserInterface
 {
+    public function getCurrentHero(): ?Hero
+    {
+        foreach ($this->getHeroes() as $hero) {
+            if ($hero->getIsCurrent()) {
+                return $hero;
+            }
+        }
+        return null;
+    }
+
     /**
      * @ORM\PrePersist
      */
@@ -68,6 +80,16 @@ class Account implements UserInterface
      * @ORM\Column(type="datetime", nullable=true)
      */
     private $lastVisitAt;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Hero::class, mappedBy="account", orphanRemoval=true)
+     */
+    private $heroes;
+
+    public function __construct()
+    {
+        $this->heroes = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -189,6 +211,36 @@ class Account implements UserInterface
     public function setLastVisitAt(?\DateTimeInterface $lastVisitAt): self
     {
         $this->lastVisitAt = $lastVisitAt;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Hero[]
+     */
+    public function getHeroes(): Collection
+    {
+        return $this->heroes;
+    }
+
+    public function addHero(Hero $hero): self
+    {
+        if (!$this->heroes->contains($hero)) {
+            $this->heroes[] = $hero;
+            $hero->setAccount($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHero(Hero $hero): self
+    {
+        if ($this->heroes->removeElement($hero)) {
+            // set the owning side to null (unless already changed)
+            if ($hero->getAccount() === $this) {
+                $hero->setAccount(null);
+            }
+        }
 
         return $this;
     }
