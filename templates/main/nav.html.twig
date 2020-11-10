@@ -46,7 +46,7 @@
                 </li>
             {% endif %}
             <li class="nav-item user-navbox">
-                <a href="#"><i class="fas fa-user"></i> {{ app.user.username }}</a>
+                <a href="{{ path('index') }}"><i class="fas fa-user"></i> {{ app.user.username }}</a>
                 <a href="{{ path('app_logout') }}" class="ma-10-left"><i class="fas fa-sign-out-alt"></i></a>
             </li>
         </ul>

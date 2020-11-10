@@ -16,7 +16,10 @@
                     <p><span class="bold"><i class="w-20 fas fa-id-card"></i> Nom</span> : {{ hero.name }}</p>
                     <p><span class="bold"><i class="w-20 fas fa-clock"></i> Date de création</span> : {{ hero.createdAt|date("d/m/Y") }}</p>
                     {% if hero.isCurrent %}
-                        <p><span class="bold red"><i class="w-20 fas fa-star"></i> Héros actif</span></p>
+                        <p><span class="bold green"><i class="w-20 fas fa-star"></i> Héros actif</span></p>
+                    {% endif %}
+                    {% if hero.isDead %}
+                        <p><span class="bold red"><i class="w-20 fas fa-skull-crossbones"></i> Mort</span></p>
                     {% endif %}
                 </div>
             </div>

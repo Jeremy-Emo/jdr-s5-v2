@@ -23,6 +23,9 @@ class Hero
         if (empty($this->createdAt)) {
             $this->createdAt = new \DateTime();
         }
+        if (empty($this->isDead)) {
+            $this->isDead = false;
+        }
     }
 
     /**
@@ -57,6 +60,11 @@ class Hero
      * @ORM\OneToOne(targetEntity=FighterInfos::class, mappedBy="hero", cascade={"persist", "remove"})
      */
     private ?FighterInfos $fighterInfos;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isDead;
 
     public function getId(): ?int
     {
@@ -129,6 +137,18 @@ class Hero
         if ($fighterInfos->getHero() !== $newHero) {
             $fighterInfos->setHero($newHero);
         }
+
+        return $this;
+    }
+
+    public function getIsDead(): ?bool
+    {
+        return $this->isDead;
+    }
+
+    public function setIsDead(bool $isDead): self
+    {
+        $this->isDead = $isDead;
 
         return $this;
     }

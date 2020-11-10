@@ -4,6 +4,17 @@
 
 {% block content %}
     <div class="row">
-
+        <div class="col-md-6 ma-25-top">
+            <div class="pa-20 bg-white full-height">
+                <h1 class="ma-15-bottom">{% trans from 'account' %}my_account_infos{% endtrans %}</h1>
+                <p><span class="bold"><i class="w-20 fas fa-clock"></i> Date de création</span> : {{ app.user.createdAt|date("d/m/Y") }}</p>
+                <p><span class="bold"><i class="w-20 fas fa-users"></i> Nombre de personnages</span> : {{ app.user.heroes|length }}</p>
+            </div>
+        </div>
+        <div class="col-md-6 ma-25-top">
+            <div class="pa-20 bg-white full-height">
+                <h1 class="ma-15-bottom">{% trans from 'account' %}account_skills{% endtrans %}</h1>
+            </div>
+        </div>
     </div>
 {% endblock %}

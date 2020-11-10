@@ -70,6 +70,7 @@ class CreateHeroScenario extends AbstractScenario
             $this->manager->persist(
                 $hero
                     ->setAccount($user)
+                    ->setIsDead(false)
                     ->setFighterInfos($fighter)
             );
             $this->manager->flush();
