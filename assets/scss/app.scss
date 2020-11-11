@@ -420,6 +420,10 @@ h2 {
   color : $green;
 }
 
+.grey {
+  color : grey;
+}
+
 .cursor-click {
   cursor : pointer;
 }
@@ -459,7 +463,16 @@ h2 {
   width: 20px !important;
 }
 
-.element-box {
+.line-through {
+  text-decoration: line-through;
+}
+
+a.no-hover:hover {
+  color: initial;
+  text-decoration: initial;
+}
+
+.box-20-px {
   width : 20px;
   height : 20px;
 }

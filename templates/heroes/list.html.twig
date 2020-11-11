@@ -17,6 +17,8 @@
                     <p><span class="bold"><i class="w-20 fas fa-clock"></i> Date de création</span> : {{ hero.createdAt|date("d/m/Y") }}</p>
                     {% if hero.isCurrent %}
                         <p><span class="bold green"><i class="w-20 fas fa-star"></i> Héros actif</span></p>
+                    {% else %}
+                        <p><a class="bold grey line-through no-hover" href="{{ path('chooseHero', {'id':hero.id}) }}"><span><i class="w-20 fas fa-star"></i> Héros actif</span></a></p>
                     {% endif %}
                     {% if hero.isDead %}
                         <p><span class="bold red"><i class="w-20 fas fa-skull-crossbones"></i> Mort</span></p>
