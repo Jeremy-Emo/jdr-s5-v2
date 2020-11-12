@@ -64,7 +64,7 @@ class Hero
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isDead;
+    private ?bool $isDead;
 
     public function getId(): ?int
     {
