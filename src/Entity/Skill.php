@@ -68,17 +68,27 @@ class Skill
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $mpCost;
+    private ?int $mpCost;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $hpCost;
+    private ?int $hpCost;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $spCost;
+    private ?int $spCost;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Skill::class)
+     */
+    private ?Skill $needSkill;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $neededSkillLevel;
 
     public function getId(): ?int
     {
@@ -194,6 +204,30 @@ class Skill
     public function setSpCost(?int $spCost): self
     {
         $this->spCost = $spCost;
+
+        return $this;
+    }
+
+    public function getNeedSkill(): ?self
+    {
+        return $this->needSkill;
+    }
+
+    public function setNeedSkill(?self $needSkill): self
+    {
+        $this->needSkill = $needSkill;
+
+        return $this;
+    }
+
+    public function getNeededSkillLevel(): ?int
+    {
+        return $this->neededSkillLevel;
+    }
+
+    public function setNeededSkillLevel(?int $neededSkillLevel): self
+    {
+        $this->neededSkillLevel = $neededSkillLevel;
 
         return $this;
     }
