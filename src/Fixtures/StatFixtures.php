@@ -36,7 +36,7 @@ class StatFixtures extends Fixture
             ],
             [
                 'name' => 'Agilité',
-                'description' => "Augmente votre capacité d'esquive",
+                'description' => "Augmente votre capacité d'esquive et votre vitesse",
                 'nameId' => StatManager::AGILITY
             ],
             [

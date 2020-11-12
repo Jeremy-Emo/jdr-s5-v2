@@ -1,5 +1,7 @@
 {% extends 'main/layout.html.twig' %}
 
+{% form_theme form with ['main/forms.html.twig'] %}
+
 {% block page_title %}{% trans from 'heroes' %}create{% endtrans %}{% endblock %}
 
 {% block content %}
