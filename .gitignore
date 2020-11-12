@@ -3,6 +3,8 @@
 /symfony.lock
 /composer.lock
 /migrations/
+/public/img/uploads/*
+!/public/img/uploads/.gitkeep
 
 ###> symfony/framework-bundle ###
 /.env.local

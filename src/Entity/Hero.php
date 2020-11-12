@@ -10,7 +10,7 @@ use Symfony\Component\Security\Core\User\UserInterface;
  * @ORM\Entity(repositoryClass=HeroRepository::class)
  * @ORM\HasLifecycleCallbacks()
  */
-class Hero
+class Hero extends UploadImageEntity
 {
     /**
      * @ORM\PrePersist

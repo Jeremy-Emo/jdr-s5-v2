@@ -17,6 +17,12 @@
   border : 1px solid red;
 }
 
+.hero_box {
+  width : 80%;
+  margin : auto;
+  display : inline-block;
+}
+
 .redScores {
   background-color: $redScores;
 }
