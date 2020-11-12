@@ -27,6 +27,42 @@ class Skill
         }
     }
 
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
+    public function getFullDescription(): string
+    {
+        $full = "<p>" . $this->description .  "</p>";
+
+        if ($this->isPassive) {
+            $full .= "<p class='bold'>Compétence passive</p>";
+        }
+
+        if ($this->isUsableInBattle) {
+            //TODO: implement here
+            $full .= "<p>TODO</p>";
+        } else {
+            if ((int) $this->mpCost > 0) {
+                $full .= "<p>Coût en mana : " . $this->mpCost . "</p>";
+            }
+            if ((int) $this->hpCost > 0) {
+                $full .= "<p>Coût en PV : " . $this->hpCost . "</p>";
+            }
+            if ((int) $this->spCost > 0) {
+                $full .= "<p>Coût en fatigue : " . $this->spCost . "</p>";
+            }
+            $full .= "<p class='red'>Non utilisable en combat</p>";
+        }
+
+        if ($this->needSkill !== null && $this->neededSkillLevel > 0) {
+            $full .= "<p class='red'>Nécessite la compétence " . $this->needSkill->name . " au niveau " . $this->neededSkillLevel . "</p>";
+        }
+
+        return $full;
+    }
+
 
     /**
      * @ORM\Id
