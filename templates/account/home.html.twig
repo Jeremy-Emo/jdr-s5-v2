@@ -8,7 +8,9 @@
             <div class="pa-20 bg-white full-height">
                 <h1 class="ma-15-bottom">{% trans from 'account' %}my_account_infos{% endtrans %}</h1>
                 <p><span class="bold"><i class="w-20 fas fa-clock"></i> Date de création</span> : {{ app.user.createdAt|date("d/m/Y") }}</p>
-                <p><span class="bold"><i class="w-20 fas fa-users"></i> Nombre de personnages</span> : {{ app.user.heroes|length }}</p>
+                <p>
+                    <span class="bold"><i class="w-20 fas fa-users"></i> Nombre de personnages</span> : {{ app.user.heroes|length }} (<a href="{{ path('listHeroes') }}">Voir</a>)
+                </p>
             </div>
         </div>
         <div class="col-md-6 ma-25-top">

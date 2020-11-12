@@ -3,7 +3,7 @@
 namespace App\Controller\Heroes;
 
 use App\AbstractClass\AbstractController;
-use App\Exception\ControllerException;
+use App\Exception\ScenarioException;
 use App\Interfaces\ControllerInterface;
 use App\Scenario\Heroes\ToggleActiveHeroScenario;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -24,7 +24,7 @@ class ToggleActiveHeroController extends AbstractController implements Controlle
     /**
      * @param int $id
      * @return Response
-     * @throws ControllerException
+     * @throws ScenarioException
      */
     public function __invoke(int $id): Response
     {

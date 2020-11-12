@@ -4,7 +4,7 @@ namespace App\Scenario\Heroes;
 
 use App\AbstractClass\AbstractScenario;
 use App\Entity\Account;
-use App\Exception\ControllerException;
+use App\Exception\ScenarioException;
 use App\Repository\HeroRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -34,7 +34,7 @@ class ToggleActiveHeroScenario extends AbstractScenario
      * @param Account $account
      * @param string $routeToRedirect
      * @return Response
-     * @throws ControllerException
+     * @throws ScenarioException
      */
     public function handle(int $id, Account $account, $routeToRedirect = 'listHeroes'): Response
     {
@@ -48,7 +48,7 @@ class ToggleActiveHeroScenario extends AbstractScenario
         ]);
 
         if ($heroToSetCurrent === null || $defaultHero === null) {
-            throw new ControllerException("Heroes not found");
+            throw new ScenarioException("Heroes not found");
         }
 
         $defaultHero->setIsCurrent(false);
