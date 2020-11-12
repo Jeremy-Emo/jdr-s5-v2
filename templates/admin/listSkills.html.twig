@@ -1,0 +1,42 @@
+{% extends 'main/layout.html.twig' %}
+
+{% block page_title %}Admin - Gestion des compétences{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col">
+                <a href="{{ path('admin_createSkill') }}"><button type="button" class="btn btn-primary">Créer une nouvelle compétence</button></a>
+            </div>
+        </div>
+        <div class="row">
+            <div class="col ma-25-top">
+                <div class="pa-20 bg-white">
+                    <p class="ma-10-bottom">Nombre de compétences : {{ skills|length }}</p>
+                    <table class="table">
+                        <thead>
+                        <tr>
+                            <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
+                            <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Passif</th>
+                            <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Bataille</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for skill in skills %}
+                            <tr>
+                                <td>{{ skill.name }}</td>
+                                <td>{{ skill.isPassive }}</td>
+                                <td>{{ skill.isUsableInBattle }}</td>
+                                <td>
+                                    <a href="#">Modifier</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
