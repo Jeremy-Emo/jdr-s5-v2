@@ -118,6 +118,7 @@ class Skill
 
     /**
      * @ORM\ManyToOne(targetEntity=Skill::class)
+     * @ORM\JoinColumn(onDelete="CASCADE")
      */
     private ?Skill $needSkill;
 

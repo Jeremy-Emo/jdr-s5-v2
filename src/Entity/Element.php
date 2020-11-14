@@ -32,7 +32,7 @@ class Element
     /**
      * @ORM\ManyToMany(targetEntity=FightingSkillInfo::class, mappedBy="element")
      */
-    private $fightingSkills;
+    private Collection $fightingSkills;
 
     public function __construct()
     {
