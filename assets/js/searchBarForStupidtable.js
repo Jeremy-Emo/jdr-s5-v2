@@ -1,11 +1,11 @@
 const $ = require('jquery');
 
 $(document).ready(function(){
-    $("body").on('change input', "#searchSkillBar", function(){
-        let search = $("#searchSkillBar").val();
+    $("body").on('change input', "#searchBar", function(){
+        let search = $("#searchBar").val();
         resetSkillsTable();
         if (search !== "") {
-            let rows = $(".searchedItem").not("[data-search*='" + search + "']");
+            let rows = $(".searchedItem").not("[data-search*='" + search.toLowerCase() + "']");
             rows.each(function(index, row) {
                 $(row).hide();
             });
@@ -13,7 +13,7 @@ $(document).ready(function(){
     });
 
     function resetSkillsTable(){
-        let allRows = $("#skillsTable").find(".searchedItem");
+        let allRows = $("#stupidTable").find(".searchedItem");
         allRows.each(function(index, row) {
             $(row).show();
         });

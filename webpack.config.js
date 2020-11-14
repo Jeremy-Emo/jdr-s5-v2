@@ -12,7 +12,7 @@ Encore
     .setPublicPath('/build')
 
     .addEntry('app', './assets/js/app.js')
-    .addEntry('skillSearch', './assets/js/skillSearch.js')
+    .addEntry('searchBar', './assets/js/searchBarForStupidtable.js')
 
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
