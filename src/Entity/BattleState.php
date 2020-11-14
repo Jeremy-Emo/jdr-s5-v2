@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\StatRepository;
+use App\Repository\BattleStateRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=StatRepository::class)
+ * @ORM\Entity(repositoryClass=BattleStateRepository::class)
  */
-class Stat
+class BattleState extends UploadImageEntity
 {
     /**
      * @ORM\Id
@@ -25,14 +25,19 @@ class Stat
     private ?string $name;
 
     /**
-     * @ORM\Column(type="text")
-     */
-    private ?string $description;
-
-    /**
      * @ORM\Column(type="string", length=255)
      */
     private ?string $nameId;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=FightingSkillBattleState::class, mappedBy="states")
+     */
+    private Collection $fightingSkills;
+
+    public function __construct()
+    {
+        $this->fightingSkills = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -51,18 +56,6 @@ class Stat
         return $this;
     }
 
-    public function getDescription(): ?string
-    {
-        return $this->description;
-    }
-
-    public function setDescription(string $description): self
-    {
-        $this->description = $description;
-
-        return $this;
-    }
-
     public function getNameId(): ?string
     {
         return $this->nameId;
@@ -76,30 +69,27 @@ class Stat
     }
 
     /**
-     * @return Collection|FightingSkillInfo[]
+     * @return Collection|FightingSkillBattleState[]
      */
     public function getFightingSkills(): Collection
     {
         return $this->fightingSkills;
     }
 
-    public function addFightingSkill(FightingSkillInfo $fightingSkill): self
+    public function addFightingSkill(FightingSkillBattleState $fightingSkill): self
     {
         if (!$this->fightingSkills->contains($fightingSkill)) {
             $this->fightingSkills[] = $fightingSkill;
-            $fightingSkill->setStatForDamage($this);
+            $fightingSkill->addState($this);
         }
 
         return $this;
     }
 
-    public function removeFightingSkill(FightingSkillInfo $fightingSkill): self
+    public function removeFightingSkill(FightingSkillBattleState $fightingSkill): self
     {
         if ($this->fightingSkills->removeElement($fightingSkill)) {
-            // set the owning side to null (unless already changed)
-            if ($fightingSkill->getStatForDamage() === $this) {
-                $fightingSkill->setStatForDamage(null);
-            }
+            $fightingSkill->removeState($this);
         }
 
         return $this;

@@ -33,22 +33,24 @@ class FightingSkillInfo
     /**
      * @ORM\ManyToMany(targetEntity=Element::class, inversedBy="fightingSkills")
      */
-    private $element;
+    private ArrayCollection $element;
 
     /**
-     * @ORM\ManyToOne(targetEntity=Stat::class, inversedBy="fightingSkills")
+     * @ORM\OneToMany(targetEntity=FightingSkillBattleState::class, mappedBy="skill", orphanRemoval=true)
      */
-    private $statForDamage;
+    private Collection $battleStates;
 
     /**
-     * @ORM\Column(type="integer", nullable=true)
+     * @ORM\OneToMany(targetEntity=StatMultiplier::class, mappedBy="skill", orphanRemoval=true)
      */
-    private $damageOutputMultiplier;
+    private Collection $statMultipliers;
 
     public function __construct()
     {
         $this->elementsMultipliers = new ArrayCollection();
         $this->element = new ArrayCollection();
+        $this->battleStates = new ArrayCollection();
+        $this->statMultipliers = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -142,6 +144,66 @@ class FightingSkillInfo
     public function setDamageOutputMultiplier(?int $damageOutputMultiplier): self
     {
         $this->damageOutputMultiplier = $damageOutputMultiplier;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FightingSkillBattleState[]
+     */
+    public function getBattleStates(): Collection
+    {
+        return $this->battleStates;
+    }
+
+    public function addBattleState(FightingSkillBattleState $battleState): self
+    {
+        if (!$this->battleStates->contains($battleState)) {
+            $this->battleStates[] = $battleState;
+            $battleState->setSkill($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBattleState(FightingSkillBattleState $battleState): self
+    {
+        if ($this->battleStates->removeElement($battleState)) {
+            // set the owning side to null (unless already changed)
+            if ($battleState->getSkill() === $this) {
+                $battleState->setSkill(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StatMultiplier[]
+     */
+    public function getStatMultipliers(): Collection
+    {
+        return $this->statMultipliers;
+    }
+
+    public function addStatMultiplier(StatMultiplier $statMultiplier): self
+    {
+        if (!$this->statMultipliers->contains($statMultiplier)) {
+            $this->statMultipliers[] = $statMultiplier;
+            $statMultiplier->setSkill($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStatMultiplier(StatMultiplier $statMultiplier): self
+    {
+        if ($this->statMultipliers->removeElement($statMultiplier)) {
+            // set the owning side to null (unless already changed)
+            if ($statMultiplier->getSkill() === $this) {
+                $statMultiplier->setSkill(null);
+            }
+        }
 
         return $this;
     }
