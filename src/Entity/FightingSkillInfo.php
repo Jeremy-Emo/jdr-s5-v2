@@ -35,6 +35,16 @@ class FightingSkillInfo
      */
     private $element;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Stat::class, inversedBy="fightingSkills")
+     */
+    private $statForDamage;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $damageOutputMultiplier;
+
     public function __construct()
     {
         $this->elementsMultipliers = new ArrayCollection();
@@ -108,6 +118,30 @@ class FightingSkillInfo
     public function removeElement(Element $element): self
     {
         $this->element->removeElement($element);
+
+        return $this;
+    }
+
+    public function getStatForDamage(): ?Stat
+    {
+        return $this->statForDamage;
+    }
+
+    public function setStatForDamage(?Stat $statForDamage): self
+    {
+        $this->statForDamage = $statForDamage;
+
+        return $this;
+    }
+
+    public function getDamageOutputMultiplier(): ?int
+    {
+        return $this->damageOutputMultiplier;
+    }
+
+    public function setDamageOutputMultiplier(?int $damageOutputMultiplier): self
+    {
+        $this->damageOutputMultiplier = $damageOutputMultiplier;
 
         return $this;
     }
