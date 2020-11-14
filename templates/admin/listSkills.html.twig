@@ -12,8 +12,11 @@
         <div class="row">
             <div class="col ma-25-top">
                 <div class="pa-20 bg-white">
-                    <p class="ma-10-bottom">Nombre de compétences : {{ skills|length }}</p>
-                    <table class="table">
+                    <p class="ma-10-bottom">
+                        <span>Nombre de compétences : {{ skills|length }}</span>
+                        <span class="f-right"><input type="text" id="searchSkillBar"></span>
+                    </p>
+                    <table class="table" id="skillsTable">
                         <thead>
                         <tr>
                             <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
@@ -25,7 +28,7 @@
                         </thead>
                         <tbody>
                         {% for skill in skills %}
-                            <tr>
+                            <tr class="searchedItem" data-search="{{ skill.name }}">
                                 <td title="{{ skill.name }}" data-content="{{ skill.getFullDescription() }}" data-html=true data-toggle="popover">{{ skill.name }}</td>
                                 <td data-sort-value={{ skill.isPassive ? "1" : "0" }}>
                                     {% if skill.isPassive %}
@@ -57,4 +60,9 @@
             </div>
         </div>
     </div>
+{% endblock %}
+
+{% block moreJS %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('skillSearch') }}
 {% endblock %}

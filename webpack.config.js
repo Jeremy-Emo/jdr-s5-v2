@@ -12,6 +12,7 @@ Encore
     .setPublicPath('/build')
 
     .addEntry('app', './assets/js/app.js')
+    .addEntry('skillSearch', './assets/js/skillSearch.js')
 
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
