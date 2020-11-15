@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class BattleState extends UploadImageEntity
 {
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

@@ -2,21 +2,16 @@
 
 namespace App\Entity;
 
-use App\Repository\ElementRepository;
+use App\Repository\BattleSkillCustomEffectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=ElementRepository::class)
+ * @ORM\Entity(repositoryClass=BattleSkillCustomEffectRepository::class)
  */
-class Element
+class BattleSkillCustomEffect
 {
-    public function __toString(): string
-    {
-        return $this->name;
-    }
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -35,13 +30,13 @@ class Element
     private ?string $nameId;
 
     /**
-     * @ORM\ManyToMany(targetEntity=FightingSkillInfo::class, mappedBy="element")
+     * @ORM\OneToMany(targetEntity=FightingSkillInfo::class, mappedBy="customEffects")
      */
-    private Collection $fightingSkills;
+    private Collection $skillsWithThis;
 
     public function __construct()
     {
-        $this->fightingSkills = new ArrayCollection();
+        $this->skillsWithThis = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -76,25 +71,28 @@ class Element
     /**
      * @return Collection|FightingSkillInfo[]
      */
-    public function getFightingSkills(): Collection
+    public function getSkillsWithThis(): Collection
     {
-        return $this->fightingSkills;
+        return $this->skillsWithThis;
     }
 
-    public function addFightingSkill(FightingSkillInfo $fightingSkill): self
+    public function addSkillsWithThi(FightingSkillInfo $skillsWithThi): self
     {
-        if (!$this->fightingSkills->contains($fightingSkill)) {
-            $this->fightingSkills[] = $fightingSkill;
-            $fightingSkill->addElement($this);
+        if (!$this->skillsWithThis->contains($skillsWithThi)) {
+            $this->skillsWithThis[] = $skillsWithThi;
+            $skillsWithThi->setCustomEffects($this);
         }
 
         return $this;
     }
 
-    public function removeFightingSkill(FightingSkillInfo $fightingSkill): self
+    public function removeSkillsWithThi(FightingSkillInfo $skillsWithThi): self
     {
-        if ($this->fightingSkills->removeElement($fightingSkill)) {
-            $fightingSkill->removeElement($this);
+        if ($this->skillsWithThis->removeElement($skillsWithThi)) {
+            // set the owning side to null (unless already changed)
+            if ($skillsWithThi->getCustomEffects() === $this) {
+                $skillsWithThi->setCustomEffects(null);
+            }
         }
 
         return $this;

@@ -3,6 +3,7 @@
 namespace App\Form\Type;
 
 use App\Entity\Skill;
+use App\Form\Type\SubType\FightingSkillInfoType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -53,6 +54,9 @@ class CreateSkillType extends AbstractType
             ->add('needSkill')
             ->add('neededSkillLevel', IntegerType::class, [
                 'required' => false
+            ])
+            ->add('fightingSkillInfo', FightingSkillInfoType::class, [
+                'required' => false,
             ])
         ;
     }

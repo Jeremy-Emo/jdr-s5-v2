@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Scenario\Account;
+namespace App\Scenario\BattleStates;
 
 use App\AbstractClass\AbstractScenario;
 use App\Exception\ScenarioException;
@@ -9,10 +9,9 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
-use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 use Twig\Environment;
 
-class CreateAccountScenario extends AbstractScenario
+class CreateBSScenario extends AbstractScenario
 {
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -23,9 +22,6 @@ class CreateAccountScenario extends AbstractScenario
         parent::__construct($entityManager, $urlGenerator, $twig, $logger);
     }
 
-    /** @required */
-    public UserPasswordEncoderInterface $encoder;
-
     /**
      * @param FormInterface $form
      * @return Response
@@ -34,25 +30,17 @@ class CreateAccountScenario extends AbstractScenario
     public function handle(FormInterface $form): Response
     {
         if($form->isSubmitted() && $form->isValid()) {
-            $account = $form->getData();
-            $account
-                ->setPassword(
-                    $this->encoder->encodePassword(
-                        $account,
-                        $form->get('plainPassword')->getData()
-                    )
-                )
-                ->setIsPasswordChangeNeeded(true)
-            ;
-            $this->manager->persist($account);
+            $bs = $form->getData();
+
+            $this->manager->persist($bs);
             $this->manager->flush();
 
-            return $this->redirectToRoute('admin_listAccounts');
+            return $this->redirectToRoute('admin_listBS');
         }
 
         return $this->renderNewResponse('admin/defaultGenericForm.html.twig', [
             'form' => $form->createView(),
-            'title' => 'create_account'
+            'title' => 'create_bs'
         ]);
     }
 }

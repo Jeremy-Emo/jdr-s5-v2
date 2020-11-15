@@ -1,0 +1,82 @@
+{% extends 'main/forms.html.twig' %}
+{% import _self as formMacros %}
+
+{% macro printElementMultiplierRow(form) %}
+    <table>
+        <thead>
+            <tr>
+                <th>{{ form_label(form.element) }}</th>
+                <th>{{ form_label(form.isResistance) }}</th>
+                <th>{{ form_label(form.value) }}</th>
+                <th>Supprimer</th>
+            </tr>
+        </thead>
+        <tbody>
+            <tr>
+                <td>{{ form_row(form.element) }}</td>
+                <td>{{ form_row(form.isResistance) }}</td>
+                <td>{{ form_row(form.value) }}</td>
+                <td>
+                    <a href="#" class="remove-item">
+                        <i class="fas fa-window-close"></i>
+                    </a>
+                </td>
+            </tr>
+        </tbody>
+    </table>
+{% endmacro %}
+
+{% macro printStatMultiplierRow(form) %}
+    <table>
+        <thead>
+        <tr>
+            <th>{{ form_label(form.stat) }}</th>
+            <th>{{ form_label(form.value) }}</th>
+            <th>Supprimer</th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ form_row(form.stat) }}</td>
+            <td>{{ form_row(form.value) }}</td>
+            <td>
+                <a href="#" class="remove-item">
+                    <span class="fa fa-close"></span>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endmacro %}
+
+
+{% block _create_skill_fightingSkillInfo_widget %}
+    <div
+        class="row collection_wrapper"
+        data-prototype="{{ _self.printElementMultiplierRow(form.elementsMultipliers.vars.prototype)|e }}"
+        data-index="{{ form.elementsMultipliers|length }}"
+    >
+        {% for elementsMultiplier in form.elementsMultipliers %}
+            {{ formMacros.printElementMultiplierRow(elementsMultiplier) }}
+        {% endfor %}
+        <button type="button" class="add_item_link btn btn-primary" data-collection-holder-class="elementsMultipliers">
+            Ajout bonus élémental
+        </button>
+    </div>
+    <div
+        class="row collection_wrapper"
+        data-prototype="{{ _self.printStatMultiplierRow(form.statMultipliers.vars.prototype)|e }}"
+        data-index="{{ form.statMultipliers|length }}"
+    >
+        {% for statMultiplier in form.statMultipliers %}
+            {{ formMacros.printStatMultiplierRow(statMultiplier) }}
+        {% endfor %}
+        <button type="button" class="add_item_link btn btn-primary" data-collection-holder-class="statMultipliers">
+            Ajout dégâts
+        </button>
+    </div>
+{% endblock %}
+
+{% block _create_skill_fightingSkillInfo_elementsMultipliers_widget %}
+    RIEN
+{% endblock %}

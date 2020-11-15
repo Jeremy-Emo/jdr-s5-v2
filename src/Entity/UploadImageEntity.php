@@ -12,6 +12,8 @@ use Symfony\Component\HttpFoundation\File\UploadedFile;
  */
 class UploadImageEntity
 {
+    public const FILES_UPLOAD_WEB_DIR = '/img/uploads/';
+
     private $temp;
 
     private $file;
@@ -48,7 +50,7 @@ class UploadImageEntity
     {
         if (null !== $this->getFile()) {
             $filename = sha1(uniqid(mt_rand(), true));
-            $this->image = '/img/uploads/' . $filename . '.' . $this->getFile()->guessExtension();
+            $this->image = $filename . '.' . $this->getFile()->guessExtension();
         }
     }
 
@@ -63,7 +65,7 @@ class UploadImageEntity
         }
         $this->getFile()->move($this->getUploadRootDir(), $this->image);
         if (isset($this->temp)) {
-            unlink($this->getUploadRootDir() . '/' . $this->temp);
+            unlink($this->getUploadRootDir() . $this->temp);
             $this->temp = null;
         }
         $this->file = null;
@@ -84,16 +86,16 @@ class UploadImageEntity
     {
         return null === $this->image
             ? null
-            : '/img/' . $this->image;
+            : $this->getUploadRootDir() . $this->image;
     }
 
     public function getWebPath()
     {
-        return !empty($this->image) ? $this->image : null;
+        return !empty($this->image) ? self::FILES_UPLOAD_WEB_DIR . $this->image : null;
     }
 
     protected function getUploadRootDir()
     {
-        return $_ENV['ABSOLUTE_PATH_FOR_UPLOAD'] . '/img/uploads/';
+        return $_ENV['ABSOLUTE_PATH_FOR_UPLOAD'] . self::FILES_UPLOAD_WEB_DIR;
     }
 }

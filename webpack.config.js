@@ -13,6 +13,7 @@ Encore
 
     .addEntry('app', './assets/js/app.js')
     .addEntry('searchBar', './assets/js/searchBarForStupidtable.js')
+    .addEntry('skillForm', './assets/js/skillForm.js')
 
     .splitEntryChunks()
     .enableSingleRuntimeChunk()

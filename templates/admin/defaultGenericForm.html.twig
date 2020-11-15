@@ -1,14 +1,15 @@
 {% extends 'main/layout.html.twig' %}
 
 {% form_theme form with ['main/forms.html.twig'] %}
+{% trans_default_domain 'admin' %}
 
-{% block page_title %}{% trans from 'admin' %}create_account{% endtrans %}{% endblock %}
+{% block page_title %}{{ title|trans }}{% endblock %}
 
 {% block content %}
     <div class="container">
         <div class="row">
             <div class="col-md-6 offset-md-3 ma-25-top pa-20 bg-white">
-                <h2 class="ma-15-bottom">{% trans from 'admin' %}create_account{% endtrans %} : </h2>
+                <h2 class="ma-15-bottom">{{ title|trans }} : </h2>
                 {{ form_start(form) }}
                 {{ form_widget(form) }}
                 <input type="submit" value="Enregistrer">
@@ -17,4 +18,11 @@
         </div>
     </div>
 
+{% endblock %}
+
+{% block moreJS %}
+    {{ parent() }}
+    {% if specificJS is defined %}
+        {{ encore_entry_script_tags(specificJS) }}
+    {% endif %}
 {% endblock %}

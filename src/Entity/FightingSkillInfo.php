@@ -33,7 +33,7 @@ class FightingSkillInfo
     /**
      * @ORM\ManyToMany(targetEntity=Element::class, inversedBy="fightingSkills")
      */
-    private ArrayCollection $element;
+    private Collection $element;
 
     /**
      * @ORM\OneToMany(targetEntity=FightingSkillBattleState::class, mappedBy="skill", orphanRemoval=true)
@@ -44,6 +44,11 @@ class FightingSkillInfo
      * @ORM\OneToMany(targetEntity=StatMultiplier::class, mappedBy="skill", orphanRemoval=true)
      */
     private Collection $statMultipliers;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=BattleSkillCustomEffect::class, inversedBy="skillsWithThis")
+     */
+    private ?BattleSkillCustomEffect $customEffects;
 
     public function __construct()
     {
@@ -204,6 +209,18 @@ class FightingSkillInfo
                 $statMultiplier->setSkill(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCustomEffects(): ?BattleSkillCustomEffect
+    {
+        return $this->customEffects;
+    }
+
+    public function setCustomEffects(?BattleSkillCustomEffect $customEffects): self
+    {
+        $this->customEffects = $customEffects;
 
         return $this;
     }
