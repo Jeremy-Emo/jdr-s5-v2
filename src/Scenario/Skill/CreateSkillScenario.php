@@ -3,6 +3,8 @@
 namespace App\Scenario\Skill;
 
 use App\AbstractClass\AbstractScenario;
+use App\Entity\FightingSkillInfo;
+use App\Entity\Skill;
 use App\Exception\ScenarioException;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -30,7 +32,16 @@ class CreateSkillScenario extends AbstractScenario
     public function handle(FormInterface $form): Response
     {
         if($form->isSubmitted() && $form->isValid()) {
+            /** @var Skill $skill */
             $skill = $form->getData();
+
+            /** @var FightingSkillInfo|null $fightingSkill */
+            $fightingSkill = $form->get('fightingSkillInfo')->getData();
+
+            if ($skill->getIsUsableInBattle() && $fightingSkill !== null) {
+                $fightingSkill->setSkill($skill);
+                $skill->setFightingSkillInfo($fightingSkill);
+            }
 
             $this->manager->persist($skill);
             $this->manager->flush();

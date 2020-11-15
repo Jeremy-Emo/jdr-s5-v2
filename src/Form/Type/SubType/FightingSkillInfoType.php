@@ -18,14 +18,12 @@ class FightingSkillInfoType extends AbstractType
                 'entry_type' => ElementMultiplierType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
-                'by_reference' => false,
                 'block_name' => 'elementMultipliers',
             ])
             ->add('statMultipliers', CollectionType::class, [
                 'entry_type' => StatMultiplierType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
-                'by_reference' => false,
                 'block_name' => 'statMultipliers',
             ])
         ;

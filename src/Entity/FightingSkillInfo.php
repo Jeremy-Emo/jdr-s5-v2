@@ -23,25 +23,25 @@ class FightingSkillInfo
      * @ORM\OneToOne(targetEntity=Skill::class, inversedBy="fightingSkillInfo", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private ?Skill $skill;
+    private ?Skill $skill = null;
 
     /**
-     * @ORM\OneToMany(targetEntity=ElementMultiplier::class, mappedBy="skill", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=ElementMultiplier::class, mappedBy="skill", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private Collection $elementsMultipliers;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Element::class, inversedBy="fightingSkills")
+     * @ORM\ManyToMany(targetEntity=Element::class, inversedBy="fightingSkills", cascade={"persist", "remove"})
      */
     private Collection $element;
 
     /**
-     * @ORM\OneToMany(targetEntity=FightingSkillBattleState::class, mappedBy="skill", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=FightingSkillBattleState::class, mappedBy="skill", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private Collection $battleStates;
 
     /**
-     * @ORM\OneToMany(targetEntity=StatMultiplier::class, mappedBy="skill", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=StatMultiplier::class, mappedBy="skill", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private Collection $statMultipliers;
 
@@ -83,7 +83,7 @@ class FightingSkillInfo
         return $this->elementsMultipliers;
     }
 
-    public function addElementsMultipliers(ElementMultiplier $elementMultiplier): self
+    public function addElementsMultiplier(ElementMultiplier $elementMultiplier): self
     {
         if (!$this->elementsMultipliers->contains($elementMultiplier)) {
             $this->elementsMultipliers[] = $elementMultiplier;
@@ -93,7 +93,7 @@ class FightingSkillInfo
         return $this;
     }
 
-    public function removeElementsMultipliers(ElementMultiplier $elementMultiplier): self
+    public function removeElementsMultiplier(ElementMultiplier $elementMultiplier): self
     {
         if ($this->elementsMultipliers->removeElement($elementMultiplier)) {
             // set the owning side to null (unless already changed)
@@ -125,30 +125,6 @@ class FightingSkillInfo
     public function removeElement(Element $element): self
     {
         $this->element->removeElement($element);
-
-        return $this;
-    }
-
-    public function getStatForDamage(): ?Stat
-    {
-        return $this->statForDamage;
-    }
-
-    public function setStatForDamage(?Stat $statForDamage): self
-    {
-        $this->statForDamage = $statForDamage;
-
-        return $this;
-    }
-
-    public function getDamageOutputMultiplier(): ?int
-    {
-        return $this->damageOutputMultiplier;
-    }
-
-    public function setDamageOutputMultiplier(?int $damageOutputMultiplier): self
-    {
-        $this->damageOutputMultiplier = $damageOutputMultiplier;
 
         return $this;
     }

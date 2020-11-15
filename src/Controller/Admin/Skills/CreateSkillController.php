@@ -3,6 +3,8 @@
 namespace App\Controller\Admin\Skills;
 
 use App\AbstractClass\AbstractController;
+use App\Entity\FightingSkillInfo;
+use App\Entity\Skill;
 use App\Exception\ScenarioException;
 use App\Form\Type\CreateSkillType;
 use App\Interfaces\ControllerInterface;
