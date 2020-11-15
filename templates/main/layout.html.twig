@@ -27,4 +27,13 @@
 
 {% block moreJS %}
     {{ encore_entry_script_tags('app') }}
+    {% if specificJS is defined %}
+        {% if specificJS is iterable %}
+            {% for script in specificJS %}
+                {{ encore_entry_script_tags(script) }}
+            {% endfor %}
+        {% else %}
+            {{ encore_entry_script_tags(specificJS) }}
+        {% endif %}
+    {% endif %}
 {% endblock %}

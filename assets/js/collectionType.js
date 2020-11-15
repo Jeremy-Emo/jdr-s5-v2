@@ -15,7 +15,7 @@ $(document).ready(function() {
         $(this).before(newForm);
     });
 
-    body.on('click', '.remove-item', function(e) {
+    body.on('click', '.remove_item_link', function(e) {
         e.preventDefault();
 
         let $wrapper = $(this).closest('.collection_wrapper');

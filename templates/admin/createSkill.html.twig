@@ -22,9 +22,6 @@
 
 {% block moreJS %}
     {{ parent() }}
-    {% if specificJS is defined %}
-        {{ encore_entry_script_tags(specificJS) }}
-    {% endif %}
 {% endblock %}
 
 

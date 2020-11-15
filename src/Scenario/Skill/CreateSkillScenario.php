@@ -41,7 +41,7 @@ class CreateSkillScenario extends AbstractScenario
         return $this->renderNewResponse('admin/createSkill.html.twig', [
             'form' => $form->createView(),
             'title' => 'create_skill',
-            'specificJS' => 'skillForm'
+            'specificJS' => 'collectionType'
         ]);
     }
 }
