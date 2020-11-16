@@ -2,20 +2,20 @@
 {% import _self as formMacros %}
 
 {% macro printElementMultiplierRow(form) %}
-    <table>
+    <table class="ma-15-top centerCells f-width-table">
         <thead>
             <tr>
                 <th>{{ form_label(form.element) }}</th>
-                <th>{{ form_label(form.isResistance) }}</th>
+                <th><label>Résistance</label></th>
                 <th>{{ form_label(form.value) }}</th>
-                <th>Supprimer</th>
+                <th><label>Supprimer</label></th>
             </tr>
         </thead>
         <tbody>
             <tr>
-                <td>{{ form_row(form.element) }}</td>
+                <td>{{ form_widget(form.element) }}</td>
                 <td>{{ form_row(form.isResistance) }}</td>
-                <td>{{ form_row(form.value) }}</td>
+                <td>{{ form_widget(form.value) }}</td>
                 <td>
                     <a href="#" class="remove_item_link">
                         <i class="fas fa-window-close"></i>
@@ -27,18 +27,18 @@
 {% endmacro %}
 
 {% macro printStatMultiplierRow(form) %}
-    <table>
+    <table class="ma-15-top centerCells f-width-table">
         <thead>
         <tr>
             <th>{{ form_label(form.stat) }}</th>
             <th>{{ form_label(form.value) }}</th>
-            <th>Supprimer</th>
+            <th><label>Supprimer</label></th>
         </tr>
         </thead>
         <tbody>
         <tr>
-            <td>{{ form_row(form.stat) }}</td>
-            <td>{{ form_row(form.value) }}</td>
+            <td>{{ form_widget(form.stat) }}</td>
+            <td>{{ form_widget(form.value) }}</td>
             <td>
                 <a href="#" class="remove_item_link">
                     <i class="fas fa-window-close"></i>
@@ -51,6 +51,7 @@
 
 
 {% block _create_skill_fightingSkillInfo_widget %}
+    <p class="ma-5-bottom">Bonus élémentaux : </p>
     <div
         class="row collection_wrapper"
         data-prototype="{{ _self.printElementMultiplierRow(form.elementsMultipliers.vars.prototype)|e }}"
@@ -59,10 +60,11 @@
         {% for elementsMultiplier in form.elementsMultipliers %}
             {{ formMacros.printElementMultiplierRow(elementsMultiplier) }}
         {% endfor %}
-        <button type="button" class="add_item_link btn btn-primary" data-collection-holder-class="elementsMultipliers">
+        <button type="button" class="add_item_link btn btn-primary ma-10-top" data-collection-holder-class="elementsMultipliers">
             Ajout bonus élémental
         </button>
     </div>
+    <p class="ma-5-bottom">Multiplicateurs de dégâts : </p>
     <div
         class="row collection_wrapper"
         data-prototype="{{ _self.printStatMultiplierRow(form.statMultipliers.vars.prototype)|e }}"
@@ -71,7 +73,7 @@
         {% for statMultiplier in form.statMultipliers %}
             {{ formMacros.printStatMultiplierRow(statMultiplier) }}
         {% endfor %}
-        <button type="button" class="add_item_link btn btn-primary" data-collection-holder-class="statMultipliers">
+        <button type="button" class="add_item_link btn btn-primary ma-10-top" data-collection-holder-class="statMultipliers">
             Ajout dégâts
         </button>
     </div>

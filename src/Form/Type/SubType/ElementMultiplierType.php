@@ -16,7 +16,7 @@ class ElementMultiplierType extends AbstractType
             ->add('element')
             ->add('isResistance', CheckboxType::class, [
                 'row_attr' => [
-                    'class' => 'pretty p-default d-block',
+                    'class' => 'pretty p-default ma-auto',
                 ],
                 'label' => 'Résistance',
                 'required' => false

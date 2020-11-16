@@ -39,7 +39,7 @@ class ElementMultiplier
     private ?Element $element;
 
     /**
-     * @ORM\ManyToOne(targetEntity=FightingSkillInfo::class, inversedBy="fightingSkillElements")
+     * @ORM\ManyToOne(targetEntity=FightingSkillInfo::class, inversedBy="elementsMultipliers")
      * @ORM\JoinColumn(nullable=false)
      */
     private ?FightingSkillInfo $skill;

@@ -448,6 +448,15 @@ h2 {
   margin-right : 0;
 }
 
+.ma-auto {
+  margin : auto;
+}
+
+.f-width-table {
+  table-layout: auto;
+  width: 100%;
+}
+
 .like-a-link {
   color: #007bff;
   text-decoration: none;
@@ -475,6 +484,15 @@ a.no-hover:hover {
 .box-20-px {
   width : 20px;
   height : 20px;
+}
+
+.add_item_link {
+  margin-bottom: 20px;
+}
+
+.remove_item_link {
+  color: $black;
+  font-size : 30px;
 }
 
 @media screen and (min-width: 992px){
