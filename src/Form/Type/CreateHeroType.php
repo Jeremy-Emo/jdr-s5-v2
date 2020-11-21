@@ -35,7 +35,7 @@ class CreateHeroType extends AbstractType
                         'mimeTypesMessage' => 'Merci de téléverser une image correspondant aux critères.',
                     ])
                 ],
-                'required' => true,
+                'required' => false,
                 'label' => 'Image',
                 'attr' => [
                     'class' => 'dropify',

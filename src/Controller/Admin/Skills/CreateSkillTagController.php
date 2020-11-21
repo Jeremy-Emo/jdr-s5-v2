@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Controller\Account;
+namespace App\Controller\Admin\Skills;
 
 use App\AbstractClass\AbstractController;
 use App\Exception\ScenarioException;
-use App\Form\Type\NewPasswordType;
+use App\Form\Type\CreateSkillTagType;
 use App\Interfaces\ControllerInterface;
-use App\Scenario\Account\ChangePasswordScenario;
+use App\Scenario\Skill\CreateSkillTagScenario;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class HomeController
- * @package App\Controller\Account
- * @Route("/changer-mot-de-passe", name="newPassword")
- * @IsGranted("ROLE_USER")
+ * Class CreateSkillTagController
+ * @package App\Controller\Admin\Skills
+ * @Route("/admin/nouvelle-famille-de-competences", name="admin_createSkillTag")
+ * @IsGranted("ROLE_ADMIN")
  */
-class NewPasswordController extends AbstractController implements ControllerInterface
+class CreateSkillTagController extends AbstractController implements ControllerInterface
 {
     /** @required */
-    public ChangePasswordScenario $scenario;
+    public CreateSkillTagScenario $scenario;
 
     /**
      * @param Request $request
@@ -30,9 +30,9 @@ class NewPasswordController extends AbstractController implements ControllerInte
      */
     public function __invoke(Request $request): Response
     {
-        $form = $this->createForm(NewPasswordType::class);
+        $form = $this->createForm(CreateSkillTagType::class);
         $form->handleRequest($request);
 
-        return $this->scenario->handle($this->getUser(), $form);
+        return $this->scenario->handle($form);
     }
 }

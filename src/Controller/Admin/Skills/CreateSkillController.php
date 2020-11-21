@@ -17,7 +17,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class CreateSkillController
  * @package App\Controller\Admin\Skills
- * @Route("/admin/creation-de-compétence", name="admin_createSkill")
+ * @Route("/admin/creation-de-competence", name="admin_createSkill")
  * @IsGranted("ROLE_ADMIN")
  */
 class CreateSkillController extends AbstractController implements ControllerInterface

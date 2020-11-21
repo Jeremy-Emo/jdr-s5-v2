@@ -7,7 +7,7 @@ use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Persistence\ObjectManager;
 use Symfony\Component\Security\Core\Encoder\UserPasswordEncoderInterface;
 
-class AccountFixture extends Fixture
+class AccountFixtures extends Fixture
 {
     protected UserPasswordEncoderInterface $passwordEncoder;
 
@@ -26,6 +26,7 @@ class AccountFixture extends Fixture
             ->setIsAdmin(true)
             ->setUsername('MoiLeFabuleux')
             ->setIsPasswordChangeNeeded(false)
+            ->setCreatedAt(new \DateTime())
         ;
         $account->setPassword($this->passwordEncoder->encodePassword($account, 'password1'));
 

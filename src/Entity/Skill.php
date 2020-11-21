@@ -134,9 +134,15 @@ class Skill
      */
     private $accountSkills;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=SkillTag::class, inversedBy="skills")
+     */
+    private $tags;
+
     public function __construct()
     {
         $this->accountSkills = new ArrayCollection();
+        $this->tags = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -307,6 +313,30 @@ class Skill
                 $accountSkill->setSkill(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|SkillTag[]
+     */
+    public function getTags(): Collection
+    {
+        return $this->tags;
+    }
+
+    public function addTag(SkillTag $tag): self
+    {
+        if (!$this->tags->contains($tag)) {
+            $this->tags[] = $tag;
+        }
+
+        return $this;
+    }
+
+    public function removeTag(SkillTag $tag): self
+    {
+        $this->tags->removeElement($tag);
 
         return $this;
     }
