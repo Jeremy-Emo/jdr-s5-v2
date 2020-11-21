@@ -19,6 +19,17 @@ class SkillRepository extends ServiceEntityRepository
         parent::__construct($registry, Skill::class);
     }
 
+    public function findOneByRandom(int $max)
+    {
+        $result = $this->createQueryBuilder('s')
+            ->andWhere('s.cost < :max')
+            ->setParameter('max', $max)
+            ->getQuery()
+            ->getResult()
+        ;
+        return $result[array_rand($result)];
+    }
+
     // /**
     //  * @return Skill[] Returns an array of Skill objects
     //  */

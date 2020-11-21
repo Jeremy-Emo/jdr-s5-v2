@@ -10,6 +10,9 @@
                 <button class="btn btn-primary" id="toggleSkills" data-state="all">Afficher mes compétences</button>
             </span>
         </p>
+        <p class="full-width t-align-center">
+            <button class="btn btn-danger" id="randomSkill" data-heroId="{{ heroId }}">Aléatoire</button>
+        </p>
     </div>
     <div class="row bg-white pa-20">
         {% for skill in skills %}
@@ -19,7 +22,7 @@
                     {% set level = heroSkill.level %}
                 {% endif %}
             {% endfor %}
-            <div class="col-md-3 skill_box {{ level > 0 ? "heroSkill" : "" }}">
+            <div class="col-md-3 skill_box {{ level > 0 ? "heroSkill" : "" }}" data-idforrandom="{{ skill.id }}">
                 <span
                     class="cursor-click"
                     title="{{ skill.name }}"

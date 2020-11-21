@@ -40,19 +40,33 @@ class BuySkillScenario extends AbstractScenario
         parent::__construct($entityManager, $urlGenerator, $twig, $logger);
     }
 
-    public function handle(int $heroId, int $skillId, Account $account): Response
+    public function handle(int $heroId, ?int $skillId, Account $account, bool $isRandom = false): Response
     {
         $hero = $this->heroRepository->findOneBy([
             'account' => $account,
             'id' => $heroId
         ]);
-        $skill = $this->skillRepository->find($skillId);
 
-        if ($skill === null || $hero === null ) {
+        if ($isRandom && $hero !== null) {
+            $skill = $this->skillRepository->findOneByRandom(
+                $hero->getFighterInfos()->getSkillPoints()
+            );
+        } else {
+            $skill = $this->skillRepository->find($skillId);
+        }
+
+        if ($skill === null || $hero === null) {
             return (new JsonResponse([
                 'success' => false,
                 'message' => "Données envoyées incorrectes"
             ], 404))->setStatusCode(404);
+        }
+
+        if ($skill->getCost() > $hero->getFighterInfos()->getSkillPoints()) {
+            return (new JsonResponse([
+                'success' => false,
+                'message' => "Nombre de points insuffisant"
+            ], 400))->setStatusCode(400);
         }
 
         //Check existing skill
@@ -89,13 +103,23 @@ class BuySkillScenario extends AbstractScenario
         }
         $this->manager->persist($existingSkill);
 
+        $cost = $isRandom ? ceil($skill->getCost() / 2) : $skill->getCost();
         $hero->getFighterInfos()->setSkillPoints(
-            $hero->getFighterInfos()->getSkillPoints() - $skill->getCost()
+            $hero->getFighterInfos()->getSkillPoints() - $cost
         );
         $this->manager->persist($hero);
 
         $this->manager->flush();
 
+        if ($isRandom) {
+            return new JsonResponse([
+                'success' => true,
+                'data' => [
+                    'id' => $skill->getId(),
+                    'cost' => $cost
+                ]
+            ]);
+        }
         return new JsonResponse([
             'success' => true
         ]);

@@ -28,6 +28,28 @@ $(document).ready(function () {
         }
     });
 
+    body.on('click', '#randomSkill', function () {
+        let $this = $(this);
+        let skillPoints = $("#skillPoints");
+        if (parseInt(skillPoints.text()) < 1) {
+            popErrorMessage("Nombre de points insuffisants !");
+        } else {
+            $.post("/heros/acheter-competence-aleatoire", {
+                'heroId' : $this.data('heroid'),
+            }).fail(function (data) {
+                popErrorMessage(data.message);
+            }).done(function (data) {
+                let skillBox = $('[data-idforrandom=' + data.data.id +']');
+                let levelBox = skillBox.find('.level_box');
+                levelBox.text(parseInt(levelBox.text()) + 1);
+                skillPoints.text(parseInt(skillPoints.text()) - data.data.cost);
+                if (!skillBox.hasClass("heroSkill")) {
+                    skillBox.addClass("heroSkill");
+                }
+            });
+        }
+    });
+
     body.on('click', '#toggleSkills', function () {
         let $this = $(this);
         if ($this.data('state') === "all") {

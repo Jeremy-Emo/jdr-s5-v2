@@ -20,8 +20,10 @@ use Twig\Environment;
 
 class CreateHeroScenario extends AbstractScenario
 {
-    public const DEFAULT_STAT_POINTS = 0;
-    public const DEFAULT_SKILL_POINTS = 0;
+    public const DEFAULT_STAT_POINTS = 10;
+
+    //must not be >= 10 to prevent infinite stacking with accountSkills
+    public const DEFAULT_SKILL_POINTS = 5;
 
     public const DEFAULT_STRENGTH = 10;
     public const DEFAULT_STAMINA = 10;
