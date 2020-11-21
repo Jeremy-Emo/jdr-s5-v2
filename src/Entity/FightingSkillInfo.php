@@ -50,6 +50,16 @@ class FightingSkillInfo
      */
     private ?BattleSkillCustomEffect $customEffects;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $isCriticalRateUpgraded = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $isIgnoreDefense = false;
+
     public function __construct()
     {
         $this->elementsMultipliers = new ArrayCollection();
@@ -197,6 +207,30 @@ class FightingSkillInfo
     public function setCustomEffects(?BattleSkillCustomEffect $customEffects): self
     {
         $this->customEffects = $customEffects;
+
+        return $this;
+    }
+
+    public function getIsCriticalRateUpgraded(): ?bool
+    {
+        return $this->isCriticalRateUpgraded;
+    }
+
+    public function setIsCriticalRateUpgraded(bool $isCriticalRateUpgraded): self
+    {
+        $this->isCriticalRateUpgraded = $isCriticalRateUpgraded;
+
+        return $this;
+    }
+
+    public function getIsIgnoreDefense(): ?bool
+    {
+        return $this->isIgnoreDefense;
+    }
+
+    public function setIsIgnoreDefense(bool $isIgnoreDefense): self
+    {
+        $this->isIgnoreDefense = $isIgnoreDefense;
 
         return $this;
     }

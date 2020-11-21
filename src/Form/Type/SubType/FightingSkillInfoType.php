@@ -4,6 +4,7 @@ namespace App\Form\Type\SubType;
 
 use App\Entity\FightingSkillInfo;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -14,6 +15,20 @@ class FightingSkillInfoType extends AbstractType
     {
         $builder
             ->add('customEffects')
+            ->add('isCriticalRateUpgraded', CheckboxType::class, [
+                'row_attr' => [
+                    'class' => 'pretty p-default d-block',
+                ],
+                'label' => 'Taux critique augmenté',
+                'required' => false
+            ])
+            ->add('isIgnoreDefense', CheckboxType::class, [
+                'row_attr' => [
+                    'class' => 'pretty p-default d-block',
+                ],
+                'label' => 'Ignore la défense',
+                'required' => false
+            ])
             ->add('elementsMultipliers', CollectionType::class, [
                 'entry_type' => ElementMultiplierType::class,
                 'entry_options' => ['label' => false],
@@ -32,7 +47,6 @@ class FightingSkillInfoType extends AbstractType
                 'allow_add' => true,
                 'block_name' => 'battleStates',
             ])
-            ->add('customEffects')
             ->add('element')
         ;
     }
