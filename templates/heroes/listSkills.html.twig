@@ -11,7 +11,7 @@
             </span>
         </p>
         <p class="full-width t-align-center">
-            <button class="btn btn-danger" id="randomSkill" data-heroId="{{ heroId }}"><i class="fas fa-crown"></i>&nbsp;&nbsp; Acheter une compétence aléatoire &nbsp;&nbsp;<i class="fas fa-crown"></i></button>
+            <button class="btn btn-danger" id="randomSkill" data-heroid="{{ heroId }}"><i class="fas fa-crown"></i>&nbsp;&nbsp; Acheter une compétence aléatoire &nbsp;&nbsp;<i class="fas fa-crown"></i></button>
         </p>
     </div>
     <div class="row bg-white pa-20">
@@ -36,9 +36,9 @@
                     Coût : {{ skill.cost }}
                     <span
                         class="cursor-click buy-skill"
-                        data-heroId="{{ heroId }}"
-                        data-skillId="{{ skill.id }}"
-                        data-skillCost="{{ skill.cost }}"
+                        data-heroid="{{ heroId }}"
+                        data-skillid="{{ skill.id }}"
+                        data-skillcost="{{ skill.cost }}"
                     >
                         <i class="fas fa-shopping-cart"></i>
                     </span>
