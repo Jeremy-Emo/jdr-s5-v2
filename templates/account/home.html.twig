@@ -16,9 +16,17 @@
         <div class="col-md-6 ma-25-top">
             <div class="pa-20 bg-white full-height">
                 <h1 class="ma-15-bottom">{% trans from 'account' %}account_skills{% endtrans %}</h1>
-                //TODO: truc joli
                 {% for accountSkill in app.user.accountSkills %}
-                    {{ accountSkill.skill.name }}
+                    <div
+                        class="cursor-click border-bottom pa-5"
+                        title="{{ accountSkill.skill.name }}"
+                        data-content="{{ accountSkill.skill.getFullDescription(accountSkill.level) }}"
+                        data-html=true
+                        data-toggle="popover"
+                    >
+                        <span>{{ accountSkill.skill.name }}</span>
+                        <span class="f-right">Niv. {{ accountSkill.level }}</span>
+                    </div>
                 {% endfor %}
             </div>
         </div>
