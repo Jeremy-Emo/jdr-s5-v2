@@ -24,6 +24,7 @@
         "popper.js": "^1.16.1",
         "pretty-checkbox": "^3.0.3",
         "sass-loader": "^9.0.1",
+        "toastr": "^2.1.4",
         "uglifyjs-webpack-plugin": "^2.2.0"
     }
 }

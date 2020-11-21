@@ -16,6 +16,10 @@
         <div class="col-md-6 ma-25-top">
             <div class="pa-20 bg-white full-height">
                 <h1 class="ma-15-bottom">{% trans from 'account' %}account_skills{% endtrans %}</h1>
+                //TODO: truc joli
+                {% for accountSkill in app.user.accountSkills %}
+                    {{ accountSkill.skill.name }}
+                {% endfor %}
             </div>
         </div>
     </div>

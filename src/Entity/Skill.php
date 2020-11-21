@@ -34,7 +34,7 @@ class Skill
         return $this->name;
     }
 
-    public function getFullDescription(): string
+    public function getFullDescription(?int $level = 0): string
     {
         $full = "<p>" . $this->description .  "</p>";
 

@@ -17,7 +17,7 @@
                 <a aria-expanded="false" role="button" href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown"> Personnage actif <span class="caret"></span></a>
                 <ul role="menu" class="dropdown-menu">
                     <li><a href="#" class="text-uppercase">Inventaire</a></li>
-                    <li><a href="#" class="text-uppercase">Compétences</a></li>
+                    <li><a href="{{ path('listHeroSkills', {'id': app.user.getCurrentHero.id}) }}" class="text-uppercase">Compétences</a></li>
                 </ul>
             </li>
             {% endif %}

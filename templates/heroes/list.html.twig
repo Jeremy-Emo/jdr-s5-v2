@@ -3,35 +3,33 @@
 {% block page_title %}{% trans from 'heroes' %}list{% endtrans %}{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <a href="{{ path('createHero') }}"><button type="button" class="btn btn-primary">Créer un nouveau héros</button></a>
+    <div class="row">
+        <div class="col">
+            <a href="{{ path('createHero') }}"><button type="button" class="btn btn-primary">Créer un nouveau héros</button></a>
+        </div>
+    </div>
+    <div class="row">
+        {% for hero in heroes %}
+        <div class="col-md-4 ma-25-top">
+            <div class="pa-20 bg-white full-height">
+                <p><span class="bold"><i class="w-20 fas fa-id-card"></i> Nom</span> : {{ hero.name }}</p>
+                {% if hero.getWebPath() %}
+                    <p class="center">
+                        <img class="hero_box" src="{{ hero.getWebPath() }}" alt="Image du héros">
+                    </p>
+                {% endif %}
+                <p><span class="bold"><i class="w-20 fas fa-clock"></i> Date de création</span> : {{ hero.createdAt|date("d/m/Y") }}</p>
+                {% if hero.isCurrent %}
+                    <p><span class="bold green"><i class="w-20 fas fa-star"></i> Héros actif</span></p>
+                {% else %}
+                    <p><a class="bold grey line-through no-hover" href="{{ path('chooseHero', {'id':hero.id}) }}"><span><i class="w-20 fas fa-star"></i> Héros actif</span></a></p>
+                {% endif %}
+                {% if hero.isDead %}
+                    <p><span class="bold red"><i class="w-20 fas fa-skull-crossbones"></i> Mort</span></p>
+                {% endif %}
             </div>
         </div>
-        <div class="row">
-            {% for hero in heroes %}
-            <div class="col-md-4 ma-25-top">
-                <div class="pa-20 bg-white full-height">
-                    <p><span class="bold"><i class="w-20 fas fa-id-card"></i> Nom</span> : {{ hero.name }}</p>
-                    {% if hero.getWebPath() %}
-                        <p class="center">
-                            <img class="hero_box" src="{{ hero.getWebPath() }}" alt="Image du héros">
-                        </p>
-                    {% endif %}
-                    <p><span class="bold"><i class="w-20 fas fa-clock"></i> Date de création</span> : {{ hero.createdAt|date("d/m/Y") }}</p>
-                    {% if hero.isCurrent %}
-                        <p><span class="bold green"><i class="w-20 fas fa-star"></i> Héros actif</span></p>
-                    {% else %}
-                        <p><a class="bold grey line-through no-hover" href="{{ path('chooseHero', {'id':hero.id}) }}"><span><i class="w-20 fas fa-star"></i> Héros actif</span></a></p>
-                    {% endif %}
-                    {% if hero.isDead %}
-                        <p><span class="bold red"><i class="w-20 fas fa-skull-crossbones"></i> Mort</span></p>
-                    {% endif %}
-                </div>
-            </div>
-            {% endfor %}
-        </div>
+        {% endfor %}
     </div>
 
 {% endblock %}
