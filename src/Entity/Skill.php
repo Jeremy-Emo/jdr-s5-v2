@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\SkillRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -126,6 +128,16 @@ class Skill
      * @ORM\Column(type="integer", nullable=true)
      */
     private ?int $neededSkillLevel;
+
+    /**
+     * @ORM\OneToMany(targetEntity=AccountSkills::class, mappedBy="skill", orphanRemoval=true)
+     */
+    private $accountSkills;
+
+    public function __construct()
+    {
+        $this->accountSkills = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -265,6 +277,36 @@ class Skill
     public function setNeededSkillLevel(?int $neededSkillLevel): self
     {
         $this->neededSkillLevel = $neededSkillLevel;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AccountSkills[]
+     */
+    public function getAccountSkills(): Collection
+    {
+        return $this->accountSkills;
+    }
+
+    public function addAccountSkill(AccountSkills $accountSkill): self
+    {
+        if (!$this->accountSkills->contains($accountSkill)) {
+            $this->accountSkills[] = $accountSkill;
+            $accountSkill->setSkill($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccountSkill(AccountSkills $accountSkill): self
+    {
+        if ($this->accountSkills->removeElement($accountSkill)) {
+            // set the owning side to null (unless already changed)
+            if ($accountSkill->getSkill() === $this) {
+                $accountSkill->setSkill(null);
+            }
+        }
 
         return $this;
     }

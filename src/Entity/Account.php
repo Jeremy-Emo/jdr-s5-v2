@@ -86,9 +86,15 @@ class Account implements UserInterface
      */
     private Collection $heroes;
 
+    /**
+     * @ORM\OneToMany(targetEntity=AccountSkills::class, mappedBy="account", orphanRemoval=true)
+     */
+    private Collection $accountSkills;
+
     public function __construct()
     {
         $this->heroes = new ArrayCollection();
+        $this->accountSkills = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -239,6 +245,36 @@ class Account implements UserInterface
             // set the owning side to null (unless already changed)
             if ($hero->getAccount() === $this) {
                 $hero->setAccount(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|AccountSkills[]
+     */
+    public function getAccountSkills(): Collection
+    {
+        return $this->accountSkills;
+    }
+
+    public function addAccountSkill(AccountSkills $accountSkill): self
+    {
+        if (!$this->accountSkills->contains($accountSkill)) {
+            $this->accountSkills[] = $accountSkill;
+            $accountSkill->setAccount($this);
+        }
+
+        return $this;
+    }
+
+    public function removeAccountSkill(AccountSkills $accountSkill): self
+    {
+        if ($this->accountSkills->removeElement($accountSkill)) {
+            // set the owning side to null (unless already changed)
+            if ($accountSkill->getAccount() === $this) {
+                $accountSkill->setAccount(null);
             }
         }
 

@@ -59,7 +59,7 @@ class FighterInfos
     private Collection $stats;
 
     /**
-     * @ORM\OneToMany(targetEntity=FighterSkill::class, mappedBy="fighter", orphanRemoval=true, cascade={"persist"})
+     * @ORM\OneToMany(targetEntity=FighterSkill::class, mappedBy="fighter", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private Collection $skills;
 

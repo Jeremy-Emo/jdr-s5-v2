@@ -5,6 +5,7 @@ namespace App\Scenario\Heroes;
 use App\AbstractClass\AbstractScenario;
 use App\Entity\Account;
 use App\Entity\FighterInfos;
+use App\Entity\FighterSkill;
 use App\Entity\FighterStat;
 use App\Entity\Hero;
 use App\Exception\ScenarioException;
@@ -66,6 +67,7 @@ class CreateHeroScenario extends AbstractScenario
                 ->setHero($hero)
             ;
             $fighter = $this->addDefaultStats($fighter);
+            $fighter = $this->addDefaultSkills($fighter, $user);
 
             $this->manager->persist(
                 $hero
@@ -129,6 +131,19 @@ class CreateHeroScenario extends AbstractScenario
             }
 
             $fighter->addStat($newStat);
+        }
+        return $fighter;
+    }
+
+    private function addDefaultSkills(FighterInfos $fighter, Account $account): FighterInfos
+    {
+        foreach ($account->getAccountSkills() as $accountSkill) {
+            $fighter->addSkill(
+                (new FighterSkill())
+                    ->setSkill($accountSkill->getSkill())
+                    ->setLevel($accountSkill->getLevel())
+                    ->setFighter($fighter)
+            );
         }
         return $fighter;
     }
