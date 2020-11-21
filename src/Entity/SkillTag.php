@@ -12,27 +12,32 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class SkillTag
 {
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $nameId;
+    private ?string $nameId;
 
     /**
      * @ORM\ManyToMany(targetEntity=Skill::class, mappedBy="tags")
      */
-    private $skills;
+    private Collection $skills;
 
     public function __construct()
     {

@@ -44,15 +44,16 @@ class CreateSkillType extends AbstractType
                 'label' => 'Compétence passive',
                 'required' => false
             ])
+            ->add('needSkill')
+            ->add('neededSkillLevel', IntegerType::class, [
+                'required' => false
+            ])
+            ->add('tags')
             ->add('isUsableInBattle', CheckboxType::class, [
                 'row_attr' => [
                     'class' => 'pretty p-default d-block',
                 ],
                 'label' => 'Compétence de combat',
-                'required' => false
-            ])
-            ->add('needSkill')
-            ->add('neededSkillLevel', IntegerType::class, [
                 'required' => false
             ])
             ->add('fightingSkillInfo', FightingSkillInfoType::class, [

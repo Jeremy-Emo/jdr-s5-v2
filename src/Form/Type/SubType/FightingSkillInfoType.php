@@ -26,6 +26,14 @@ class FightingSkillInfoType extends AbstractType
                 'allow_add' => true,
                 'block_name' => 'statMultipliers',
             ])
+            ->add('battleStates', CollectionType::class, [
+                'entry_type' => FSBattleStateType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'block_name' => 'battleStates',
+            ])
+            ->add('customEffects')
+            ->add('element')
         ;
     }
 

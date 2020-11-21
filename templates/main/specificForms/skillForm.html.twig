@@ -49,8 +49,33 @@
     </table>
 {% endmacro %}
 
+{% macro printBattleStatesRow(form) %}
+    <table class="ma-15-top centerCells f-width-table">
+        <thead>
+        <tr>
+            <th>{{ form_label(form.states) }}</th>
+            <th>{{ form_label(form.turnsNumber) }}</th>
+            <th><label>Supprimer</label></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ form_widget(form.states) }}</td>
+            <td>{{ form_widget(form.turnsNumber) }}</td>
+            <td>
+                <a href="#" class="remove_item_link">
+                    <i class="fas fa-window-close"></i>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endmacro %}
+
 
 {% block _create_skill_fightingSkillInfo_widget %}
+    {{ form_row(form.element) }}
+    {{ form_row(form.customEffects) }}
     <p class="ma-5-bottom">Bonus élémentaux : </p>
     <div
         class="row collection_wrapper"
@@ -75,6 +100,19 @@
         {% endfor %}
         <button type="button" class="add_item_link btn btn-primary ma-10-top" data-collection-holder-class="statMultipliers">
             Ajout dégâts
+        </button>
+    </div>
+    <p class="ma-5-bottom">Statuts de combat : </p>
+    <div
+            class="row collection_wrapper"
+            data-prototype="{{ _self.printBattleStatesRow(form.battleStates.vars.prototype)|e }}"
+            data-index="{{ form.battleStates|length }}"
+    >
+        {% for battleState in form.battleStates %}
+            {{ formMacros.printBattleStatesRow(battleState) }}
+        {% endfor %}
+        <button type="button" class="add_item_link btn btn-primary ma-10-top" data-collection-holder-class="battleStates">
+            Ajout statut
         </button>
     </div>
 {% endblock %}
