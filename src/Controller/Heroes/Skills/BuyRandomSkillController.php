@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Controller\Heroes;
+namespace App\Controller\Heroes\Skills;
 
 use App\AbstractClass\AbstractController;
 use App\Interfaces\ControllerInterface;
@@ -11,12 +11,12 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class BuySkillController
+ * Class BuyRandomSkillController
  * @package App\Controller\Heroes
- * @Route("/heros/acheter-competence", name="buyHeroSkill")
+ * @Route("/heros/acheter-competence-aleatoire", name="buyRandomHeroSkill")
  * @IsGranted("ROLE_USER")
  */
-class BuySkillController extends AbstractController implements ControllerInterface
+class BuyRandomSkillController extends AbstractController implements ControllerInterface
 {
     /** @required */
     public BuySkillScenario $scenario;
@@ -24,7 +24,6 @@ class BuySkillController extends AbstractController implements ControllerInterfa
     public function __invoke(Request $request): Response
     {
         $heroId = $request->request->get('heroId');
-        $skillId = $request->request->get('skillId');
-        return $this->scenario->handle($heroId, $skillId, $this->getUser());
+        return $this->scenario->handle($heroId, null, $this->getUser(), true);
     }
 }

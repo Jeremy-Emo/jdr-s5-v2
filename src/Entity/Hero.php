@@ -66,6 +66,17 @@ class Hero extends UploadImageEntity
      */
     private ?bool $isDead;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Element::class, inversedBy="heroes")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private ?Element $ElementAffinity;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $age;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -149,6 +160,30 @@ class Hero extends UploadImageEntity
     public function setIsDead(bool $isDead): self
     {
         $this->isDead = $isDead;
+
+        return $this;
+    }
+
+    public function getElementAffinity(): ?Element
+    {
+        return $this->ElementAffinity;
+    }
+
+    public function setElementAffinity(?Element $ElementAffinity): self
+    {
+        $this->ElementAffinity = $ElementAffinity;
+
+        return $this;
+    }
+
+    public function getAge(): ?int
+    {
+        return $this->age;
+    }
+
+    public function setAge(?int $age): self
+    {
+        $this->age = $age;
 
         return $this;
     }

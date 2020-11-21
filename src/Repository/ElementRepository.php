@@ -19,32 +19,14 @@ class ElementRepository extends ServiceEntityRepository
         parent::__construct($registry, Element::class);
     }
 
-    // /**
-    //  * @return Element[] Returns an array of Element objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findOneByRandom(int $min)
     {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('e.id', 'ASC')
-            ->setMaxResults(10)
+        $result = $this->createQueryBuilder('e')
+            ->andWhere('e.rarity > :min')
+            ->setParameter('min', $min)
             ->getQuery()
             ->getResult()
         ;
+        return $result[array_rand($result)];
     }
-    */
-
-    /*
-    public function findOneBySomeField($value): ?Element
-    {
-        return $this->createQueryBuilder('e')
-            ->andWhere('e.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
-    }
-    */
 }

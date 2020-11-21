@@ -6,9 +6,10 @@ namespace App\Fixtures;
 
 use App\Entity\SkillTag;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class SkillTagFixtures extends Fixture
+class SkillTagFixtures extends Fixture implements FixtureGroupInterface
 {
     public function load(ObjectManager $manager)
     {
@@ -27,5 +28,10 @@ class SkillTagFixtures extends Fixture
             $manager->persist($object);
         }
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ['prod'];
     }
 }

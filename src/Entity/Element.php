@@ -39,9 +39,20 @@ class Element
      */
     private Collection $fightingSkills;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private ?int $rarity = 100;
+
+    /**
+     * @ORM\OneToMany(targetEntity=Hero::class, mappedBy="ElementAffinity", orphanRemoval=true)
+     */
+    private $heroes;
+
     public function __construct()
     {
         $this->fightingSkills = new ArrayCollection();
+        $this->heroes = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -95,6 +106,48 @@ class Element
     {
         if ($this->fightingSkills->removeElement($fightingSkill)) {
             $fightingSkill->removeElement($this);
+        }
+
+        return $this;
+    }
+
+    public function getRarity(): ?int
+    {
+        return $this->rarity;
+    }
+
+    public function setRarity(int $rarity): self
+    {
+        $this->rarity = $rarity;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Hero[]
+     */
+    public function getHeroes(): Collection
+    {
+        return $this->heroes;
+    }
+
+    public function addHero(Hero $hero): self
+    {
+        if (!$this->heroes->contains($hero)) {
+            $this->heroes[] = $hero;
+            $hero->setElementAffinity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHero(Hero $hero): self
+    {
+        if ($this->heroes->removeElement($hero)) {
+            // set the owning side to null (unless already changed)
+            if ($hero->getElementAffinity() === $this) {
+                $hero->setElementAffinity(null);
+            }
         }
 
         return $this;

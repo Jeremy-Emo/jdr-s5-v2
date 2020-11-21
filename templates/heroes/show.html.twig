@@ -1,0 +1,42 @@
+{% extends 'main/layout.html.twig' %}
+
+{% block page_title %}{% trans from 'heroes' %}show{% endtrans %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 ma-25-top">
+            <div class="pa-20 bg-white full-height">
+                <div class="row ma-10-bottom">
+                    <div class="col-md-4 center">
+                        <img class="hero_box" src="{{ hero.getWebPath() }}" alt="Image du héros">
+                    </div>
+                    <div class="md-8">
+                        <h1>{{ hero.name }}</h1>
+                    </div>
+                </div>
+                <p><span class="bold"><i class="w-20 fas fa-clock"></i> Date de création</span> : {{ hero.createdAt|date("d/m/Y") }}</p>
+                <p><span class="bold"><i class="w-20 fas fa-leaf"></i> Affinité</span> : {{ hero.ElementAffinity }}</p>
+                <p><span class="bold"><i class="w-20 fas fa-birthday-cake"></i> Age</span> : {{ hero.age ? hero.age : "Inconnu" }}</p>
+
+                {% if hero.isDead %}
+                    <p><span class="bold">Statut : </span><span class="red"><i class="w-20 fas fa-skull-crossbones"></i> Mort</span></p>
+                {% else %}
+                    <p><span class="bold">Statut : </span><span class="green"><i class="w-20 far fa-smile-beam"></i> Vivant</span></p>
+                {% endif %}
+
+                {% if hero.isCurrent %}
+                    <p class="t-align-right"><span class="bold green"><i class="w-20 fas fa-star"></i> Héros actif</span></p>
+                {% else %}
+                    <p class="t-align-right"><a class="bold grey line-through no-hover" href="{{ path('chooseHero', {'id':hero.id}) }}"><span><i class="w-20 fas fa-star"></i> Héros non-actif</span></a></p>
+                {% endif %}
+            </div>
+        </div>
+
+        <div class="col-md-6 ma-25-top">
+            <div class="pa-20 bg-white full-height">
+                <h1>Statistiques</h1>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

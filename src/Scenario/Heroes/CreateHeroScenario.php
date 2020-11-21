@@ -10,6 +10,7 @@ use App\Entity\FighterStat;
 use App\Entity\Hero;
 use App\Exception\ScenarioException;
 use App\Manager\StatManager;
+use App\Repository\ElementRepository;
 use App\Repository\StatRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -35,9 +36,11 @@ class CreateHeroScenario extends AbstractScenario
     public const DEFAULT_CHARISMA = 10;
     public const DEFAULT_RESISTANCE = 30;
 
-    /** @required  */
+    /** @required */
     public StatRepository $statRepository;
 
+    /** @required */
+    public ElementRepository $elementRepository;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -70,6 +73,7 @@ class CreateHeroScenario extends AbstractScenario
             ;
             $fighter = $this->addDefaultStats($fighter);
             $fighter = $this->addDefaultSkills($fighter, $user);
+            $hero = $this->generateAffinity($hero);
 
             $this->manager->persist(
                 $hero
@@ -148,5 +152,12 @@ class CreateHeroScenario extends AbstractScenario
             );
         }
         return $fighter;
+    }
+
+    private function generateAffinity(Hero $hero): Hero
+    {
+        return $hero->setElementAffinity(
+            $this->elementRepository->findOneByRandom(rand(1, 100))
+        );
     }
 }

@@ -7,9 +7,10 @@ namespace App\Fixtures;
 use App\Entity\Stat;
 use App\Manager\StatManager;
 use Doctrine\Bundle\FixturesBundle\Fixture;
+use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
 
-class StatFixtures extends Fixture
+class StatFixtures extends Fixture implements FixtureGroupInterface
 {
     public function load(ObjectManager $manager)
     {
@@ -71,5 +72,10 @@ class StatFixtures extends Fixture
         }
 
         $manager->flush();
+    }
+
+    public static function getGroups(): array
+    {
+        return ['prod'];
     }
 }
