@@ -4,38 +4,43 @@
 
 {% block content %}
     <div class="row bg-white pa-20">
-        <p>Points de compétences restants : <span id="skillPoints">{{ skillPoints }}</span></p>
+        <p class="full-width">
+            <span>Points de compétences restants : <span id="skillPoints">{{ skillPoints }}</span></span>
+            <span class="f-right">
+                <button class="btn btn-primary" id="toggleSkills" data-state="all">Afficher mes compétences</button>
+            </span>
+        </p>
     </div>
     <div class="row bg-white pa-20">
         {% for skill in skills %}
-        <div class="col-md-3 skill_box">
             {% set level = 0 %}
             {% for heroSkill in heroSkills %}
                 {% if heroSkill.skill == skill %}
                     {% set level = heroSkill.level %}
                 {% endif %}
             {% endfor %}
-            <span
-                class="cursor-click {{ level > 0 ? "heroSkill" : "" }}"
-                title="{{ skill.name }}"
-                data-content="{{ skill.getFullDescription(level) }}"
-                data-html=true
-                data-toggle="popover"
-            >
-                {{ skill.name }} (lv <span class="level_box">{{ level }}</span>)
-            </span>
-            <span class="f-right">
-                Coût : {{ skill.cost }}
+            <div class="col-md-3 skill_box {{ level > 0 ? "heroSkill" : "" }}">
                 <span
-                    class="cursor-click buy-skill"
-                    data-heroId="{{ heroId }}"
-                    data-skillId="{{ skill.id }}"
-                    data-skillCost="{{ skill.cost }}"
+                    class="cursor-click"
+                    title="{{ skill.name }}"
+                    data-content="{{ skill.getFullDescription(level) }}"
+                    data-html=true
+                    data-toggle="popover"
                 >
-                    <i class="fas fa-shopping-cart"></i>
+                    {{ skill.name }} (lv <span class="level_box">{{ level }}</span>)
                 </span>
-            </span>
-        </div>
+                <span class="f-right">
+                    Coût : {{ skill.cost }}
+                    <span
+                        class="cursor-click buy-skill"
+                        data-heroId="{{ heroId }}"
+                        data-skillId="{{ skill.id }}"
+                        data-skillCost="{{ skill.cost }}"
+                    >
+                        <i class="fas fa-shopping-cart"></i>
+                    </span>
+                </span>
+            </div>
         {% endfor %}
     </div>
 
