@@ -24,6 +24,9 @@
                     <p><span class="bold">Statut : </span><span class="green"><i class="w-20 far fa-smile-beam"></i> Vivant</span></p>
                 {% endif %}
 
+                <p class="border-top pa-10-top ma-10-top full-width"><span class="bold"><i class="w-20 fas fa-fist-raised"></i> Points de stats</span> : <span id="statPoints">{{ hero.fighterInfos.statPoints }}</span></p>
+                <p><span class="bold"><i class="w-20 fas fa-bolt"></i> Points de compétences</span> : {{ hero.fighterInfos.skillPoints }}</p>
+
                 {% if hero.isCurrent %}
                     <p class="t-align-right"><span class="bold green"><i class="w-20 fas fa-star"></i> Héros actif</span></p>
                 {% else %}
