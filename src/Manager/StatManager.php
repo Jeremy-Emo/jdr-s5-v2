@@ -111,7 +111,7 @@ class StatManager
                     ];
                     break;
                 default:
-                    continue;
+                    break;
             }
         }
 

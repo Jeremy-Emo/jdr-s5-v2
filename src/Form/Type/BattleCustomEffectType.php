@@ -2,7 +2,7 @@
 
 namespace App\Form\Type;
 
-use App\Entity\BattleSkillCustomEffect;
+use App\Entity\CustomEffect;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -29,7 +29,7 @@ class BattleCustomEffectType extends AbstractType
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => BattleSkillCustomEffect::class,
+            'data_class' => CustomEffect::class,
         ]);
     }
 }

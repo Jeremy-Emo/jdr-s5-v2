@@ -2,15 +2,15 @@
 
 namespace App\Entity;
 
-use App\Repository\BattleSkillCustomEffectRepository;
+use App\Repository\CustomEffectRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=BattleSkillCustomEffectRepository::class)
+ * @ORM\Entity(repositoryClass=CustomEffectRepository::class)
  */
-class BattleSkillCustomEffect
+class CustomEffect
 {
     public function __toString(): string
     {

@@ -4,7 +4,7 @@
 namespace App\Fixtures;
 
 
-use App\Entity\BattleSkillCustomEffect;
+use App\Entity\CustomEffect;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
 use Doctrine\Persistence\ObjectManager;
@@ -22,7 +22,7 @@ class CustomEffectFixtures extends Fixture implements FixtureGroupInterface
         ];
 
         foreach ($effects as $effect) {
-            $object = (new BattleSkillCustomEffect())
+            $object = (new CustomEffect())
                 ->setName($effect['name'])
                 ->setNameId($effect['nameId'])
                 ->setValue($effect['value'])

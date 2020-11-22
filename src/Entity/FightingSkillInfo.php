@@ -108,9 +108,9 @@ class FightingSkillInfo
     private Collection $statMultipliers;
 
     /**
-     * @ORM\ManyToOne(targetEntity=BattleSkillCustomEffect::class, inversedBy="skillsWithThis")
+     * @ORM\ManyToOne(targetEntity=CustomEffect::class, inversedBy="skillsWithThis")
      */
-    private ?BattleSkillCustomEffect $customEffects;
+    private ?CustomEffect $customEffects;
 
     /**
      * @ORM\Column(type="boolean")
@@ -266,12 +266,12 @@ class FightingSkillInfo
         return $this;
     }
 
-    public function getCustomEffects(): ?BattleSkillCustomEffect
+    public function getCustomEffects(): ?CustomEffect
     {
         return $this->customEffects;
     }
 
-    public function setCustomEffects(?BattleSkillCustomEffect $customEffects): self
+    public function setCustomEffects(?CustomEffect $customEffects): self
     {
         $this->customEffects = $customEffects;
 
