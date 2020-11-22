@@ -8,7 +8,9 @@
             <div class="pa-20 bg-white full-height">
                 <div class="row ma-10-bottom">
                     <div class="col-md-4 center">
-                        <img class="hero_box" src="{{ hero.getWebPath() }}" alt="Image du héros">
+                        <a href="{{ path('editHeroPhoto', {'id': hero.id}) }}">
+                            <img class="hero_box" src="{{ hero.getWebPath() }}" alt="Image du héros">
+                        </a>
                     </div>
                     <div class="md-8">
                         <h1>{{ hero.name }}</h1>
@@ -40,7 +42,7 @@
                 <h1 class="ma-20-bottom">Statistiques</h1>
                 {% for stat in metaStats %}
                     <p>
-                        <span>{{ stat.name }}</span>
+                        <span>{{ stat.name }} :</span>
                         <span class="f-right">{{ stat.value }}</span>
                     </p>
                 {% endfor %}
