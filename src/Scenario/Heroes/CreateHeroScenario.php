@@ -66,16 +66,7 @@ class CreateHeroScenario extends AbstractScenario
                 $hero->setIsCurrent(true);
             }
 
-            $fighter = (new FighterInfos())
-                ->setSkillPoints(self::DEFAULT_SKILL_POINTS)
-                ->setStatPoints(self::DEFAULT_STAT_POINTS)
-                ->setHero($hero)
-                ->setCurrentSP(0)
-                ->setCurrentHP(StatManager::calculateMaxHP(self::DEFAULT_STAMINA))
-                ->setCurrentMP(StatManager::calculateMaxMP(self::DEFAULT_WISDOM))
-            ;
-            $fighter = $this->addDefaultStats($fighter);
-            $fighter = $this->addDefaultSkills($fighter, $user);
+            $fighter = $this->getFighter($user, $hero);
             $hero = $this->generateAffinity($hero);
 
             $this->manager->persist(
@@ -92,6 +83,27 @@ class CreateHeroScenario extends AbstractScenario
         return $this->renderNewResponse('heroes/create.html.twig', [
             'form' => $form->createView()
         ]);
+    }
+
+    /**
+     * @param Account $account
+     * @param Hero $hero
+     * @return FighterInfos
+     * @throws ScenarioException
+     */
+    private function getFighter(Account $account, Hero $hero): FighterInfos
+    {
+        $fighter = (new FighterInfos())
+            ->setSkillPoints(self::DEFAULT_SKILL_POINTS)
+            ->setStatPoints(self::DEFAULT_STAT_POINTS)
+            ->setHero($hero)
+            ->setCurrentSP(0)
+            ->setCurrentHP(StatManager::calculateMaxHP(self::DEFAULT_STAMINA))
+            ->setCurrentMP(StatManager::calculateMaxMP(self::DEFAULT_WISDOM))
+        ;
+        $fighter = $this->addDefaultStats($fighter);
+        $fighter = $this->addDefaultSkills($fighter, $account);
+        return $fighter;
     }
 
     /**
@@ -144,6 +156,11 @@ class CreateHeroScenario extends AbstractScenario
         return $fighter;
     }
 
+    /**
+     * @param FighterInfos $fighter
+     * @param Account $account
+     * @return FighterInfos
+     */
     private function addDefaultSkills(FighterInfos $fighter, Account $account): FighterInfos
     {
         foreach ($account->getAccountSkills() as $accountSkill) {
@@ -157,6 +174,10 @@ class CreateHeroScenario extends AbstractScenario
         return $fighter;
     }
 
+    /**
+     * @param Hero $hero
+     * @return Hero
+     */
     private function generateAffinity(Hero $hero): Hero
     {
         return $hero->setElementAffinity(
