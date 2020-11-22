@@ -2,3 +2,4 @@ create_account: Créer un nouveau compte
 create_skill: Créer une nouvelle compétence
 create_bs: Créer un nouveau statut
 create_skill_tag : Créer une nouvelle famille de compétences
+create_skill_custom_effect : Créer un nouvel effet personnalisé

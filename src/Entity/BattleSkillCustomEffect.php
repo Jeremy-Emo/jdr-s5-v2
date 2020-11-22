@@ -14,6 +14,9 @@ class BattleSkillCustomEffect
 {
     public function __toString(): string
     {
+        if (!empty($this->value)) {
+            return $this->name . ' (' . $this->value . ')';
+        }
         return $this->name;
     }
 
@@ -38,6 +41,11 @@ class BattleSkillCustomEffect
      * @ORM\OneToMany(targetEntity=FightingSkillInfo::class, mappedBy="customEffects")
      */
     private Collection $skillsWithThis;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $value;
 
     public function __construct()
     {
@@ -99,6 +107,18 @@ class BattleSkillCustomEffect
                 $skillsWithThi->setCustomEffects(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getValue(): ?int
+    {
+        return $this->value;
+    }
+
+    public function setValue(?int $value): self
+    {
+        $this->value = $value;
 
         return $this;
     }
