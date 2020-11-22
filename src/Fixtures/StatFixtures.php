@@ -17,7 +17,7 @@ class StatFixtures extends Fixture implements FixtureGroupInterface
         $statsToSave = [
             [
                 'name' => 'Force',
-                'description' => "Augmente vos dégâts physique et votre capacité à soulever des objets",
+                'description' => "Augmente vos dégâts physique et réduit votre fatigue",
                 'nameId' => StatManager::STRENGTH
             ],
             [

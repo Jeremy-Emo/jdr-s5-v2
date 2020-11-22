@@ -70,6 +70,9 @@ class CreateHeroScenario extends AbstractScenario
                 ->setSkillPoints(self::DEFAULT_SKILL_POINTS)
                 ->setStatPoints(self::DEFAULT_STAT_POINTS)
                 ->setHero($hero)
+                ->setCurrentSP(0)
+                ->setCurrentHP(StatManager::calculateMaxHP(self::DEFAULT_STAMINA))
+                ->setCurrentMP(StatManager::calculateMaxMP(self::DEFAULT_WISDOM))
             ;
             $fighter = $this->addDefaultStats($fighter);
             $fighter = $this->addDefaultSkills($fighter, $user);

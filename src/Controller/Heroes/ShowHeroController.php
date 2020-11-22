@@ -39,7 +39,8 @@ class ShowHeroController extends AbstractController implements ControllerInterfa
 
         return $this->render('heroes/show.html.twig', [
             'hero' => $hero,
-            'stats' => StatManager::returnTotalStats($hero->getFighterInfos())
+            'stats' => StatManager::returnTotalStats($hero->getFighterInfos()),
+            'metaStats' => StatManager::returnMetaStats($hero->getFighterInfos())
         ]);
     }
 }

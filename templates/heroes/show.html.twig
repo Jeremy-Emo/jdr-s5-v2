@@ -38,6 +38,13 @@
         <div class="col-md-6 ma-25-top">
             <div class="pa-20 bg-white full-height">
                 <h1 class="ma-20-bottom">Statistiques</h1>
+                {% for stat in metaStats %}
+                    <p>
+                        <span>{{ stat.name }}</span>
+                        <span class="f-right">{{ stat.value }}</span>
+                    </p>
+                {% endfor %}
+                <br>
                 {% for stat in stats %}
                     <p>
                         <span

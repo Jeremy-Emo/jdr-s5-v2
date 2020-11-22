@@ -63,6 +63,21 @@ class FighterInfos
      */
     private Collection $skills;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $currentHP;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $currentMP;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $currentSP;
+
     public function __construct()
     {
         $this->stats = new ArrayCollection();
@@ -178,6 +193,42 @@ class FighterInfos
                 $skill->setFighter(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCurrentHP(): ?int
+    {
+        return $this->currentHP;
+    }
+
+    public function setCurrentHP(int $currentHP): self
+    {
+        $this->currentHP = $currentHP;
+
+        return $this;
+    }
+
+    public function getCurrentMP(): ?int
+    {
+        return $this->currentMP;
+    }
+
+    public function setCurrentMP(int $currentMP): self
+    {
+        $this->currentMP = $currentMP;
+
+        return $this;
+    }
+
+    public function getCurrentSP(): ?int
+    {
+        return $this->currentSP;
+    }
+
+    public function setCurrentSP(int $currentSP): self
+    {
+        $this->currentSP = $currentSP;
 
         return $this;
     }

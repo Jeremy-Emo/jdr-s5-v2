@@ -3,8 +3,6 @@
 namespace App\Manager;
 
 use App\Entity\FighterInfos;
-use App\Entity\FighterStat;
-use Doctrine\Common\Collections\ArrayCollection;
 
 class StatManager
 {
@@ -27,6 +25,7 @@ class StatManager
 
     public const ONE_HP_STAMINA = 5;
     public const ONE_MP_WISDOM = 5;
+    public const ONE_SP_STRENGTH = 5;
 
     /**
      * @param int $cr
@@ -76,6 +75,47 @@ class StatManager
     public static function calculateMaxMP(int $wisdom): int
     {
         return $wisdom * self::ONE_MP_WISDOM;
+    }
+
+    /**
+     * @param int $strength
+     * @return int
+     */
+    public static function calculateMaxSP(int $strength): int
+    {
+        return $strength * self::ONE_SP_STRENGTH;
+    }
+
+    public static function returnMetaStats(FighterInfos $fighter): array
+    {
+        $statsToReturn = [];
+
+        foreach ($fighter->getStats() as $stat) {
+            switch ($stat->getStat()->getNameId()) {
+                case self::STAMINA:
+                    $statsToReturn[] = [
+                        'name' => 'Points de vie',
+                        'value' => $fighter->getCurrentHP() . " / " . self::calculateMaxHP($stat->getValue())
+                    ];
+                    break;
+                case self::STRENGTH:
+                    $statsToReturn[] = [
+                        'name' => 'Fatigue',
+                        'value' => $fighter->getCurrentSP() . " / " . self::calculateMaxSP($stat->getValue())
+                    ];
+                    break;
+                case self::WISDOM:
+                    $statsToReturn[] = [
+                        'name' => 'Points de mana',
+                        'value' => $fighter->getCurrentMP() . " / " . self::calculateMaxMP($stat->getValue())
+                    ];
+                    break;
+                default:
+                    continue;
+            }
+        }
+
+        return $statsToReturn;
     }
 
     /**
