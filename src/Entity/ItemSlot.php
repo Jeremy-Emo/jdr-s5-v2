@@ -12,6 +12,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class ItemSlot
 {
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -28,11 +33,6 @@ class ItemSlot
      * @ORM\Column(type="string", length=255)
      */
     private ?string $nameId;
-
-    /**
-     * @ORM\ManyToOne(targetEntity=WeaponType::class)
-     */
-    private ?WeaponType $weaponType;
 
     /**
      * @ORM\OneToMany(targetEntity=Item::class, mappedBy="itemSlot")
@@ -69,18 +69,6 @@ class ItemSlot
     public function setNameId(string $nameId): self
     {
         $this->nameId = $nameId;
-
-        return $this;
-    }
-
-    public function getWeaponType(): ?WeaponType
-    {
-        return $this->weaponType;
-    }
-
-    public function setWeaponType(?WeaponType $weaponType): self
-    {
-        $this->weaponType = $weaponType;
 
         return $this;
     }

@@ -53,6 +53,11 @@ class Item extends UploadImageEntity
      */
     private ?CustomEffect $customEffect;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=WeaponType::class, inversedBy="items")
+     */
+    private $weaponType;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -138,6 +143,18 @@ class Item extends UploadImageEntity
     public function setCustomEffect(?CustomEffect $customEffect): self
     {
         $this->customEffect = $customEffect;
+
+        return $this;
+    }
+
+    public function getWeaponType(): ?WeaponType
+    {
+        return $this->weaponType;
+    }
+
+    public function setWeaponType(?WeaponType $weaponType): self
+    {
+        $this->weaponType = $weaponType;
 
         return $this;
     }

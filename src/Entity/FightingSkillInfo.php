@@ -127,6 +127,11 @@ class FightingSkillInfo
      */
     private $accuracy;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=WeaponType::class, inversedBy="fightingSkillInfos")
+     */
+    private $needWeaponType;
+
     public function __construct()
     {
         $this->elementsMultipliers = new ArrayCollection();
@@ -310,6 +315,18 @@ class FightingSkillInfo
     public function setAccuracy(?int $accuracy): self
     {
         $this->accuracy = $accuracy;
+
+        return $this;
+    }
+
+    public function getNeedWeaponType(): ?WeaponType
+    {
+        return $this->needWeaponType;
+    }
+
+    public function setNeedWeaponType(?WeaponType $needWeaponType): self
+    {
+        $this->needWeaponType = $needWeaponType;
 
         return $this;
     }
