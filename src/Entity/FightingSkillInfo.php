@@ -71,6 +71,10 @@ class FightingSkillInfo
             $full .= "<p>" . $add . "</p>";
         }
 
+        if ($this->needWeaponType !== null) {
+            $full .= "<p class='red'>Nécessite une arme de type : " . $this->needWeaponType . "</p>";
+        }
+
         return $full;
     }
 
@@ -125,12 +129,12 @@ class FightingSkillInfo
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $accuracy;
+    private ?int $accuracy;
 
     /**
      * @ORM\ManyToOne(targetEntity=WeaponType::class, inversedBy="fightingSkillInfos")
      */
-    private $needWeaponType;
+    private ?WeaponType $needWeaponType;
 
     public function __construct()
     {

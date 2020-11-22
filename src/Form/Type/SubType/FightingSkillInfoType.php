@@ -52,6 +52,7 @@ class FightingSkillInfoType extends AbstractType
                 'block_name' => 'battleStates',
             ])
             ->add('element')
+            ->add('needWeaponType')
         ;
     }
 
