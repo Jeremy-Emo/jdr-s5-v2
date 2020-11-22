@@ -12,6 +12,68 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class FightingSkillInfo
 {
+    public function generateDescription(?int $level = 1): string
+    {
+        $full = "";
+
+        $elements = "";
+        foreach ($this->getElement() as $element) {
+            $elements .= $element->getName();
+            if ($element !== $this->getElement()->last()) {
+                $elements .= " & ";
+            }
+        }
+        $full.= "<p>Élément(s) :  " . $elements . "</p>";
+
+        if ($this->isCriticalRateUpgraded) {
+            $full .= "<p>Taux critique augmenté.</p>";
+        }
+        if ($this->isIgnoreDefense) {
+            $full .= "<p>Ignore la défense de l'ennemi</p>";
+        }
+
+        if ($this->customEffects !== null) {
+            $full .= "<p>" . $this->customEffects . "</p>";
+        }
+
+        if ($this->accuracy !== null) {
+            $full .= "<p>Chances de toucher : " . ($this->accuracy * $level) . "%</p>";
+        }
+
+        if ($this->getElementsMultipliers()->count() > 0) {
+            $full .= "<p>Multiplicateurs élémentaux :</p><ul>";
+            foreach ($this->getElementsMultipliers() as $mult) {
+                $full .= "<li>" . $mult->getElement()->getName() . " : " . ($mult->getValue() * $level) . "%</li>";
+            }
+            $full .= "</ul>";
+        }
+
+        if ($this->getStatMultipliers()->count() > 0) {
+            $full .= "<p>Multiplicateurs de dégâts :</p><ul>";
+            foreach ($this->getStatMultipliers() as $mult) {
+                $full .= "<li>" . $mult->getStat()->getName() . " : " . ($mult->getValue() * $level) . "%</li>";
+            }
+            $full .= "</ul>";
+        }
+
+        foreach ($this->getBattleStates() as $states) {
+            $add = "Pose ";
+            /** @var BattleState $state */
+            foreach ($states as $state) {
+                $add .= $state->getName();
+                if ($state !== $states->last()) {
+                    $elements .= ", ";
+                }
+            }
+            if ($states->getTurnsNumber() !== null) {
+                $add .= " pendant " . $states->getTurnsNumber() . " tour(s)";
+            }
+            $full .= "<p>" . $add . "</p>";
+        }
+
+        return $full;
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -59,6 +121,11 @@ class FightingSkillInfo
      * @ORM\Column(type="boolean")
      */
     private ?bool $isIgnoreDefense = false;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private $accuracy;
 
     public function __construct()
     {
@@ -231,6 +298,18 @@ class FightingSkillInfo
     public function setIsIgnoreDefense(bool $isIgnoreDefense): self
     {
         $this->isIgnoreDefense = $isIgnoreDefense;
+
+        return $this;
+    }
+
+    public function getAccuracy(): ?int
+    {
+        return $this->accuracy;
+    }
+
+    public function setAccuracy(?int $accuracy): self
+    {
+        $this->accuracy = $accuracy;
 
         return $this;
     }

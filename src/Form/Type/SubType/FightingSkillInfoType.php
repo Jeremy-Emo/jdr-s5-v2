@@ -6,6 +6,7 @@ use App\Entity\FightingSkillInfo;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\CollectionType;
+use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
@@ -15,6 +16,9 @@ class FightingSkillInfoType extends AbstractType
     {
         $builder
             ->add('customEffects')
+            ->add('accuracy', IntegerType::class, [
+                'required' => false
+            ])
             ->add('isCriticalRateUpgraded', CheckboxType::class, [
                 'row_attr' => [
                     'class' => 'pretty p-default d-block',

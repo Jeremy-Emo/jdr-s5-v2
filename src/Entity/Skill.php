@@ -34,7 +34,7 @@ class Skill
         return $this->name;
     }
 
-    public function getFullDescription(?int $level = 0): string
+    public function getFullDescription(?int $level = 1): string
     {
         $full = "<p>" . $this->description .  "</p>";
 
@@ -43,19 +43,18 @@ class Skill
         }
 
         if ($this->isUsableInBattle) {
-            //TODO: implement here
-            $full .= "<p>TODO</p>";
+            $full .= $this->getFightingSkillInfo()->generateDescription($level);
         } else {
-            if ((int) $this->mpCost > 0) {
-                $full .= "<p>Coût en mana : " . $this->mpCost . "</p>";
-            }
-            if ((int) $this->hpCost > 0) {
-                $full .= "<p>Coût en PV : " . $this->hpCost . "</p>";
-            }
-            if ((int) $this->spCost > 0) {
-                $full .= "<p>Coût en fatigue : " . $this->spCost . "</p>";
-            }
             $full .= "<p class='red'>Non utilisable en combat</p>";
+        }
+        if ((int) $this->mpCost > 0) {
+            $full .= "<p>Coût en mana : " . $this->mpCost . "</p>";
+        }
+        if ((int) $this->hpCost > 0) {
+            $full .= "<p>Coût en PV : " . $this->hpCost . "</p>";
+        }
+        if ((int) $this->spCost > 0) {
+            $full .= "<p>Coût en fatigue : " . $this->spCost . "</p>";
         }
 
         if ($this->needSkill !== null && $this->neededSkillLevel > 0) {
