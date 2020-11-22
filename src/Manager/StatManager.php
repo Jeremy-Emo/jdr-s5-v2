@@ -2,6 +2,10 @@
 
 namespace App\Manager;
 
+use App\Entity\FighterInfos;
+use App\Entity\FighterStat;
+use Doctrine\Common\Collections\ArrayCollection;
+
 class StatManager
 {
     public const STRENGTH = 'force';
@@ -74,4 +78,21 @@ class StatManager
         return $wisdom * self::ONE_MP_WISDOM;
     }
 
+    /**
+     * @param FighterInfos $fighter
+     * @return array
+     */
+    public static function returnTotalStats(FighterInfos $fighter): array
+    {
+        $statsToReturn = [];
+        foreach ($fighter->getStats() as $stat) {
+            //TODO : calculate bonuses with equipments and passives
+            $statsToReturn[] = [
+                'name' => $stat->getStat()->getName(),
+                'description' => $stat->getStat()->getDescription(),
+                'value' => $stat->getValue()
+            ];
+        }
+        return $statsToReturn;
+    }
 }

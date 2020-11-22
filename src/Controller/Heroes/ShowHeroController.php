@@ -4,6 +4,7 @@ namespace App\Controller\Heroes;
 
 use App\AbstractClass\AbstractController;
 use App\Interfaces\ControllerInterface;
+use App\Manager\StatManager;
 use App\Repository\HeroRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,6 +22,10 @@ class ShowHeroController extends AbstractController implements ControllerInterfa
     /** @required  */
     public HeroRepository $heroRepository;
 
+    /**
+     * @param int $id
+     * @return Response
+     */
     public function __invoke(int $id): Response
     {
         $hero = $this->heroRepository->findOneBy([
@@ -33,7 +38,8 @@ class ShowHeroController extends AbstractController implements ControllerInterfa
         }
 
         return $this->render('heroes/show.html.twig', [
-            'hero' => $hero
+            'hero' => $hero,
+            'stats' => StatManager::returnTotalStats($hero->getFighterInfos())
         ]);
     }
 }

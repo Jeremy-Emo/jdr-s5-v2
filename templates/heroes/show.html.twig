@@ -37,7 +37,21 @@
 
         <div class="col-md-6 ma-25-top">
             <div class="pa-20 bg-white full-height">
-                <h1>Statistiques</h1>
+                <h1 class="ma-20-bottom">Statistiques</h1>
+                {% for stat in stats %}
+                    <p>
+                        <span
+                            class="cursor-click"
+                            title="{{ stat.name }}"
+                            data-content="{{ stat.description }}"
+                            data-html=true
+                            data-toggle="popover"
+                        >
+                            {{ stat.name }} :
+                        </span>
+                        <span class="f-right">{{ stat.value }}</span>
+                    </p>
+                {% endfor %}
             </div>
         </div>
     </div>
