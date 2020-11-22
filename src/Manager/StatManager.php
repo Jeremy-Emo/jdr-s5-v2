@@ -26,6 +26,7 @@ class StatManager
     public const ONE_HP_STAMINA = 5;
     public const ONE_MP_WISDOM = 5;
     public const ONE_SP_STRENGTH = 5;
+    public const ONE_SPEED_AGILITY = 0.5;
 
     /**
      * @param int $cr
@@ -77,6 +78,11 @@ class StatManager
         return $wisdom * self::ONE_MP_WISDOM;
     }
 
+    public static function calculateSpeed(int $agility): int
+    {
+        return ceil($agility * self::ONE_SPEED_AGILITY);
+    }
+
     /**
      * @param int $strength
      * @return int
@@ -108,6 +114,12 @@ class StatManager
                     $statsToReturn[] = [
                         'name' => 'Points de mana',
                         'value' => $fighter->getCurrentMP() . " / " . self::calculateMaxMP($stat->getValue())
+                    ];
+                    break;
+                case self::AGILITY:
+                    $statsToReturn[] = [
+                        'name' => 'Vitesse',
+                        'value' => self::calculateSpeed($stat->getValue())
                     ];
                     break;
                 default:
