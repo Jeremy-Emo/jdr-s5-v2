@@ -5,6 +5,8 @@ namespace App\Fixtures;
 use App\Entity\ItemSlot;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
+use Doctrine\ORM\Id\AssignedGenerator;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ObjectManager;
 
 class ItemSlotFixtures extends Fixture implements FixtureGroupInterface
@@ -46,11 +48,20 @@ class ItemSlotFixtures extends Fixture implements FixtureGroupInterface
             ],
         ];
 
+        $i = 1;
+
         foreach ($slots as $slot) {
             $object = (new ItemSlot())
                 ->setName($slot['name'])
-                ->setNameId($slot['nameId']);
+                ->setNameId($slot['nameId'])
+                ->setId($i)
+            ;
             $manager->persist($object);
+
+            $metadata = $manager->getClassMetaData(get_class($object));
+            $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+            $metadata->setIdGenerator(new AssignedGenerator());
+            $i ++;
         }
 
         $manager->flush();

@@ -5,6 +5,8 @@ namespace App\Fixtures;
 use App\Entity\WeaponType;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
+use Doctrine\ORM\Id\AssignedGenerator;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ObjectManager;
 
 class WeaponTypeFixtures extends Fixture implements FixtureGroupInterface
@@ -74,13 +76,21 @@ class WeaponTypeFixtures extends Fixture implements FixtureGroupInterface
             ],
         ];
 
+        $i = 1;
+
         foreach ($weapons as $weapon) {
             $object = (new WeaponType())
                 ->setName($weapon['name'])
                 ->setNameId($weapon['nameId'])
                 ->setHandNumber($weapon['hands'])
+                ->setId($i)
             ;
             $manager->persist($object);
+
+            $metadata = $manager->getClassMetaData(get_class($object));
+            $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+            $metadata->setIdGenerator(new AssignedGenerator());
+            $i ++;
         }
 
         $manager->flush();

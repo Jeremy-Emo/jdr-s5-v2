@@ -5,6 +5,8 @@ namespace App\Fixtures;
 use App\Entity\Element;
 use Doctrine\Bundle\FixturesBundle\Fixture;
 use Doctrine\Bundle\FixturesBundle\FixtureGroupInterface;
+use Doctrine\ORM\Id\AssignedGenerator;
+use Doctrine\ORM\Mapping\ClassMetadata;
 use Doctrine\Persistence\ObjectManager;
 
 class ElementFixtures extends Fixture implements FixtureGroupInterface
@@ -84,13 +86,21 @@ class ElementFixtures extends Fixture implements FixtureGroupInterface
             ],
         ];
 
+        $i = 1;
+
         foreach ($elementToSave as $element) {
             $object = (new Element())
                 ->setName($element['name'])
                 ->setNameId($element['nameId'])
                 ->setRarity($element['rarity'])
+                ->setId($i)
             ;
             $manager->persist($object);
+
+            $metadata = $manager->getClassMetaData(get_class($object));
+            $metadata->setIdGeneratorType(ClassMetadata::GENERATOR_TYPE_NONE);
+            $metadata->setIdGenerator(new AssignedGenerator());
+            $i ++;
         }
 
         $manager->flush();
