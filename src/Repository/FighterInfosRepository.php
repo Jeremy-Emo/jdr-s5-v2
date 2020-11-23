@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\FighterInfos;
+use App\Entity\Skill;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,32 +20,37 @@ class FighterInfosRepository extends ServiceEntityRepository
         parent::__construct($registry, FighterInfos::class);
     }
 
-    // /**
-    //  * @return FighterInfos[] Returns an array of FighterInfos objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findAllSkillsAvailable(FighterInfos $fighter)
     {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('f.id', 'ASC')
-            ->setMaxResults(10)
-            ->getQuery()
-            ->getResult()
+        $qb1 = $this->_em->createQueryBuilder();
+        $qb1
+            ->select('s3')
+            ->from(Skill::class, 's3')
+            ->where('s3.needSkill is not null')
         ;
-    }
-    */
+        $skillsToFilter = $qb1->getQuery()->getResult();
 
-    /*
-    public function findOneBySomeField($value): ?FighterInfos
-    {
-        return $this->createQueryBuilder('f')
-            ->andWhere('f.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
+        $qb2 = $this->_em->createQueryBuilder();
+        $qb2
+            ->select('s2')
+            ->from(Skill::class, 's2')
+            ->where('s2.needSkill is null')
         ;
+        $allSkills = $qb2->getQuery()->getResult();
+
+        /** @var Skill $skill */
+        foreach ($skillsToFilter as $skill) {
+            $fighterSkills = $fighter->getSkills();
+            foreach ($fighterSkills as $fighterSkill) {
+                if (
+                    $fighterSkill->getSkill()->getId() === $skill->getNeedSkill()->getId()
+                    && $skill->getNeededSkillLevel() <= $fighterSkill->getLevel()
+                ) {
+                    $allSkills[] = $skill;
+                }
+            }
+        }
+
+        return $allSkills;
     }
-    */
 }

@@ -66,17 +66,17 @@ class FighterInfos
     /**
      * @ORM\Column(type="integer")
      */
-    private $currentHP;
+    private ?int $currentHP;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $currentMP;
+    private ?int $currentMP;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private $currentSP;
+    private ?int $currentSP;
 
     public function __construct()
     {

@@ -4,8 +4,8 @@ namespace App\Controller\Heroes\Skills;
 
 use App\AbstractClass\AbstractController;
 use App\Interfaces\ControllerInterface;
+use App\Repository\FighterInfosRepository;
 use App\Repository\HeroRepository;
-use App\Repository\SkillRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -23,7 +23,7 @@ class ListSkillController extends AbstractController implements ControllerInterf
     public HeroRepository $heroRepository;
 
     /** @required */
-    public SkillRepository $skillRepository;
+    public FighterInfosRepository $fighterRepository;
 
     public function __invoke(int $id): Response
     {
@@ -36,10 +36,12 @@ class ListSkillController extends AbstractController implements ControllerInterf
             throw new NotFoundHttpException("Hero not found");
         }
 
+        $fighter = $hero->getFighterInfos();
+
         return $this->render('heroes/listSkills.html.twig', [
-            'heroSkills' => $hero->getFighterInfos()->getSkills(),
-            'skills' => $this->skillRepository->findAll(),
-            'skillPoints' => $hero->getFighterInfos()->getSkillPoints(),
+            'heroSkills' => $fighter->getSkills(),
+            'skills' => $this->fighterRepository->findAllSkillsAvailable($fighter),
+            'skillPoints' => $fighter->getSkillPoints(),
             'heroId' => $hero->getId()
         ]);
     }

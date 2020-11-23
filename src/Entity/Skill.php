@@ -131,12 +131,12 @@ class Skill
     /**
      * @ORM\OneToMany(targetEntity=AccountSkills::class, mappedBy="skill", orphanRemoval=true)
      */
-    private $accountSkills;
+    private Collection $accountSkills;
 
     /**
      * @ORM\ManyToMany(targetEntity=SkillTag::class, inversedBy="skills")
      */
-    private $tags;
+    private Collection $tags;
 
     public function __construct()
     {

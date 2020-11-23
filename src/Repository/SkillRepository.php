@@ -2,6 +2,7 @@
 
 namespace App\Repository;
 
+use App\Entity\FighterInfos;
 use App\Entity\Skill;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
