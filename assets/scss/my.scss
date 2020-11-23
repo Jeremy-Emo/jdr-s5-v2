@@ -37,6 +37,10 @@
 
 .centerCells td, .centerCells th {
   text-align : center;
+  span:not(.select2-selection__arrow) {
+    text-align : left;
+    width : calc(100% - 1px) !important;
+  }
 }
 
 .skill_box {

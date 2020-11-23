@@ -13,6 +13,7 @@ $(document).ready(function() {
         let newForm = prototype.replace(/__name__/g, index);
         $wrapper.data('index', index + 1);
         $(this).before(newForm);
+        $("select").select2();
     });
 
     body.on('click', '.remove_item_link', function(e) {

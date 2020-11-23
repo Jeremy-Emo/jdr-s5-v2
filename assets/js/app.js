@@ -9,6 +9,8 @@ require('dropify/dist/css/dropify.min.css');
 require('dropify/dist/fonts/dropify.ttf');
 require('bootstrap-select/dist/js/bootstrap-select.min');
 require('bootstrap-select/dist/css/bootstrap-select.min.css');
+require('select2/dist/js/select2.full.min');
+require('select2/dist/css/select2.min.css');
 
 const imagesContext = require.context('../img', true, /\.(png|jpg|jpeg|gif|ico|svg|webp)$/);
 imagesContext.keys().forEach(imagesContext);
@@ -45,5 +47,7 @@ $(document).ready(function() {
             'imageFormat': 'Le format d\'image est incorrect : seuls sont autorisés ({{ value }}).'
         }
     });
+
+    $("select").select2();
 
 });
