@@ -35,6 +35,7 @@ class CreateHeroScenario extends AbstractScenario
     public const DEFAULT_PERCEPTION = 10;
     public const DEFAULT_CHARISMA = 10;
     public const DEFAULT_RESISTANCE = 30;
+    public const DEFAULT_FURTIVE = 10;
 
     /** @required */
     public StatRepository $statRepository;
@@ -143,6 +144,9 @@ class CreateHeroScenario extends AbstractScenario
                     break;
                 case StatManager::RESISTANCE:
                     $newStat->setValue(self::DEFAULT_RESISTANCE);
+                    break;
+                case StatManager::FURTIVE:
+                    $newStat->setValue(self::DEFAULT_FURTIVE);
                     break;
                 default:
                     $this->logger->error("Stat not found", [
