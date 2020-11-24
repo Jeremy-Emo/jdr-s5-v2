@@ -3,6 +3,7 @@
 namespace App\Manager;
 
 use App\Entity\FighterInfos;
+use App\Entity\FighterStat;
 use App\Entity\Stat;
 
 class StatManager
@@ -159,11 +160,12 @@ class StatManager
 
     /**
      * @param FighterInfos $fighter
-     * @param Stat $stat
+     * @param FighterStat $stat
      * @return int
      */
-    private static function getBonus(FighterInfos $fighter, Stat $stat): int
+    private static function getBonus(FighterInfos $fighter, FighterStat $stat): int
     {
+        $stat = $stat->getStat();
         $bonusToStat = 100;
         foreach ($fighter->getSkills() as $fighterSkill) {
             $bonuses = $fighterSkill->getSkill()->getStatBonusPercents();
