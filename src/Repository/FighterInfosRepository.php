@@ -50,6 +50,8 @@ class FighterInfosRepository extends ServiceEntityRepository
                 }
             }
         }
+        
+        shuffle($allSkills);
 
         return $allSkills;
     }
