@@ -3,6 +3,7 @@
 namespace App\Manager;
 
 use App\Entity\FighterInfos;
+use App\Entity\Stat;
 
 class StatManager
 {
@@ -15,6 +16,7 @@ class StatManager
     public const PERCEPTION = 'perception';
     public const CHARISMA = 'charisme';
     public const RESISTANCE = 'resistance';
+    public const FURTIVE = 'furtivite';
 
     public const CAP_CRITICAL_RATE = 60;
     public const ONE_PERCENT_CRITICAL_RATE = 2;
@@ -101,25 +103,33 @@ class StatManager
                 case self::STAMINA:
                     $statsToReturn[] = [
                         'name' => 'Points de vie',
-                        'value' => $fighter->getCurrentHP() . " / " . self::calculateMaxHP($stat->getValue())
+                        'value' => $fighter->getCurrentHP() . " / " . self::calculateMaxHP(
+                            ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100)
+                        )
                     ];
                     break;
                 case self::STRENGTH:
                     $statsToReturn[] = [
                         'name' => 'Fatigue',
-                        'value' => $fighter->getCurrentSP() . " / " . self::calculateMaxSP($stat->getValue())
+                        'value' => $fighter->getCurrentSP() . " / " . self::calculateMaxSP(
+                            ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100)
+                        )
                     ];
                     break;
                 case self::WISDOM:
                     $statsToReturn[] = [
                         'name' => 'Points de mana',
-                        'value' => $fighter->getCurrentMP() . " / " . self::calculateMaxMP($stat->getValue())
+                        'value' => $fighter->getCurrentMP() . " / " . self::calculateMaxMP(
+                            ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100)
+                        )
                     ];
                     break;
                 case self::AGILITY:
                     $statsToReturn[] = [
                         'name' => 'Vitesse',
-                        'value' => self::calculateSpeed($stat->getValue())
+                        'value' => self::calculateSpeed(
+                            ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100)
+                        )
                     ];
                     break;
                 default:
@@ -138,13 +148,34 @@ class StatManager
     {
         $statsToReturn = [];
         foreach ($fighter->getStats() as $stat) {
-            //TODO : calculate bonuses with equipments and passives
             $statsToReturn[] = [
                 'name' => $stat->getStat()->getName(),
                 'description' => $stat->getStat()->getDescription(),
-                'value' => $stat->getValue()
+                'value' => ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100)
             ];
         }
         return $statsToReturn;
+    }
+
+    /**
+     * @param FighterInfos $fighter
+     * @param Stat $stat
+     * @return int
+     */
+    private static function getBonus(FighterInfos $fighter, Stat $stat): int
+    {
+        $bonusToStat = 100;
+        foreach ($fighter->getSkills() as $fighterSkill) {
+            $bonuses = $fighterSkill->getSkill()->getStatBonusPercents();
+            if ($bonuses !== null) {
+                foreach ($bonuses as $bonus) {
+                    if ($bonus->getStat()->getId() === $stat->getId()) {
+                        $bonusToStat += $bonus->getValue();
+                    }
+                }
+            }
+        }
+        //TODO : equipements
+        return $bonusToStat;
     }
 }

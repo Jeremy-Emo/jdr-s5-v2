@@ -138,10 +138,16 @@ class Skill
      */
     private Collection $tags;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=StatBonusPercent::class, mappedBy="skill")
+     */
+    private Collection $statBonusPercents;
+
     public function __construct()
     {
         $this->accountSkills = new ArrayCollection();
         $this->tags = new ArrayCollection();
+        $this->statBonusPercents = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -336,6 +342,33 @@ class Skill
     public function removeTag(SkillTag $tag): self
     {
         $this->tags->removeElement($tag);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StatBonusPercent[]
+     */
+    public function getStatBonusPercents(): Collection
+    {
+        return $this->statBonusPercents;
+    }
+
+    public function addStatBonusPercent(StatBonusPercent $statBonusPercent): self
+    {
+        if (!$this->statBonusPercents->contains($statBonusPercent)) {
+            $this->statBonusPercents[] = $statBonusPercent;
+            $statBonusPercent->addSkill($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStatBonusPercent(StatBonusPercent $statBonusPercent): self
+    {
+        if ($this->statBonusPercents->removeElement($statBonusPercent)) {
+            $statBonusPercent->removeSkill($this);
+        }
 
         return $this;
     }

@@ -62,6 +62,11 @@ class StatFixtures extends Fixture implements FixtureGroupInterface
                 'description' => "Augmente votre capacité à résister aux effets néfastes",
                 'nameId' => StatManager::RESISTANCE
             ],
+            [
+                'name' => 'Furtivité',
+                'description' => "Augmente votre discrétion",
+                'nameId' => StatManager::FURTIVE
+            ],
         ];
 
         $i = 1;

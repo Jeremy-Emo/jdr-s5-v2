@@ -49,6 +49,7 @@ class CreateSkillType extends AbstractType
                 'required' => false
             ])
             ->add('tags')
+            ->add('statBonusPercents')
             ->add('isUsableInBattle', CheckboxType::class, [
                 'row_attr' => [
                     'class' => 'pretty p-default d-block',
