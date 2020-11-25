@@ -24,6 +24,7 @@
                             <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
                             <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Passif</th>
                             <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Bataille</th>
+                            <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Coût d'achat</th>
                             <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nécessite</th>
                             <th scope="col">Actions</th>
                         </tr>
@@ -45,6 +46,9 @@
                                     {% else %}
                                         <i class="red fas fa-times"></i>
                                     {% endif %}
+                                </td>
+                                <td data-sort-value="{{ skill.cost }}">
+                                    {{ skill.cost }}
                                 </td>
                                 <td>
                                     {% if skill.needSkill and skill.neededSkillLevel > 0 %}
