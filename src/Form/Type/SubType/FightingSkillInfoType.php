@@ -33,6 +33,13 @@ class FightingSkillInfoType extends AbstractType
                 'label' => 'Ignore la défense',
                 'required' => false
             ])
+            ->add('isAoE', CheckboxType::class, [
+                'row_attr' => [
+                    'class' => 'pretty p-default d-block',
+                ],
+                'label' => 'Compétence de zone',
+                'required' => false
+            ])
             ->add('elementsMultipliers', CollectionType::class, [
                 'entry_type' => ElementMultiplierType::class,
                 'entry_options' => ['label' => false],
