@@ -42,10 +42,11 @@ class Skill
             $full .= "<p class='bold'>Compétence passive</p>";
         }
 
+        $notUsableInBattle = "";
         if ($this->isUsableInBattle) {
             $full .= $this->getFightingSkillInfo()->generateDescription($level);
         } else {
-            $full .= "<p class='red'>Non utilisable en combat</p>";
+            $notUsableInBattle .= "<p class='red'>Non utilisable en combat</p>";
         }
         if ((int) $this->mpCost > 0) {
             $full .= "<p>Coût en mana : " . $this->mpCost . "</p>";
@@ -60,6 +61,12 @@ class Skill
         if ($this->needSkill !== null && $this->neededSkillLevel > 0) {
             $full .= "<p class='red'>Nécessite la compétence " . $this->needSkill->name . " au niveau " . $this->neededSkillLevel . "</p>";
         }
+
+        foreach ($this->getStatBonusPercents() as $bonusPercent) {
+            $full .= "<p>" . $bonusPercent->getStat()->getName() . " +" . $bonusPercent->getValue() . "%</p>";
+        }
+
+        $full .= $notUsableInBattle;
 
         return $full;
     }
