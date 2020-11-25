@@ -47,7 +47,7 @@ class Element
     /**
      * @ORM\OneToMany(targetEntity=Hero::class, mappedBy="ElementAffinity", orphanRemoval=true)
      */
-    private $heroes;
+    private Collection $heroes;
 
     public function __construct()
     {

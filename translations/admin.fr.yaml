@@ -5,3 +5,5 @@ create_skill_tag : Créer une nouvelle famille de compétences
 create_skill_custom_effect : Créer un nouvel effet personnalisé
 create_sbp : Créer un bonus de stat
 edit_skill : Modifier compétence
+create_element : Créer un élément
+create_weaponType : Créer un type d'arme
