@@ -31,6 +31,9 @@ class FightingSkillInfo
         if ($this->isIgnoreDefense) {
             $full .= "<p>Ignore la défense de l'ennemi</p>";
         }
+        if ($this->isAoE) {
+            $full .= "<p>Compétence de zone</p>";
+        }
 
         if ($this->customEffects !== null) {
             $full .= "<p>" . $this->customEffects . "</p>";
@@ -135,6 +138,11 @@ class FightingSkillInfo
      * @ORM\ManyToOne(targetEntity=WeaponType::class, inversedBy="fightingSkillInfos")
      */
     private ?WeaponType $needWeaponType;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $isAoE = false;
 
     public function __construct()
     {
@@ -331,6 +339,18 @@ class FightingSkillInfo
     public function setNeedWeaponType(?WeaponType $needWeaponType): self
     {
         $this->needWeaponType = $needWeaponType;
+
+        return $this;
+    }
+
+    public function getIsAoE(): ?bool
+    {
+        return $this->isAoE;
+    }
+
+    public function setIsAoE(bool $isAoE): self
+    {
+        $this->isAoE = $isAoE;
 
         return $this;
     }
