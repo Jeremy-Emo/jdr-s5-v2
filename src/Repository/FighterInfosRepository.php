@@ -43,8 +43,12 @@ class FighterInfosRepository extends ServiceEntityRepository
             $fighterSkills = $fighter->getSkills();
             foreach ($fighterSkills as $fighterSkill) {
                 if (
-                    $fighterSkill->getSkill()->getId() === $skill->getNeedSkill()->getId()
-                    && $skill->getNeededSkillLevel() <= $fighterSkill->getLevel()
+                    (
+                        $fighterSkill->getSkill()->getId() === $skill->getNeedSkill()->getId()
+                        && $skill->getNeededSkillLevel() <= $fighterSkill->getLevel()
+                    )
+                    ||
+                    $fighterSkill->getSkill()->getId() === $skill->getId()
                 ) {
                     $allSkills[] = $skill;
                 }

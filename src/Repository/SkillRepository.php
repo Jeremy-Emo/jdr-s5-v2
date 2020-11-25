@@ -23,7 +23,7 @@ class SkillRepository extends ServiceEntityRepository
     public function findOneByRandom(int $max)
     {
         $result = $this->createQueryBuilder('s')
-            ->andWhere('s.cost < :max')
+            ->andWhere('s.cost <= :max')
             ->setParameter('max', $max)
             ->getQuery()
             ->getResult()
