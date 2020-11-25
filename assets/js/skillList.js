@@ -15,7 +15,7 @@ $(document).ready(function () {
                 'heroId' : $this.data('heroid'),
                 'skillId': $this.data('skillid')
             }).fail(function (data) {
-                popErrorMessage(data.message);
+                popErrorMessage(data.responseJSON.message);
             }).done(function (data) {
                 let skillBox = $this.closest('.skill_box')
                 let levelBox = skillBox.find('.level_box');
@@ -37,7 +37,7 @@ $(document).ready(function () {
             $.post("/heros/acheter-competence-aleatoire", {
                 'heroId' : $this.data('heroid'),
             }).fail(function (data) {
-                popErrorMessage(data.message);
+                popErrorMessage(data.responseJSON.message);
             }).done(function (data) {
                 let skillBox = $('[data-idforrandom=' + data.data.id +']');
                 let levelBox = skillBox.find('.level_box');

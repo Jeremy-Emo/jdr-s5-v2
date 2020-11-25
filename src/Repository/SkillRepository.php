@@ -2,7 +2,6 @@
 
 namespace App\Repository;
 
-use App\Entity\FighterInfos;
 use App\Entity\Skill;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
@@ -18,16 +17,5 @@ class SkillRepository extends ServiceEntityRepository
     public function __construct(ManagerRegistry $registry)
     {
         parent::__construct($registry, Skill::class);
-    }
-
-    public function findOneByRandom(int $max)
-    {
-        $result = $this->createQueryBuilder('s')
-            ->andWhere('s.cost <= :max')
-            ->setParameter('max', $max)
-            ->getQuery()
-            ->getResult()
-        ;
-        return $result[array_rand($result)];
     }
 }

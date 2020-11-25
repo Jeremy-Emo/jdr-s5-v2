@@ -5,8 +5,11 @@ namespace App\Scenario\Skill;
 use App\AbstractClass\AbstractScenario;
 use App\Entity\Account;
 use App\Entity\AccountSkills;
+use App\Entity\FighterInfos;
 use App\Entity\FighterSkill;
+use App\Entity\Skill;
 use App\Repository\AccountSkillsRepository;
+use App\Repository\FighterInfosRepository;
 use App\Repository\FighterSkillRepository;
 use App\Repository\HeroRepository;
 use App\Repository\SkillRepository;
@@ -23,7 +26,7 @@ class BuySkillScenario extends AbstractScenario
     public HeroRepository $heroRepository;
 
     /** @required */
-    public SkillRepository $skillRepository;
+    public FighterInfosRepository $skillRepository;
 
     /** @required */
     public FighterSkillRepository $fsRepository;
@@ -48,9 +51,7 @@ class BuySkillScenario extends AbstractScenario
         ]);
 
         if ($isRandom && $hero !== null) {
-            $skill = $this->skillRepository->findOneByRandom(
-                $hero->getFighterInfos()->getSkillPoints()
-            );
+            $skill = $this->pickRandomSkill($hero->getFighterInfos());
         } else {
             $skill = $this->skillRepository->find($skillId);
         }
@@ -123,5 +124,19 @@ class BuySkillScenario extends AbstractScenario
         return new JsonResponse([
             'success' => true
         ]);
+    }
+
+    private function pickRandomSkill(FighterInfos $fighter): ?Skill
+    {
+        $availableSkills = $this->skillRepository->findAllSkillsAvailable($fighter);
+        $skills = [];
+        /** @var Skill $potentialSkill */
+        foreach ($availableSkills as $potentialSkill) {
+            if ($potentialSkill->getCost() <= $fighter->getStatPoints()) {
+                $skills[] = $potentialSkill;
+            }
+        }
+
+        return (count($skills) > 0) ? $skills[array_rand($skills)] : null;
     }
 }
