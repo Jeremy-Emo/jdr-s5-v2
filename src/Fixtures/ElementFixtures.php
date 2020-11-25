@@ -84,6 +84,11 @@ class ElementFixtures extends Fixture implements FixtureGroupInterface
                 'nameId' => 'dark',
                 'rarity' => 25
             ],
+            [
+                'name' => 'Poison',
+                'nameId' => 'poison',
+                'rarity' => 30
+            ],
         ];
 
         $i = 1;
