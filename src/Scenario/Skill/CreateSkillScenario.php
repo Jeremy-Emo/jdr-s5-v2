@@ -26,10 +26,11 @@ class CreateSkillScenario extends AbstractScenario
 
     /**
      * @param FormInterface $form
+     * @param string|null $formName
      * @return Response
      * @throws ScenarioException
      */
-    public function handle(FormInterface $form): Response
+    public function handle(FormInterface $form, ?string $formName = 'create_skill'): Response
     {
         if($form->isSubmitted() && $form->isValid()) {
             /** @var Skill $skill */
@@ -41,6 +42,15 @@ class CreateSkillScenario extends AbstractScenario
             if ($skill->getIsUsableInBattle() && $fightingSkill !== null) {
                 $fightingSkill->setSkill($skill);
                 $skill->setFightingSkillInfo($fightingSkill);
+                foreach ($fightingSkill->getStatMultipliers() as $statMultiplier) {
+                    $statMultiplier->setSkill($fightingSkill);
+                }
+                foreach ($fightingSkill->getBattleStates() as $battleState) {
+                    $battleState->setSkill($fightingSkill);
+                }
+                foreach ($fightingSkill->getElementsMultipliers() as $elementMultiplier) {
+                    $elementMultiplier->setSkill($fightingSkill);
+                }
             }
 
             $this->manager->persist($skill);
@@ -51,7 +61,7 @@ class CreateSkillScenario extends AbstractScenario
 
         return $this->renderNewResponse('admin/createSkill.html.twig', [
             'form' => $form->createView(),
-            'title' => 'create_skill',
+            'title' => $formName,
             'specificJS' => 'collectionType'
         ]);
     }

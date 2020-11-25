@@ -37,7 +37,7 @@
 
 .centerCells td, .centerCells th {
   text-align : center;
-  span:not(.select2-selection__arrow) {
+  span:not(.select2-selection__arrow):not(.select2-selection__choice__remove) {
     text-align : left;
     width : calc(100% - 1px) !important;
   }

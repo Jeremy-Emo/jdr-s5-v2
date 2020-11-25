@@ -87,7 +87,7 @@
         data-index="{{ form.elementsMultipliers|length }}"
     >
         {% for elementsMultiplier in form.elementsMultipliers %}
-            {{ formMacros.printElementMultiplierRow(elementsMultiplier) }}
+            {{ _self.printElementMultiplierRow(elementsMultiplier) }}
         {% endfor %}
         <button type="button" class="add_item_link btn btn-primary ma-10-top" data-collection-holder-class="elementsMultipliers">
             Ajout bonus élémental
@@ -100,7 +100,7 @@
         data-index="{{ form.statMultipliers|length }}"
     >
         {% for statMultiplier in form.statMultipliers %}
-            {{ formMacros.printStatMultiplierRow(statMultiplier) }}
+            {{ _self.printStatMultiplierRow(statMultiplier) }}
         {% endfor %}
         <button type="button" class="add_item_link btn btn-primary ma-10-top" data-collection-holder-class="statMultipliers">
             Ajout dégâts
@@ -113,7 +113,7 @@
             data-index="{{ form.battleStates|length }}"
     >
         {% for battleState in form.battleStates %}
-            {{ formMacros.printBattleStatesRow(battleState) }}
+            {{ _self.printBattleStatesRow(battleState) }}
         {% endfor %}
         <button type="button" class="add_item_link btn btn-primary ma-10-top" data-collection-holder-class="battleStates">
             Ajout statut
