@@ -59,7 +59,7 @@ class Skill
         }
 
         if ($this->needSkill !== null && $this->neededSkillLevel > 0) {
-            $full .= "<p class='red'>Nécessite la compétence " . $this->needSkill->name . " au niveau " . $this->neededSkillLevel . "</p>";
+            $full .= "<p class='red'>Nécessite la compétence " . $this->needSkill . " au niveau " . $this->neededSkillLevel . "</p>";
         }
 
         foreach ($this->getStatBonusPercents() as $bonusPercent) {
