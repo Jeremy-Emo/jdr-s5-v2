@@ -61,13 +61,13 @@ class FightingSkillInfo
 
         foreach ($this->getBattleStates() as $states) {
             $add = "Pose ";
-            /** @var BattleState $state */
-            foreach ($states as $state) {
+            foreach ($states->getStates() as $state) {
                 $add .= $state->getName();
-                if ($state !== $states->last()) {
-                    $elements .= ", ";
+                if ($state !== $states->getStates()->last()) {
+                    $add .= ", ";
                 }
             }
+
             if ($states->getTurnsNumber() !== null) {
                 $add .= " pendant " . $states->getTurnsNumber() . " tour(s)";
             }
