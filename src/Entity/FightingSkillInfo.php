@@ -23,7 +23,9 @@ class FightingSkillInfo
                 $elements .= " & ";
             }
         }
-        $full.= "<p>Élément(s) :  " . $elements . "</p>";
+        if ($elements !== "") {
+            $full.= "<p>Élément(s) :  " . $elements . "</p>";
+        }
 
         if ($this->isCriticalRateUpgraded) {
             $full .= "<p>Taux critique augmenté.</p>";
@@ -44,11 +46,25 @@ class FightingSkillInfo
         }
 
         if ($this->getElementsMultipliers()->count() > 0) {
-            $full .= "<p>Multiplicateurs élémentaux :</p><ul>";
+            $damages = "";
+            $res = "";
             foreach ($this->getElementsMultipliers() as $mult) {
-                $full .= "<li>" . $mult->getElement()->getName() . " : " . ($mult->getValue() * $level) . "%</li>";
+                if ($mult->getIsResistance()) {
+                    $res .= "<li>" . $mult->getElement()->getName() . " : " . ($mult->getValue() * $level) . "%</li>";
+                } else {
+                    $damages .= "<li>" . $mult->getElement()->getName() . " : " . ($mult->getValue() * $level) . "%</li>";
+                }
             }
-            $full .= "</ul>";
+            if ($damages !== "") {
+                $full .= "<p>Multiplicateurs élémentaux :</p><ul>";
+                $full .= $damages;
+                $full .= "</ul>";
+            }
+            if ($damages !== "") {
+                $full .= "<p>Résistances élémentaires :</p><ul>";
+                $full .= $res;
+                $full .= "</ul>";
+            }
         }
 
         if ($this->getStatMultipliers()->count() > 0) {
