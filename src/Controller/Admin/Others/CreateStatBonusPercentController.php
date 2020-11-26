@@ -6,7 +6,7 @@ use App\AbstractClass\AbstractController;
 use App\Exception\ScenarioException;
 use App\Form\Type\SBPType;
 use App\Interfaces\ControllerInterface;
-use App\Scenario\StatBonusPercent\CreateSBPScenario;
+use App\Scenario\Generic\CreateFromGenericAdminFormScenario;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CreateStatBonusPercentController extends AbstractController implements ControllerInterface
 {
     /** @required */
-    public CreateSBPScenario $scenario;
+    public CreateFromGenericAdminFormScenario $scenario;
 
     /**
      * @param Request $request
@@ -33,6 +33,6 @@ class CreateStatBonusPercentController extends AbstractController implements Con
         $form = $this->createForm(SBPType::class);
         $form->handleRequest($request);
 
-        return $this->scenario->handle($form);
+        return $this->scenario->handle($form, 'create_sbp', 'admin_listSkills');
     }
 }
