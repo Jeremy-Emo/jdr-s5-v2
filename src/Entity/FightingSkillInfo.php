@@ -60,7 +60,7 @@ class FightingSkillInfo
                 $full .= $damages;
                 $full .= "</ul>";
             }
-            if ($damages !== "") {
+            if ($res !== "") {
                 $full .= "<p>Résistances élémentaires :</p><ul>";
                 $full .= $res;
                 $full .= "</ul>";
