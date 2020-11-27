@@ -4,6 +4,7 @@ namespace App\Form\Type;
 
 use App\Entity\BattleState;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
@@ -31,6 +32,13 @@ class CreateBattleStateType extends AbstractType
                         'message' => "Veuillez renseigner l'identifiant du statut'.",
                     ]),
                 ],
+            ])
+            ->add('isTransformation', CheckboxType::class, [
+                'row_attr' => [
+                    'class' => 'pretty p-default d-block',
+                ],
+                'label' => 'Transformation',
+                'required' => false
             ])
             ->add('file', FileType::class, [
                 'constraints' => [

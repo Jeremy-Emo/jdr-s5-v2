@@ -39,6 +39,11 @@ class BattleState extends UploadImageEntity
      */
     private Collection $fightingSkills;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $isTransformation = false;
+
     public function __construct()
     {
         $this->fightingSkills = new ArrayCollection();
@@ -96,6 +101,18 @@ class BattleState extends UploadImageEntity
         if ($this->fightingSkills->removeElement($fightingSkill)) {
             $fightingSkill->removeState($this);
         }
+
+        return $this;
+    }
+
+    public function getIsTransformation(): ?bool
+    {
+        return $this->isTransformation;
+    }
+
+    public function setIsTransformation(bool $isTransformation): self
+    {
+        $this->isTransformation = $isTransformation;
 
         return $this;
     }

@@ -45,6 +45,10 @@ class FightingSkillInfo
             $full .= "<p>Chances de toucher : " . ($this->accuracy * $level) . "%</p>";
         }
 
+        if ($this->isOnSelfOnly) {
+        $full .= "<p>Ne peut cibler que soi.</p>";
+        }
+
         if ($this->getElementsMultipliers()->count() > 0) {
             $damages = "";
             $res = "";
@@ -159,6 +163,11 @@ class FightingSkillInfo
      * @ORM\Column(type="boolean")
      */
     private ?bool $isAoE = false;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $isOnSelfOnly = false;
 
     public function __construct()
     {
@@ -367,6 +376,18 @@ class FightingSkillInfo
     public function setIsAoE(bool $isAoE): self
     {
         $this->isAoE = $isAoE;
+
+        return $this;
+    }
+
+    public function getIsOnSelfOnly(): ?bool
+    {
+        return $this->isOnSelfOnly;
+    }
+
+    public function setIsOnSelfOnly(bool $isOnSelfOnly): self
+    {
+        $this->isOnSelfOnly = $isOnSelfOnly;
 
         return $this;
     }

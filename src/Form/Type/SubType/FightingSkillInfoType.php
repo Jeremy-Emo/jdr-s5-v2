@@ -33,6 +33,13 @@ class FightingSkillInfoType extends AbstractType
                 'label' => 'Ignore la défense',
                 'required' => false
             ])
+            ->add('isOnSelfOnly', CheckboxType::class, [
+                'row_attr' => [
+                    'class' => 'pretty p-default d-block',
+                ],
+                'label' => 'Ne peut cibler que soi',
+                'required' => false
+            ])
             ->add('isAoE', CheckboxType::class, [
                 'row_attr' => [
                     'class' => 'pretty p-default d-block',
