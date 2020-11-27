@@ -29,8 +29,9 @@ class StatManager
 
     public const ONE_HP_STAMINA = 5;
     public const ONE_MP_WISDOM = 5;
-    public const ONE_SP_STRENGTH = 5;
+    public const ONE_SP_STRENGTH = 2;
     public const ONE_SPEED_AGILITY = 0.5;
+    public const ONE_DODGE_AGILITY = 0.1;
 
     /**
      * @param int $cr
@@ -87,6 +88,11 @@ class StatManager
         return ceil($agility * self::ONE_SPEED_AGILITY);
     }
 
+    public static function calculateDodge(int $agility): int
+    {
+        return ceil($agility * self::ONE_DODGE_AGILITY);
+    }
+
     /**
      * @param int $strength
      * @return int
@@ -130,6 +136,12 @@ class StatManager
                     $statsToReturn[] = [
                         'name' => 'Vitesse',
                         'value' => self::calculateSpeed(
+                            ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100)
+                        )
+                    ];
+                    $statsToReturn[] = [
+                        'name' => 'Esquive',
+                        'value' => self::calculateDodge(
                             ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100)
                         )
                     ];
