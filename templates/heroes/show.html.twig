@@ -48,7 +48,7 @@
                 {% endfor %}
                 <br>
                 {% for stat in stats %}
-                    <p>
+                    <p class="stat-box">
                         <span
                             class="cursor-click"
                             title="{{ stat.name }}"
@@ -58,11 +58,17 @@
                         >
                             {{ stat.name }} :
                         </span>
-                        <span class="f-right">{{ stat.value }}</span>
+                        <span class="f-right buy-stat cursor-click ma-5-left" data-statid="{{ stat.id }}"><i class="w-20 fas fa-plus-square"></i></span>
+                        <span class="f-right stat-value">{{ stat.value }}</span>
                     </p>
                 {% endfor %}
             </div>
         </div>
     </div>
 
+{% endblock %}
+
+{% block moreJS %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('showHero') }}
 {% endblock %}

@@ -165,7 +165,8 @@ class StatManager
             $statsToReturn[] = [
                 'name' => $stat->getStat()->getName(),
                 'description' => $stat->getStat()->getDescription(),
-                'value' => ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100)
+                'value' => ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100),
+                'id' => $stat->getStat()->getId()
             ];
         }
         return $statsToReturn;
