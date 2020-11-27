@@ -98,6 +98,10 @@ class FightingSkillInfo
             $full .= "<p class='red'>Nécessite une arme de type : " . $this->needWeaponType . "</p>";
         }
 
+        if ($this->castingTime > 0) {
+            $full .= "<p>Temps d'incantation : " . $this->castingTime . " tour(s)</p>";
+        }
+
         return $full;
     }
 
@@ -168,6 +172,11 @@ class FightingSkillInfo
      * @ORM\Column(type="boolean")
      */
     private ?bool $isOnSelfOnly = false;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private $castingTime;
 
     public function __construct()
     {
@@ -388,6 +397,18 @@ class FightingSkillInfo
     public function setIsOnSelfOnly(bool $isOnSelfOnly): self
     {
         $this->isOnSelfOnly = $isOnSelfOnly;
+
+        return $this;
+    }
+
+    public function getCastingTime(): ?int
+    {
+        return $this->castingTime;
+    }
+
+    public function setCastingTime(int $castingTime): self
+    {
+        $this->castingTime = $castingTime;
 
         return $this;
     }

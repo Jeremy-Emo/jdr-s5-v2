@@ -16,6 +16,10 @@ class FightingSkillInfoType extends AbstractType
     {
         $builder
             ->add('customEffects')
+            ->add('castingTime', IntegerType::class, [
+                'required' => false,
+                'empty_data' => "0"
+            ])
             ->add('accuracy', IntegerType::class, [
                 'required' => false
             ])
