@@ -18,6 +18,7 @@ class StatManager
     public const CHARISMA = 'charisme';
     public const RESISTANCE = 'resistance';
     public const FURTIVE = 'furtivite';
+    public const LEADERSHIP = 'leadership';
 
     public const CAP_CRITICAL_RATE = 60;
     public const ONE_PERCENT_CRITICAL_RATE = 2;

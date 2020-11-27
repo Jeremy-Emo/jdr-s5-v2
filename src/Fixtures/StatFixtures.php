@@ -67,6 +67,11 @@ class StatFixtures extends Fixture implements FixtureGroupInterface
                 'description' => "Augmente votre discrétion",
                 'nameId' => StatManager::FURTIVE
             ],
+            [
+                'name' => 'Commandement',
+                'description' => "Augmente votre capacité de contrôle d'unités.",
+                'nameId' => StatManager::LEADERSHIP
+            ],
         ];
 
         $i = 1;
