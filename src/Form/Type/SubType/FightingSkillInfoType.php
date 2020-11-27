@@ -71,6 +71,7 @@ class FightingSkillInfoType extends AbstractType
             ])
             ->add('element')
             ->add('needWeaponType')
+            ->add('needStatusToCast')
         ;
     }
 

@@ -98,6 +98,17 @@ class FightingSkillInfo
             $full .= "<p class='red'>Nécessite une arme de type : " . $this->needWeaponType . "</p>";
         }
 
+        if ($this->needStatusToCast->count() > 0) {
+            $full .= "<p>Nécessite d'être affecté par ";
+            foreach ($this->needStatusToCast as $status) {
+                $full .= $status;
+                if ($status !== $this->needStatusToCast->last()) {
+                    $full .= " & ";
+                }
+            }
+            $full .= " pour être lancé.</p>";
+        }
+
         if ($this->castingTime > 0) {
             $full .= "<p>Temps d'incantation : " . $this->castingTime . " tour(s)</p>";
         }
@@ -176,7 +187,12 @@ class FightingSkillInfo
     /**
      * @ORM\Column(type="integer")
      */
-    private $castingTime;
+    private ?int $castingTime;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=BattleState::class)
+     */
+    private Collection $needStatusToCast;
 
     public function __construct()
     {
@@ -184,6 +200,7 @@ class FightingSkillInfo
         $this->element = new ArrayCollection();
         $this->battleStates = new ArrayCollection();
         $this->statMultipliers = new ArrayCollection();
+        $this->needStatusToCast = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -409,6 +426,30 @@ class FightingSkillInfo
     public function setCastingTime(int $castingTime): self
     {
         $this->castingTime = $castingTime;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BattleState[]
+     */
+    public function getNeedStatusToCast(): Collection
+    {
+        return $this->needStatusToCast;
+    }
+
+    public function addNeedStatusToCast(BattleState $needStatusToCast): self
+    {
+        if (!$this->needStatusToCast->contains($needStatusToCast)) {
+            $this->needStatusToCast[] = $needStatusToCast;
+        }
+
+        return $this;
+    }
+
+    public function removeNeedStatusToCast(BattleState $needStatusToCast): self
+    {
+        $this->needStatusToCast->removeElement($needStatusToCast);
 
         return $this;
     }
