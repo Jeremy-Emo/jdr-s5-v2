@@ -70,12 +70,12 @@ class Hero extends UploadImageEntity
      * @ORM\ManyToOne(targetEntity=Element::class, inversedBy="heroes")
      * @ORM\JoinColumn(nullable=false)
      */
-    private ?Element $ElementAffinity;
+    private ?Element $elementAffinity;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private $age;
+    private ?int $age;
 
     public function getId(): ?int
     {
@@ -166,12 +166,12 @@ class Hero extends UploadImageEntity
 
     public function getElementAffinity(): ?Element
     {
-        return $this->ElementAffinity;
+        return $this->elementAffinity;
     }
 
-    public function setElementAffinity(?Element $ElementAffinity): self
+    public function setElementAffinity(?Element $elementAffinity): self
     {
-        $this->ElementAffinity = $ElementAffinity;
+        $this->elementAffinity = $elementAffinity;
 
         return $this;
     }

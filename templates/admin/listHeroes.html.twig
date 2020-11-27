@@ -1,0 +1,43 @@
+{% extends 'main/layout.html.twig' %}
+
+{% block page_title %}Admin - Gestion des héros{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col ma-25-top">
+                <div class="pa-20 bg-white">
+                    <p class="ma-10-bottom">
+                        <span>Nombre de héros : {{ heroes|length }}</span>
+                        <span class="f-right"><input type="text" id="searchBar"></span>
+                    </p>
+                    <table class="table" id="stupidTable">
+                        <thead>
+                        <tr>
+                            <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
+                            <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Affinité</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for hero in heroes %}
+                            <tr class="searchedItem" data-search="{{ hero.name|lower }}">
+                                <td>{{ hero.name }}</td>
+                                <td>{{ hero.elementAffinity }}</td>
+                                <td>
+                                    <a href="{{ path('admin_editHero', {'id': hero.id}) }}">Modifier</a><br>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block moreJS %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('searchBar') }}
+{% endblock %}

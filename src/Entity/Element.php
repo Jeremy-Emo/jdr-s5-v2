@@ -45,7 +45,7 @@ class Element
     private ?int $rarity = 100;
 
     /**
-     * @ORM\OneToMany(targetEntity=Hero::class, mappedBy="ElementAffinity", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Hero::class, mappedBy="elementAffinity", orphanRemoval=true)
      */
     private Collection $heroes;
 
