@@ -12,8 +12,17 @@ class Item extends UploadImageEntity
 {
     public function getFullDescription(): string
     {
-        //TODO : implement here
-        return "";
+        $full = "<p>Rareté : <span class='" . $this->rarity->getColor() . "'>" . $this->rarity->getName() . "</span></p>";
+
+        if (!empty($this->description)) {
+            $full .= "<p>" . $this->description . "</p>";
+        }
+
+        if ($this->getBattleItemInfo() !== null) {
+            $full .= $this->getBattleItemInfo()->getFullDescription();
+        }
+
+        return $full;
     }
 
     /**

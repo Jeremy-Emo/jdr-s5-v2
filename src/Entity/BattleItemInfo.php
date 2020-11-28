@@ -10,6 +10,21 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class BattleItemInfo
 {
+    public function getFullDescription(): string
+    {
+        $full = "";
+
+        if (!empty($this->armor)) {
+            $full .= "<p>Défense : " . $this->armor . "</p>";
+        }
+
+        if (!empty($this->trueDamages)) {
+            $full .= "<p>Capacité offensive : " . $this->trueDamages . "</p>";
+        }
+
+        return $full;
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
