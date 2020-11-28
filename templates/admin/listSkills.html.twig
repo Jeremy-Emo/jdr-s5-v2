@@ -32,7 +32,7 @@
                         <tbody>
                         {% for skill in skills %}
                             <tr class="searchedItem" data-search="{{ skill.name|lower }}">
-                                <td title="{{ skill.name }}" data-content="{{ skill.getFullDescription() }}" data-html=true data-toggle="popover">{{ skill.name }}</td>
+                                <td class="cursor-click" title="{{ skill.name }}" data-content="{{ skill.getFullDescription() }}" data-html=true data-toggle="popover">{{ skill.name }}</td>
                                 <td data-sort-value={{ skill.isPassive ? "1" : "0" }}>
                                     {% if skill.isPassive %}
                                         <i class="green fas fa-check"></i>

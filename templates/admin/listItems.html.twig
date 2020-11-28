@@ -28,7 +28,7 @@
                         <tbody>
                         {% for item in items %}
                             <tr class="searchedItem" data-search="{{ item.name|lower }}">
-                                <td title="{{ item.name }}" data-content="{{ item.getFullDescription() }}" data-html=true data-toggle="popover">{{ item.name }}</td>
+                                <td class="cursor-click" title="{{ item.name }}" data-content="{{ item.getFullDescription() }}" data-html=true data-toggle="popover">{{ item.name }}</td>
                                 <td class="{{ item.rarity.color }}">{{ item.rarity }}</td>
                                 <td>
                                     <a href="{{ path('admin_editItem', {'id': item.id}) }}">Modifier</a>
