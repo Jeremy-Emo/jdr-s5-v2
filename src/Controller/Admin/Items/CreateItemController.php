@@ -1,27 +1,27 @@
 <?php
 
-namespace App\Controller\Admin\Others;
+namespace App\Controller\Admin\Items;
 
 use App\AbstractClass\AbstractController;
 use App\Exception\ScenarioException;
-use App\Form\Type\WeaponTypeType;
+use App\Form\Type\CreateItemType;
 use App\Interfaces\ControllerInterface;
-use App\Scenario\Generic\CreateFromGenericAdminFormScenario;
+use App\Scenario\Item\CreateItemScenario;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class CreateWeaponTypeController
- * @package App\Controller\Admin\Others
- * @Route("/admin/nouveau-type-arme", name="admin_createWT")
+ * Class CreateItemController
+ * @package App\Controller\Admin\Items
+ * @Route("/admin/creer-nouvel-objet", name="admin_createItem")
  * @IsGranted("ROLE_ADMIN")
  */
-class CreateWeaponTypeController extends AbstractController implements ControllerInterface
+class CreateItemController extends AbstractController implements ControllerInterface
 {
     /** @required  */
-    public CreateFromGenericAdminFormScenario $scenario;
+    public CreateItemScenario $scenario;
 
     /**
      * @param Request $request
@@ -30,9 +30,9 @@ class CreateWeaponTypeController extends AbstractController implements Controlle
      */
     public function __invoke(Request $request): Response
     {
-        $form = $this->createForm(WeaponTypeType::class);
+        $form = $this->createForm(CreateItemType::class);
         $form->handleRequest($request);
 
-        return $this->scenario->handle($form, 'create_weaponType', 'admin_listItems');
+        return $this->scenario->handle($form);
     }
 }

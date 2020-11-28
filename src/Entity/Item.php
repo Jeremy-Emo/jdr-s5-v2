@@ -10,6 +10,12 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Item extends UploadImageEntity
 {
+    public function getFullDescription(): string
+    {
+        //TODO : implement here
+        return "";
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -56,7 +62,7 @@ class Item extends UploadImageEntity
     /**
      * @ORM\ManyToOne(targetEntity=WeaponType::class, inversedBy="items")
      */
-    private $weaponType;
+    private ?WeaponType $weaponType;
 
     public function getId(): ?int
     {

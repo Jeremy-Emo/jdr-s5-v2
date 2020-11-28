@@ -9,3 +9,4 @@ create_element : Créer un élément
 create_weaponType : Créer un type d'arme
 edit_hero : Modifier un héros
 create_stat : Ajouter une statistique
+create_item: Créer un objet
