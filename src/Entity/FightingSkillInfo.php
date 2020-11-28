@@ -72,7 +72,11 @@ class FightingSkillInfo
         }
 
         if ($this->getStatMultipliers()->count() > 0) {
-            $full .= "<p>Multiplicateurs de dégâts :</p><ul>";
+            if ($this->isHeal) {
+                $full .= "<p>Soin :</p><ul>";
+            } else {
+                $full .= "<p>Multiplicateurs de dégâts :</p><ul>";
+            }
             foreach ($this->getStatMultipliers() as $mult) {
                 $full .= "<li>" . $mult->getStat()->getName() . " : " . ($mult->getValue() * $level) . "%</li>";
             }
@@ -193,6 +197,11 @@ class FightingSkillInfo
      * @ORM\ManyToMany(targetEntity=BattleState::class)
      */
     private Collection $needStatusToCast;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $isHeal;
 
     public function __construct()
     {
@@ -450,6 +459,18 @@ class FightingSkillInfo
     public function removeNeedStatusToCast(BattleState $needStatusToCast): self
     {
         $this->needStatusToCast->removeElement($needStatusToCast);
+
+        return $this;
+    }
+
+    public function getIsHeal(): ?bool
+    {
+        return $this->isHeal;
+    }
+
+    public function setIsHeal(bool $isHeal): self
+    {
+        $this->isHeal = $isHeal;
 
         return $this;
     }

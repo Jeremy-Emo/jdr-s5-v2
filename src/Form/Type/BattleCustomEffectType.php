@@ -5,6 +5,7 @@ namespace App\Form\Type;
 use App\Entity\CustomEffect;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
+use Symfony\Component\Form\Extension\Core\Type\TextareaType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -21,6 +22,9 @@ class BattleCustomEffectType extends AbstractType
                 'required' => true
             ])
             ->add('value', IntegerType::class, [
+                'required' => false
+            ])
+            ->add('advancedDescription', TextareaType::class, [
                 'required' => false
             ])
         ;

@@ -40,11 +40,6 @@ class Item extends UploadImageEntity
     private ?ItemSlot $itemSlot;
 
     /**
-     * @ORM\Column(type="string", length=255)
-     */
-    private ?string $typeId;
-
-    /**
      * @ORM\Column(type="boolean")
      */
     private ?bool $isConsumable;
@@ -63,6 +58,11 @@ class Item extends UploadImageEntity
      * @ORM\ManyToOne(targetEntity=WeaponType::class, inversedBy="items")
      */
     private ?WeaponType $weaponType;
+
+    /**
+     * @ORM\OneToOne(targetEntity=BattleItemInfo::class, mappedBy="item", cascade={"persist", "remove"})
+     */
+    private $battleItemInfo;
 
     public function getId(): ?int
     {
@@ -101,18 +101,6 @@ class Item extends UploadImageEntity
     public function setItemSlot(?ItemSlot $itemSlot): self
     {
         $this->itemSlot = $itemSlot;
-
-        return $this;
-    }
-
-    public function getTypeId(): ?string
-    {
-        return $this->typeId;
-    }
-
-    public function setTypeId(string $typeId): self
-    {
-        $this->typeId = $typeId;
 
         return $this;
     }
@@ -161,6 +149,23 @@ class Item extends UploadImageEntity
     public function setWeaponType(?WeaponType $weaponType): self
     {
         $this->weaponType = $weaponType;
+
+        return $this;
+    }
+
+    public function getBattleItemInfo(): ?BattleItemInfo
+    {
+        return $this->battleItemInfo;
+    }
+
+    public function setBattleItemInfo(BattleItemInfo $battleItemInfo): self
+    {
+        $this->battleItemInfo = $battleItemInfo;
+
+        // set the owning side of the relation if necessary
+        if ($battleItemInfo->getItem() !== $this) {
+            $battleItemInfo->setItem($this);
+        }
 
         return $this;
     }

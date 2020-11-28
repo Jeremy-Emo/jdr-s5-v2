@@ -38,6 +38,8 @@ class CreateHeroScenario extends AbstractScenario
     public const DEFAULT_FURTIVE = 10;
     public const DEFAULT_LEADERSHIP = 0;
 
+    public const MAX_RARITY_BEGINNER_STUFF = 'Commun';
+
     /** @required */
     public StatRepository $statRepository;
 

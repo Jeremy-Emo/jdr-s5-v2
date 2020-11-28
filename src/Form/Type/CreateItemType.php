@@ -21,7 +21,6 @@ class CreateItemType extends AbstractType
             ])
             ->add('rarity')
             ->add('itemSlot')
-            ->add('typeId')
             ->add('isConsumable', CheckboxType::class, [
                 'row_attr' => [
                     'class' => 'pretty p-default d-block',

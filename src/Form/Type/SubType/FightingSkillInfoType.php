@@ -44,6 +44,13 @@ class FightingSkillInfoType extends AbstractType
                 'label' => 'Ne peut cibler que soi',
                 'required' => false
             ])
+            ->add('isHeal', CheckboxType::class, [
+                'row_attr' => [
+                    'class' => 'pretty p-default d-block',
+                ],
+                'label' => 'Soin',
+                'required' => false
+            ])
             ->add('isAoE', CheckboxType::class, [
                 'row_attr' => [
                     'class' => 'pretty p-default d-block',

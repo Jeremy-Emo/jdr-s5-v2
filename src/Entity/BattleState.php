@@ -44,6 +44,11 @@ class BattleState extends UploadImageEntity
      */
     private ?bool $isTransformation = false;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private $advancedDescription;
+
     public function __construct()
     {
         $this->fightingSkills = new ArrayCollection();
@@ -113,6 +118,18 @@ class BattleState extends UploadImageEntity
     public function setIsTransformation(bool $isTransformation): self
     {
         $this->isTransformation = $isTransformation;
+
+        return $this;
+    }
+
+    public function getAdvancedDescription(): ?string
+    {
+        return $this->advancedDescription;
+    }
+
+    public function setAdvancedDescription(?string $advancedDescription): self
+    {
+        $this->advancedDescription = $advancedDescription;
 
         return $this;
     }
