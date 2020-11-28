@@ -31,7 +31,6 @@ class CreateItemType extends AbstractType
             ])
             ->add('description')
             ->add('customEffect')
-            ->add('weaponType')
             ->add('file', FileType::class, [
                 'constraints' => [
                     new File([

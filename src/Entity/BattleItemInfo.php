@@ -48,6 +48,11 @@ class BattleItemInfo
      */
     private ?int $armor;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=WeaponType::class, inversedBy="items")
+     */
+    private ?WeaponType $weaponType;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -85,6 +90,18 @@ class BattleItemInfo
     public function setArmor(?int $armor): self
     {
         $this->armor = $armor;
+
+        return $this;
+    }
+
+    public function getWeaponType(): ?WeaponType
+    {
+        return $this->weaponType;
+    }
+
+    public function setWeaponType(?WeaponType $weaponType): self
+    {
+        $this->weaponType = $weaponType;
 
         return $this;
     }

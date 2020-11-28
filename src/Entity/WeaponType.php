@@ -40,7 +40,7 @@ class WeaponType
     private Collection $fightingSkillInfos;
 
     /**
-     * @ORM\OneToMany(targetEntity=Item::class, mappedBy="weaponType")
+     * @ORM\OneToMany(targetEntity=BattleItemInfo::class, mappedBy="weaponType")
      */
     private Collection $items;
 

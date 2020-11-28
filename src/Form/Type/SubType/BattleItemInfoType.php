@@ -19,6 +19,7 @@ class BattleItemInfoType extends AbstractType
             ->add('trueDamages', IntegerType::class, [
                 'required' => false,
             ])
+            ->add('weaponType')
         ;
     }
 
