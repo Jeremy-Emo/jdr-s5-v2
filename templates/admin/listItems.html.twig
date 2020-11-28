@@ -21,6 +21,7 @@
                         <thead>
                         <tr>
                             <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
+                            <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Rareté</th>
                             <th scope="col">Actions</th>
                         </tr>
                         </thead>
@@ -28,8 +29,9 @@
                         {% for item in items %}
                             <tr class="searchedItem" data-search="{{ item.name|lower }}">
                                 <td title="{{ item.name }}" data-content="{{ item.getFullDescription() }}" data-html=true data-toggle="popover">{{ item.name }}</td>
+                                <td class="{{ item.rarity.color }}">{{ item.rarity }}</td>
                                 <td>
-                                    <a href="#">Modifier</a>
+                                    <a href="{{ path('admin_editItem', {'id': item.id}) }}">Modifier</a>
                                 </td>
                             </tr>
                         {% endfor %}

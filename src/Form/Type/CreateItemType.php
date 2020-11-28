@@ -43,7 +43,7 @@ class CreateItemType extends AbstractType
                         'mimeTypesMessage' => 'Merci de téléverser une image correspondant aux critères.',
                     ])
                 ],
-                'required' => true,
+                'required' => !$options['isEdit'],
                 'label' => 'Image',
                 'attr' => [
                     'class' => 'dropify',
@@ -58,6 +58,7 @@ class CreateItemType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => Item::class,
+            'isEdit' => false,
         ]);
     }
 }
