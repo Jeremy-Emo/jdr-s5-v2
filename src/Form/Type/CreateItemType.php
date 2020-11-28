@@ -3,6 +3,7 @@
 namespace App\Form\Type;
 
 use App\Entity\Item;
+use App\Form\Type\SubType\BattleItemInfoType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -49,6 +50,9 @@ class CreateItemType extends AbstractType
                     'data-max-file-size' => '3M',
                     'data-allowed-file-extensions' => 'jpg jpeg png'
                 ],
+            ])
+            ->add('battleItemInfo', BattleItemInfoType::class, [
+                'required' => false,
             ])
         ;
     }

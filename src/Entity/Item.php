@@ -62,7 +62,7 @@ class Item extends UploadImageEntity
     /**
      * @ORM\OneToOne(targetEntity=BattleItemInfo::class, mappedBy="item", cascade={"persist", "remove"})
      */
-    private $battleItemInfo;
+    private ?BattleItemInfo $battleItemInfo;
 
     public function getId(): ?int
     {

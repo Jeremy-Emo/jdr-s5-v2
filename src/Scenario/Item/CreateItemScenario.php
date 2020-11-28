@@ -3,6 +3,8 @@
 namespace App\Scenario\Item;
 
 use App\AbstractClass\AbstractScenario;
+use App\Entity\BattleItemInfo;
+use App\Entity\Item;
 use App\Exception\ScenarioException;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -30,9 +32,17 @@ class CreateItemScenario extends AbstractScenario
     public function handle(FormInterface $form): Response
     {
         if($form->isSubmitted() && $form->isValid()) {
-            $object = $form->getData();
+            /** @var Item $item */
+            $item = $form->getData();
+            /** @var BattleItemInfo|null $itemBattleInfo */
+            $itemBattleInfo = $form->get('battleItemInfo')->getData();
 
-            $this->manager->persist($object);
+            if ($itemBattleInfo !== null) {
+                $itemBattleInfo->setItem($item);
+                $item->setBattleItemInfo($itemBattleInfo);
+            }
+
+            $this->manager->persist($item);
             $this->manager->flush();
 
             return $this->redirectToRoute('admin_listItems');

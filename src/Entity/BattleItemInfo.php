@@ -15,13 +15,23 @@ class BattleItemInfo
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\OneToOne(targetEntity=Item::class, inversedBy="battleItemInfo", cascade={"persist", "remove"})
      * @ORM\JoinColumn(nullable=false)
      */
-    private $item;
+    private ?Item $item = null;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $trueDamages;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $armor;
 
     public function getId(): ?int
     {
@@ -36,6 +46,30 @@ class BattleItemInfo
     public function setItem(Item $item): self
     {
         $this->item = $item;
+
+        return $this;
+    }
+
+    public function getTrueDamages(): ?int
+    {
+        return $this->trueDamages;
+    }
+
+    public function setTrueDamages(?int $trueDamages): self
+    {
+        $this->trueDamages = $trueDamages;
+
+        return $this;
+    }
+
+    public function getArmor(): ?int
+    {
+        return $this->armor;
+    }
+
+    public function setArmor(?int $armor): self
+    {
+        $this->armor = $armor;
 
         return $this;
     }
