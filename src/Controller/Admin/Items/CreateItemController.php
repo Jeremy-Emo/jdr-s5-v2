@@ -4,9 +4,9 @@ namespace App\Controller\Admin\Items;
 
 use App\AbstractClass\AbstractController;
 use App\Exception\ScenarioException;
-use App\Form\Type\CreateItemType;
+use App\Form\Type\SaveItemType;
 use App\Interfaces\ControllerInterface;
-use App\Scenario\Item\CreateItemScenario;
+use App\Scenario\Item\SaveItemScenario;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CreateItemController extends AbstractController implements ControllerInterface
 {
     /** @required  */
-    public CreateItemScenario $scenario;
+    public SaveItemScenario $scenario;
 
     /**
      * @param Request $request
@@ -30,7 +30,7 @@ class CreateItemController extends AbstractController implements ControllerInter
      */
     public function __invoke(Request $request): Response
     {
-        $form = $this->createForm(CreateItemType::class);
+        $form = $this->createForm(SaveItemType::class);
         $form->handleRequest($request);
 
         return $this->scenario->handle($form);

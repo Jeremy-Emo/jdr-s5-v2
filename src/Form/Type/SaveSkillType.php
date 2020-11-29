@@ -13,7 +13,7 @@ use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 use Symfony\Component\Validator\Constraints\NotBlank;
 
-class CreateSkillType extends AbstractType
+class SaveSkillType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {

@@ -4,10 +4,10 @@ namespace App\Controller\Admin\Skills;
 
 use App\AbstractClass\AbstractController;
 use App\Exception\ScenarioException;
-use App\Form\Type\CreateSkillType;
+use App\Form\Type\SaveSkillType;
 use App\Interfaces\ControllerInterface;
 use App\Repository\SkillRepository;
-use App\Scenario\Skill\CreateSkillScenario;
+use App\Scenario\Skill\SaveSkillScenario;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -23,7 +23,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class EditSkillController extends AbstractController implements ControllerInterface
 {
     /** @required */
-    public CreateSkillScenario $scenario;
+    public SaveSkillScenario $scenario;
 
     /** @required */
     public SkillRepository $skillRepository;
@@ -41,7 +41,7 @@ class EditSkillController extends AbstractController implements ControllerInterf
             throw new NotFoundHttpException("Skill not found");
         }
 
-        $form = $this->createForm(CreateSkillType::class, $skill);
+        $form = $this->createForm(SaveSkillType::class, $skill);
         $form->handleRequest($request);
 
         return $this->scenario->handle($form, 'edit_skill');

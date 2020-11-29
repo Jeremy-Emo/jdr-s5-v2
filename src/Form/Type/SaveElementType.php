@@ -2,25 +2,26 @@
 
 namespace App\Form\Type;
 
-use App\Entity\SkillTag;
+use App\Entity\Element;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
 
-class CreateSkillTagType extends AbstractType
+class SaveElementType extends AbstractType
 {
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
             ->add('name')
             ->add('nameId')
+            ->add('rarity')
         ;
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
-            'data_class' => SkillTag::class,
+            'data_class' => Element::class,
         ]);
     }
 }

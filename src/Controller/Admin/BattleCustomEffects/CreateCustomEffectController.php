@@ -6,7 +6,7 @@ use App\AbstractClass\AbstractController;
 use App\Exception\ScenarioException;
 use App\Form\Type\BattleCustomEffectType;
 use App\Interfaces\ControllerInterface;
-use App\Scenario\Generic\CreateFromGenericAdminFormScenario;
+use App\Scenario\Generic\SaveFromGenericAdminFormScenario;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -21,7 +21,7 @@ use Symfony\Component\Routing\Annotation\Route;
 class CreateCustomEffectController extends AbstractController implements ControllerInterface
 {
     /** @required  */
-    public CreateFromGenericAdminFormScenario $scenario;
+    public SaveFromGenericAdminFormScenario $scenario;
 
     /**
      * @param Request $request

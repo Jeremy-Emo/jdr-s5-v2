@@ -4,7 +4,7 @@ namespace App\Controller\Admin\Others;
 
 use App\AbstractClass\AbstractController;
 use App\Exception\ScenarioException;
-use App\Form\Type\CreateStatType;
+use App\Form\Type\SaveStatType;
 use App\Interfaces\ControllerInterface;
 use App\Scenario\Stat\CreateStatScenario;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
@@ -30,7 +30,7 @@ class CreateStatController extends AbstractController implements ControllerInter
      */
     public function __invoke(Request $request): Response
     {
-        $form = $this->createForm(CreateStatType::class);
+        $form = $this->createForm(SaveStatType::class);
         $form->handleRequest($request);
         return $this->scenario->handle($form);
     }

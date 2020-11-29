@@ -13,7 +13,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
-class CreateItemScenario extends AbstractScenario
+class SaveItemScenario extends AbstractScenario
 {
     public function __construct(
         EntityManagerInterface $entityManager,

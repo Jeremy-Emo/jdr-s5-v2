@@ -4,10 +4,10 @@ namespace App\Controller\Admin\Items;
 
 use App\AbstractClass\AbstractController;
 use App\Exception\ScenarioException;
-use App\Form\Type\CreateItemType;
+use App\Form\Type\SaveItemType;
 use App\Interfaces\ControllerInterface;
 use App\Repository\ItemRepository;
-use App\Scenario\Item\CreateItemScenario;
+use App\Scenario\Item\SaveItemScenario;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
@@ -26,7 +26,7 @@ class EditItemController extends AbstractController implements ControllerInterfa
     public ItemRepository $itemRepository;
 
     /** @required  */
-    public CreateItemScenario $scenario;
+    public SaveItemScenario $scenario;
 
     /**
      * @param Request $request
@@ -41,7 +41,7 @@ class EditItemController extends AbstractController implements ControllerInterfa
             throw new NotFoundHttpException("Item not found");
         }
 
-        $form = $this->createForm(CreateItemType::class, $item, [
+        $form = $this->createForm(SaveItemType::class, $item, [
             'isEdit' => true
         ]);
         $form->handleRequest($request);
