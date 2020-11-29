@@ -4,6 +4,7 @@ namespace App\Form\Type\SubType;
 
 use App\Entity\BattleItemInfo;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CollectionType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -20,6 +21,13 @@ class BattleItemInfoType extends AbstractType
                 'required' => false,
             ])
             ->add('weaponType')
+            ->add('elementMultipliers', CollectionType::class, [
+                'entry_type' => ElementMultiplierType::class,
+                'entry_options' => ['label' => false],
+                'allow_add' => true,
+                'block_name' => 'elementMultipliers',
+            ])
+            ->add('statBonusPercents')
         ;
     }
 

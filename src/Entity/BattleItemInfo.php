@@ -82,7 +82,7 @@ class BattleItemInfo
     private ?WeaponType $weaponType;
 
     /**
-     * @ORM\OneToMany(targetEntity=ElementMultiplier::class, mappedBy="item")
+     * @ORM\OneToMany(targetEntity=ElementMultiplier::class, mappedBy="item", cascade={"persist", "remove"})
      */
     private Collection $elementMultipliers;
 

@@ -40,6 +40,10 @@ class CreateItemScenario extends AbstractScenario
             if ($itemBattleInfo !== null) {
                 $itemBattleInfo->setItem($item);
                 $item->setBattleItemInfo($itemBattleInfo);
+
+                foreach ($itemBattleInfo->getElementMultipliers() as $elementMultiplier) {
+                    $elementMultiplier->setItem($itemBattleInfo);
+                }
             }
 
             $this->manager->persist($item);
@@ -48,9 +52,10 @@ class CreateItemScenario extends AbstractScenario
             return $this->redirectToRoute('admin_listItems');
         }
 
-        return $this->renderNewResponse('admin/defaultGenericForm.html.twig', [
+        return $this->renderNewResponse('admin/createItem.html.twig', [
             'form' => $form->createView(),
-            'title' => 'create_item'
+            'title' => 'create_item',
+            'specificJS' => 'collectionType'
         ]);
     }
 }

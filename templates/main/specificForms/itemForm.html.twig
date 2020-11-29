@@ -1,0 +1,46 @@
+{% extends 'main/forms.html.twig' %}
+
+{% macro printElementMultiplierRow(form) %}
+    <table class="ma-15-top centerCells f-width-table">
+        <thead>
+        <tr>
+            <th>{{ form_label(form.element) }}</th>
+            <th><label>Résistance</label></th>
+            <th>{{ form_label(form.value) }}</th>
+            <th><label>Supprimer</label></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ form_widget(form.element) }}</td>
+            <td>{{ form_row(form.isResistance) }}</td>
+            <td>{{ form_widget(form.value) }}</td>
+            <td>
+                <a href="#" class="remove_item_link">
+                    <i class="fas fa-window-close"></i>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endmacro %}
+
+{% block _create_item_battleItemInfo_widget %}
+    {{ form_row(form.armor) }}
+    {{ form_row(form.trueDamages) }}
+    {{ form_row(form.weaponType) }}
+    {{ form_row(form.statBonusPercents) }}
+    <p class="ma-5-bottom">Bonus élémentaux : </p>
+    <div
+            class="row collection_wrapper"
+            data-prototype="{{ _self.printElementMultiplierRow(form.elementMultipliers.vars.prototype)|e }}"
+            data-index="{{ form.elementMultipliers|length }}"
+    >
+        {% for elementsMultiplier in form.elementMultipliers %}
+            {{ _self.printElementMultiplierRow(elementsMultiplier) }}
+        {% endfor %}
+        <button type="button" class="add_item_link btn btn-primary ma-10-top" data-collection-holder-class="elementsMultipliers">
+            Ajout bonus élémental
+        </button>
+    </div>
+{% endblock %}
