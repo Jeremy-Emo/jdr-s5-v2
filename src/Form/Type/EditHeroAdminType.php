@@ -4,6 +4,7 @@ namespace App\Form\Type;
 
 use App\Entity\Hero;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -16,6 +17,13 @@ class EditHeroAdminType extends AbstractType
             ->add('name')
             ->add('elementAffinity')
             ->add('age')
+            ->add('isDead', CheckboxType::class, [
+                'row_attr' => [
+                    'class' => 'pretty p-default',
+                ],
+                'label' => 'Mort',
+                'required' => false
+            ])
             ->add('addStatPoints', IntegerType::class, [
                 'mapped' => false,
                 'required' => false,
