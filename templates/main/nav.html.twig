@@ -26,9 +26,10 @@
                 <li class="nav-item dropdown">
                     <a aria-expanded="false" role="button" href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown"> MJ <span class="caret"></span></a>
                     <ul role="menu" class="dropdown-menu">
-                        <li><a href="#" class="text-uppercase">Groupes</a></li>
+                        <li><a href="{{ path('listParties') }}" class="text-uppercase">Groupes</a></li>
                     </ul>
                 </li>
+                {% if app.user.getCurrentParty %}
                 <li class="nav-item dropdown">
                     <a aria-expanded="false" role="button" href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown"> MJ - Groupe actif <span class="caret"></span></a>
                     <ul role="menu" class="dropdown-menu">
@@ -37,6 +38,7 @@
                         <li><a href="#" class="text-uppercase">Combat</a></li>
                     </ul>
                 </li>
+                {% endif %}
             {% endif %}
             {% if is_granted("ROLE_ADMIN") %}
                 <li class="nav-item dropdown">

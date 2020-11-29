@@ -1,0 +1,31 @@
+{% extends 'main/layout.html.twig' %}
+
+{% block page_title %}{% trans from 'parties' %}list{% endtrans %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+            <a href="{{ path('createParty') }}"><button type="button" class="btn btn-primary">Créer un nouveau groupe</button></a>
+        </div>
+    </div>
+    <div class="row">
+        {% for party in parties %}
+            <div class="col-md-4 ma-25-top">
+                <div class="pa-20 bg-white full-height">
+                    <p><span class="bold"><i class="w-20 fas fa-id-card"></i> Nom</span> : {{ party.name }}</p>
+                    <p>Membres :
+                        <ul>
+                            {% for member in party.heroes %}
+                                <li>{{ member }}</li>
+                            {% endfor %}
+                        </ul>
+                    </p>
+                    <p class="t-align-right">
+                        <a href="#">Voir</a>
+                    </p>
+                </div>
+            </div>
+        {% endfor %}
+    </div>
+
+{% endblock %}

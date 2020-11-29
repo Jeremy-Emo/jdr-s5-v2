@@ -30,10 +30,9 @@
                                 <td>{{ user.username }}</td>
                                 <td data-sort-value="{{ user.lastVisitAt ? user.lastVisitAt|date("U") : '0' }}">{{ user.lastVisitAt ? user.lastVisitAt|date("d/m/Y") : 'Jamais' }}</td>
                                 <td>
-                                    <a href="{{ path('admin_resetPassword', {'id':user.id}) }}">Modifier mot de passe</a><br>
-                                    {% if "ROLE_ADMIN" not in user.roles %}
+                                    <a href="{{ path('admin_resetPassword', {'id':user.id}) }}">Changer mot de passe</a><br>
+                                    <a href="{{ path('admin_editAccount', {'id':user.id}) }}">Modifier</a><br>
                                     <span class="like-a-link" data-toggle="modal" data-target="#deleteModal{{ user.id }}">Supprimer</span>
-                                    {% endif %}
                                 </td>
                             </tr>
                             <div class="modal fade" id="deleteModal{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ user.id }}" aria-hidden="true">

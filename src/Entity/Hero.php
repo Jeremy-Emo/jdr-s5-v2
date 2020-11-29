@@ -12,6 +12,11 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class Hero extends UploadImageEntity
 {
+    public function __toString(): string
+    {
+        return $this->getName() . ' (' . $this->getAccount()->getUsername() . ')';
+    }
+
     /**
      * @ORM\PrePersist
      */
@@ -76,6 +81,11 @@ class Hero extends UploadImageEntity
      * @ORM\Column(type="integer", nullable=true)
      */
     private ?int $age;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=Party::class, inversedBy="heroes")
+     */
+    private $party;
 
     public function getId(): ?int
     {
@@ -184,6 +194,18 @@ class Hero extends UploadImageEntity
     public function setAge(?int $age): self
     {
         $this->age = $age;
+
+        return $this;
+    }
+
+    public function getParty(): ?Party
+    {
+        return $this->party;
+    }
+
+    public function setParty(?Party $party): self
+    {
+        $this->party = $party;
 
         return $this;
     }

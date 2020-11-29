@@ -14,6 +14,16 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class Account implements UserInterface
 {
+    public function getCurrentParty(): ?Party
+    {
+        foreach ($this->getParties() as $party) {
+            if ($party->getIsActive()) {
+                return $party;
+            }
+        }
+        return null;
+    }
+
     public function getCurrentHero(): ?Hero
     {
         foreach ($this->getHeroes() as $hero) {
@@ -91,10 +101,21 @@ class Account implements UserInterface
      */
     private Collection $accountSkills;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Party::class, mappedBy="mj", orphanRemoval=true)
+     */
+    private Collection $parties;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $isMJ;
+
     public function __construct()
     {
         $this->heroes = new ArrayCollection();
         $this->accountSkills = new ArrayCollection();
+        $this->parties = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -129,6 +150,10 @@ class Account implements UserInterface
 
         if ($this->isAdmin) {
             $roles[] = 'ROLE_ADMIN';
+        }
+
+        if ($this->isMJ) {
+            $roles[] = 'ROLE_MJ';
         }
 
         return array_unique($roles);
@@ -277,6 +302,48 @@ class Account implements UserInterface
                 $accountSkill->setAccount(null);
             }
         }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Party[]
+     */
+    public function getParties(): Collection
+    {
+        return $this->parties;
+    }
+
+    public function addParty(Party $party): self
+    {
+        if (!$this->parties->contains($party)) {
+            $this->parties[] = $party;
+            $party->setMj($this);
+        }
+
+        return $this;
+    }
+
+    public function removeParty(Party $party): self
+    {
+        if ($this->parties->removeElement($party)) {
+            // set the owning side to null (unless already changed)
+            if ($party->getMj() === $this) {
+                $party->setMj(null);
+            }
+        }
+
+        return $this;
+    }
+
+    public function getIsMJ(): ?bool
+    {
+        return $this->isMJ;
+    }
+
+    public function setIsMJ(bool $isMJ): self
+    {
+        $this->isMJ = $isMJ;
 
         return $this;
     }
