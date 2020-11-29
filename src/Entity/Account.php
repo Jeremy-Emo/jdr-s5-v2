@@ -43,9 +43,6 @@ class Account implements UserInterface
             $this->createdAt = new \DateTime();
             $this->isPasswordChangeNeeded = true;
         }
-        if (empty($this->isAdmin)) {
-            $this->isAdmin = false;
-        }
     }
 
     /**
@@ -74,7 +71,7 @@ class Account implements UserInterface
     /**
      * @ORM\Column(type="boolean")
      */
-    private ?bool $isAdmin;
+    private ?bool $isAdmin = false;
 
     /**
      * @ORM\Column(type="boolean")
@@ -109,7 +106,7 @@ class Account implements UserInterface
     /**
      * @ORM\Column(type="boolean")
      */
-    private ?bool $isMJ;
+    private ?bool $isMJ = false;
 
     public function __construct()
     {

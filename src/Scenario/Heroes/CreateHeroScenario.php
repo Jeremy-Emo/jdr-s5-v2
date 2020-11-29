@@ -155,10 +155,10 @@ class CreateHeroScenario extends AbstractScenario
                     $newStat->setValue(self::DEFAULT_LEADERSHIP);
                     break;
                 default:
-                    $this->logger->error("Stat not found", [
+                    $this->logger->error("Stat not found : " . $stat->getNameId(), [
                         'method' => __METHOD__,
                     ]);
-                    throw new ScenarioException("Stat not found");
+                    $newStat->setValue(0);
             }
 
             $fighter->addStat($newStat);

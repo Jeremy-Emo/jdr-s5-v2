@@ -2,7 +2,10 @@
 
 namespace App\Form\Type;
 
+use App\Entity\Hero;
 use App\Entity\Party;
+use Doctrine\ORM\EntityRepository;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
@@ -13,7 +16,17 @@ class SavePartyType extends AbstractType
     {
         $builder
             ->add('name')
-            ->add('heroes')
+            ->add('heroes', EntityType::class, [
+                'multiple' => true,
+                'class' => Hero::class,
+                'query_builder' => function (EntityRepository $er) use ($options) {
+                    return $er->createQueryBuilder('h')
+                        ->join('h.account', 'a')
+                        ->where('a.id != :idAccount')
+                        ->setParameter('idAccount', $options['id'])
+                        ->orderBy('h.name', 'ASC');
+                },
+            ])
         ;
     }
 
@@ -22,6 +35,7 @@ class SavePartyType extends AbstractType
         $resolver->setDefaults([
             'data_class' => Party::class,
             'isEdit' => false,
+            'id' => null,
         ]);
     }
 }

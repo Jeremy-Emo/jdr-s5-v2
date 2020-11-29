@@ -15,7 +15,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class CreatePartyController
  * @package App\Controller\Parties
- * @Route("/creer-un-nouveau-groupe", name="createParty")
+ * @Route("/mj/creer-un-nouveau-groupe", name="createParty")
  * @IsGranted("ROLE_MJ")
  */
 class CreatePartyController extends AbstractController implements ControllerInterface
@@ -30,7 +30,9 @@ class CreatePartyController extends AbstractController implements ControllerInte
      */
     public function __invoke(Request $request): Response
     {
-        $form = $this->createForm(SavePartyType::class);
+        $form = $this->createForm(SavePartyType::class, null, [
+            'id' => $this->getUser()->getId()
+        ]);
         $form->handleRequest($request);
 
         return $this->scenario->handle($form, $this->getUser());

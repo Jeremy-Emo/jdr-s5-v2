@@ -12,7 +12,7 @@ use Symfony\Component\Routing\Annotation\Route;
 /**
  * Class ListPartiesController
  * @package App\Controller\Parties
- * @Route("/liste-des-groupes", name="listParties")
+ * @Route("/mj/liste-des-groupes", name="listParties")
  * @IsGranted("ROLE_MJ")
  */
 class ListPartiesController extends AbstractController implements ControllerInterface
