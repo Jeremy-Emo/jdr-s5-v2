@@ -13,6 +13,7 @@ use App\Repository\FighterInfosRepository;
 use App\Repository\FighterSkillRepository;
 use App\Repository\HeroRepository;
 use App\Repository\SkillRepository;
+use App\Scenario\Account\UpgradeAccountSkillScenario;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\JsonResponse;
@@ -32,7 +33,7 @@ class BuySkillScenario extends AbstractScenario
     public FighterSkillRepository $fsRepository;
 
     /** @required */
-    public AccountSkillsRepository $asRepository;
+    public UpgradeAccountSkillScenario $upgradeASScenario;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -86,20 +87,8 @@ class BuySkillScenario extends AbstractScenario
             $existingSkill->setLevel($existingSkill->getLevel() + 1);
             //AccountSkill check
             if ($existingSkill->getLevel() % 10 === 0) {
-                $accountSkill = $this->asRepository->findOneBy([
-                    'skill' => $skill,
-                    'account' => $account
-                ]);
-                if ($accountSkill === null) {
-                    $accountSkill = (new AccountSkills())
-                        ->setSkill($skill)
-                        ->setLevel(1)
-                        ->setAccount($account)
-                    ;
-                } else {
-                    $accountSkill->setLevel($accountSkill->getLevel() + 1);
-                }
-                $this->manager->persist($accountSkill);
+                //Attention => persist & flush !
+                $this->upgradeASScenario->handle($skill, $account);
             }
         }
         $this->manager->persist($existingSkill);
