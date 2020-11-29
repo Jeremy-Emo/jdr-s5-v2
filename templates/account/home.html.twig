@@ -11,6 +11,11 @@
                 <p>
                     <span class="bold"><i class="w-20 fas fa-users"></i> Nombre de personnages</span> : {{ app.user.heroes|length }} (<a href="{{ path('listHeroes') }}">Voir</a>)
                 </p>
+                {% if app.user.isMJ %}
+                <p>
+                    <span class="bold"><i class="w-20 fas fa-democrat"></i> Nombre de groupes (MJ)</span> : {{ app.user.parties|length }} (<a href="{{ path('listParties') }}">Voir</a>)
+                </p>
+                {% endif %}
             </div>
         </div>
         <div class="col-md-6 ma-25-top">
