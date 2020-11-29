@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\BattleItemInfoRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -20,6 +22,32 @@ class BattleItemInfo
 
         if (!empty($this->trueDamages)) {
             $full .= "<p>Capacité offensive : " . $this->trueDamages . "</p>";
+        }
+
+        foreach ($this->getStatBonusPercents() as $bonusPercent) {
+            $full .= "<p>" . $bonusPercent->getStat()->getName() . " +" . $bonusPercent->getValue() . "%</p>";
+        }
+
+        if ($this->getElementMultipliers()->count() > 0) {
+            $damages = "";
+            $res = "";
+            foreach ($this->getElementMultipliers() as $mult) {
+                if ($mult->getIsResistance()) {
+                    $res .= "<li>" . $mult->getElement()->getName() . " : " . $mult->getValue() . "%</li>";
+                } else {
+                    $damages .= "<li>" . $mult->getElement()->getName() . " : " . $mult->getValue() . "%</li>";
+                }
+            }
+            if ($damages !== "") {
+                $full .= "<p>Multiplicateurs élémentaux :</p><ul>";
+                $full .= $damages;
+                $full .= "</ul>";
+            }
+            if ($res !== "") {
+                $full .= "<p>Résistances élémentaires :</p><ul>";
+                $full .= $res;
+                $full .= "</ul>";
+            }
         }
 
         return $full;
@@ -52,6 +80,22 @@ class BattleItemInfo
      * @ORM\ManyToOne(targetEntity=WeaponType::class, inversedBy="items")
      */
     private ?WeaponType $weaponType;
+
+    /**
+     * @ORM\OneToMany(targetEntity=ElementMultiplier::class, mappedBy="item")
+     */
+    private Collection $elementMultipliers;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=StatBonusPercent::class, mappedBy="item")
+     */
+    private Collection $statBonusPercents;
+
+    public function __construct()
+    {
+        $this->elementMultipliers = new ArrayCollection();
+        $this->statBonusPercents = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -102,6 +146,63 @@ class BattleItemInfo
     public function setWeaponType(?WeaponType $weaponType): self
     {
         $this->weaponType = $weaponType;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|ElementMultiplier[]
+     */
+    public function getElementMultipliers(): Collection
+    {
+        return $this->elementMultipliers;
+    }
+
+    public function addElementMultiplier(ElementMultiplier $elementMultiplier): self
+    {
+        if (!$this->elementMultipliers->contains($elementMultiplier)) {
+            $this->elementMultipliers[] = $elementMultiplier;
+            $elementMultiplier->setItem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeElementMultiplier(ElementMultiplier $elementMultiplier): self
+    {
+        if ($this->elementMultipliers->removeElement($elementMultiplier)) {
+            // set the owning side to null (unless already changed)
+            if ($elementMultiplier->getItem() === $this) {
+                $elementMultiplier->setItem(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|StatBonusPercent[]
+     */
+    public function getStatBonusPercents(): Collection
+    {
+        return $this->statBonusPercents;
+    }
+
+    public function addStatBonusPercent(StatBonusPercent $statBonusPercent): self
+    {
+        if (!$this->statBonusPercents->contains($statBonusPercent)) {
+            $this->statBonusPercents[] = $statBonusPercent;
+            $statBonusPercent->addItem($this);
+        }
+
+        return $this;
+    }
+
+    public function removeStatBonusPercent(StatBonusPercent $statBonusPercent): self
+    {
+        if ($this->statBonusPercents->removeElement($statBonusPercent)) {
+            $statBonusPercent->removeItem($this);
+        }
 
         return $this;
     }

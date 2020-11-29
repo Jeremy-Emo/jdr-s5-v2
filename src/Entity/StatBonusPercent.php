@@ -40,9 +40,15 @@ class StatBonusPercent
      */
     private Collection $skill;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=BattleItemInfo::class, inversedBy="statBonusPercents")
+     */
+    private Collection $item;
+
     public function __construct()
     {
         $this->skill = new ArrayCollection();
+        $this->item = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -94,6 +100,30 @@ class StatBonusPercent
     public function removeSkill(Skill $skill): self
     {
         $this->skill->removeElement($skill);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|BattleItemInfo[]
+     */
+    public function getItem(): Collection
+    {
+        return $this->item;
+    }
+
+    public function addItem(BattleItemInfo $item): self
+    {
+        if (!$this->item->contains($item)) {
+            $this->item[] = $item;
+        }
+
+        return $this;
+    }
+
+    public function removeItem(BattleItemInfo $item): self
+    {
+        $this->item->removeElement($item);
 
         return $this;
     }

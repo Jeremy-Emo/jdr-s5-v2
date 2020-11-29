@@ -40,7 +40,6 @@ class ElementMultiplier
 
     /**
      * @ORM\ManyToOne(targetEntity=FightingSkillInfo::class, inversedBy="elementsMultipliers")
-     * @ORM\JoinColumn(nullable=false)
      */
     private ?FightingSkillInfo $skill;
 
@@ -53,6 +52,11 @@ class ElementMultiplier
      * @ORM\Column(type="integer")
      */
     private ?int $value;
+
+    /**
+     * @ORM\ManyToOne(targetEntity=BattleItemInfo::class, inversedBy="elementMultipliers")
+     */
+    private ?BattleItemInfo $item;
 
     public function getId(): ?int
     {
@@ -103,6 +107,18 @@ class ElementMultiplier
     public function setValue(int $value): self
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    public function getItem(): ?BattleItemInfo
+    {
+        return $this->item;
+    }
+
+    public function setItem(?BattleItemInfo $item): self
+    {
+        $this->item = $item;
 
         return $this;
     }

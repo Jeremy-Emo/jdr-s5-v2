@@ -58,15 +58,15 @@ class Skill
             $full .= "<p>Coût en fatigue : " . $this->spCost . "</p>";
         }
 
-        if ($this->needSkill !== null && $this->neededSkillLevel > 0) {
-            $full .= "<p class='red'>Nécessite la compétence " . $this->needSkill . " au niveau " . $this->neededSkillLevel . "</p>";
-        }
-
         foreach ($this->getStatBonusPercents() as $bonusPercent) {
             $full .= "<p>" . $bonusPercent->getStat()->getName() . " +" . $bonusPercent->getValue() . "%</p>";
         }
 
         $full .= $notUsableInBattle;
+
+        if ($this->needSkill !== null && $this->neededSkillLevel > 0) {
+            $full .= "<p class='red'>Nécessite la compétence " . $this->needSkill . " au niveau " . $this->neededSkillLevel . "</p>";
+        }
 
         return $full;
     }
