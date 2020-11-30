@@ -34,6 +34,7 @@ class EditHeroAdminScenario extends AbstractScenario
         if($form->isSubmitted() && $form->isValid()) {
             /** @var Hero $hero */
             $hero = $form->getData();
+
             $statPoints = $form->get('addStatPoints')->getData();
             $skillPoints = $form->get('addSkillPoints')->getData();
             if (!empty($statPoints)) {
@@ -42,6 +43,7 @@ class EditHeroAdminScenario extends AbstractScenario
             if (!empty($skillPoints)) {
                 $hero->getFighterInfos()->setSkillPoints($hero->getFighterInfos()->getSkillPoints() + $skillPoints);
             }
+
             $money = $form->get('addMoney')->getData();
             $amount = $form->get('addMoneyAmount')->getData();
             if (!empty($money) && !empty($amount)) {

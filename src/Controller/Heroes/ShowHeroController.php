@@ -5,6 +5,7 @@ namespace App\Controller\Heroes;
 use App\AbstractClass\AbstractController;
 use App\Interfaces\ControllerInterface;
 use App\Manager\StatManager;
+use App\Manager\StuffManager;
 use App\Repository\HeroRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
@@ -40,7 +41,8 @@ class ShowHeroController extends AbstractController implements ControllerInterfa
         return $this->render('heroes/show.html.twig', [
             'hero' => $hero,
             'stats' => StatManager::returnTotalStats($hero->getFighterInfos()),
-            'metaStats' => StatManager::returnMetaStats($hero->getFighterInfos())
+            'metaStats' => StatManager::returnMetaStats($hero->getFighterInfos()),
+            'stuff' => StuffManager::returnStuffForDisplay($hero->getFighterInfos()),
         ]);
     }
 }
