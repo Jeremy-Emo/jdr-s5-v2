@@ -35,19 +35,15 @@ class SaveSkillType extends AbstractType
             ])
             ->add('cost', IntegerType::class, [
                 'empty_data' => 1,
-                'attr' => ['value' => 1],
             ])
             ->add('hpCost', IntegerType::class, [
                 'empty_data' => 0,
-                'attr' => ['value' => 0],
             ])
             ->add('mpCost', IntegerType::class, [
                 'empty_data' => 0,
-                'attr' => ['value' => 0],
             ])
             ->add('spCost', IntegerType::class, [
                 'empty_data' => 0,
-                'attr' => ['value' => 0],
             ])
             ->add('isPassive', CheckboxType::class, [
                 'row_attr' => [
