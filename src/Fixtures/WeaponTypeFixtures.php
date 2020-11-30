@@ -84,6 +84,11 @@ class WeaponTypeFixtures extends Fixture implements FixtureGroupInterface
                 'nameId' => 'scytheTwoHanded',
                 'hands' => 2,
             ],
+            [
+                'name' => 'Catalyseur',
+                'nameId' => 'orbOneHanded',
+                'hands' => 1,
+            ],
         ];
 
         $i = 1;
