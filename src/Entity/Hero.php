@@ -90,7 +90,7 @@ class Hero extends UploadImageEntity
     private ?Party $party;
 
     /**
-     * @ORM\OneToMany(targetEntity=HeroMoney::class, mappedBy="hero")
+     * @ORM\OneToMany(targetEntity=HeroMoney::class, mappedBy="hero", cascade={"persist", "remove"})
      */
     private Collection $heroMoney;
 

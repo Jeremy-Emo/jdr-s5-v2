@@ -10,22 +10,27 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Currency
 {
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\Column(type="text", nullable=true)
      */
-    private $description;
+    private ?string $description;
 
     public function getId(): ?int
     {

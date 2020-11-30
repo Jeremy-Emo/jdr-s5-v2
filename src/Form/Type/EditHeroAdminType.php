@@ -2,7 +2,9 @@
 
 namespace App\Form\Type;
 
+use App\Entity\Currency;
 use App\Entity\Hero;
+use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
@@ -29,6 +31,16 @@ class EditHeroAdminType extends AbstractType
                 'required' => false,
             ])
             ->add('addSkillPoints', IntegerType::class, [
+                'mapped' => false,
+                'required' => false,
+            ])
+            ->add('addMoney', EntityType::class, [
+                'mapped' => false,
+                'multiple' => true,
+                'class' => Currency::class,
+                'required' => false,
+            ])
+            ->add('addMoneyAmount', IntegerType::class, [
                 'mapped' => false,
                 'required' => false,
             ])

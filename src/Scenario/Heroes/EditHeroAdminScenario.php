@@ -4,6 +4,7 @@ namespace App\Scenario\Heroes;
 
 use App\AbstractClass\AbstractScenario;
 use App\Entity\Hero;
+use App\Entity\HeroMoney;
 use App\Exception\ScenarioException;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -40,6 +41,26 @@ class EditHeroAdminScenario extends AbstractScenario
             }
             if (!empty($skillPoints)) {
                 $hero->getFighterInfos()->setSkillPoints($hero->getFighterInfos()->getSkillPoints() + $skillPoints);
+            }
+            $money = $form->get('addMoney')->getData();
+            $amount = $form->get('addMoneyAmount')->getData();
+            if (!empty($money) && !empty($amount)) {
+                foreach ($money as $currency) {
+                    foreach ($hero->getHeroMoney() as $heroMoney) {
+                        if ($heroMoney->getCurrency() === $currency) {
+                            $addingMoney = $heroMoney;
+                        }
+                    }
+                    if (!isset($addingMoney)) {
+                        $addingMoney = (new HeroMoney())
+                            ->setValue(0)
+                            ->setHero($hero)
+                            ->setCurrency($currency)
+                        ;
+                        $hero->addHeroMoney($addingMoney);
+                    }
+                    $addingMoney->setValue($addingMoney->getValue() + $amount);
+                }
             }
 
             $this->manager->persist($hero);
