@@ -16,6 +16,10 @@ class BattleItemInfo
     {
         $full = "";
 
+        if (!empty($this->getWeaponType())) {
+            $full .= "Équipement : " . $this->getWeaponType()->getName();
+        }
+
         if (!empty($this->armor)) {
             $full .= "<p>Défense : " . $this->armor . "</p>";
         }
