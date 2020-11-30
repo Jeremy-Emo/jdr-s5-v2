@@ -85,7 +85,7 @@ class Hero extends UploadImageEntity
     /**
      * @ORM\ManyToOne(targetEntity=Party::class, inversedBy="heroes")
      */
-    private $party;
+    private ?Party $party;
 
     public function getId(): ?int
     {

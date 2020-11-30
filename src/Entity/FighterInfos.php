@@ -78,10 +78,16 @@ class FighterInfos
      */
     private ?int $currentSP;
 
+    /**
+     * @ORM\OneToMany(targetEntity=FighterItem::class, mappedBy="hero")
+     */
+    private Collection $heroItems;
+
     public function __construct()
     {
         $this->stats = new ArrayCollection();
         $this->skills = new ArrayCollection();
+        $this->heroItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -229,6 +235,36 @@ class FighterInfos
     public function setCurrentSP(int $currentSP): self
     {
         $this->currentSP = $currentSP;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|FighterItem[]
+     */
+    public function getHeroItems(): Collection
+    {
+        return $this->heroItems;
+    }
+
+    public function addHeroItem(FighterItem $heroItem): self
+    {
+        if (!$this->heroItems->contains($heroItem)) {
+            $this->heroItems[] = $heroItem;
+            $heroItem->setHero($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHeroItem(FighterItem $heroItem): self
+    {
+        if ($this->heroItems->removeElement($heroItem)) {
+            // set the owning side to null (unless already changed)
+            if ($heroItem->getHero() === $this) {
+                $heroItem->setHero(null);
+            }
+        }
 
         return $this;
     }
