@@ -66,6 +66,28 @@
         </div>
     </div>
 
+    <div class="row">
+        <div class="col-md-6 ma-25-top">
+            <div class="pa-20 bg-white full-height">
+                <h1 class="ma-20-bottom">Argent</h1>
+                {% for money in hero.heroMoney %}
+                    <p>
+                        <span
+                            class="cursor-click"
+                            title="{{ money.currency.name }}"
+                            data-content="{{ money.currency.description }}"
+                            data-html=true
+                            data-toggle="popover"
+                        >
+                            {{ money.currency.name }}
+                        </span>
+                        <span class="f-right">{{ money.value }}</span>
+                    </p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+
 {% endblock %}
 
 {% block moreJS %}

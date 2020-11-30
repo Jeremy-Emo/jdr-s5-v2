@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\HeroRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 use Symfony\Component\Security\Core\User\UserInterface;
 
@@ -86,6 +88,16 @@ class Hero extends UploadImageEntity
      * @ORM\ManyToOne(targetEntity=Party::class, inversedBy="heroes")
      */
     private ?Party $party;
+
+    /**
+     * @ORM\OneToMany(targetEntity=HeroMoney::class, mappedBy="hero")
+     */
+    private Collection $heroMoney;
+
+    public function __construct()
+    {
+        $this->heroMoney = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -206,6 +218,36 @@ class Hero extends UploadImageEntity
     public function setParty(?Party $party): self
     {
         $this->party = $party;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|HeroMoney[]
+     */
+    public function getHeroMoney(): Collection
+    {
+        return $this->heroMoney;
+    }
+
+    public function addHeroMoney(HeroMoney $heroMoney): self
+    {
+        if (!$this->heroMoney->contains($heroMoney)) {
+            $this->heroMoney[] = $heroMoney;
+            $heroMoney->setHero($this);
+        }
+
+        return $this;
+    }
+
+    public function removeHeroMoney(HeroMoney $heroMoney): self
+    {
+        if ($this->heroMoney->removeElement($heroMoney)) {
+            // set the owning side to null (unless already changed)
+            if ($heroMoney->getHero() === $this) {
+                $heroMoney->setHero(null);
+            }
+        }
 
         return $this;
     }
