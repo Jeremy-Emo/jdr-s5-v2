@@ -19,11 +19,15 @@ class Item extends UploadImageEntity
         }
 
         if (!empty($this->getItemSlot())) {
-            $full .= "Équipement : " . $this->getItemSlot()->getName();
+            $full .= "<p>Équipement : " . $this->getItemSlot()->getName() . "</p>";
         }
 
         if ($this->getBattleItemInfo() !== null) {
             $full .= $this->getBattleItemInfo()->getFullDescription();
+        }
+
+        if (!empty($this->customEffect)) {
+            $full .= "<p>" . $this->customEffect . "</p>";
         }
 
         return $full;
