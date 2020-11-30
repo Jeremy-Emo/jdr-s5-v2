@@ -15,24 +15,24 @@ class FighterItem
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\ManyToOne(targetEntity=FighterInfos::class, inversedBy="heroItems")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $hero;
+    private ?FighterInfos $hero;
 
     /**
      * @ORM\ManyToOne(targetEntity=Item::class)
      * @ORM\JoinColumn(nullable=false)
      */
-    private $item;
+    private ?Item $item;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isEquipped;
+    private ?bool $isEquipped;
 
     public function getId(): ?int
     {

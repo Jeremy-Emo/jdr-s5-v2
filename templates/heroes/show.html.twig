@@ -72,7 +72,8 @@
                 <h1 class="ma-20-bottom">Armes :</h1>
                 {% for item in stuff.weapons %}
                     <p>
-                        <span class="bold">{{ item.itemSlot }} : </span>
+                        <img class="hf_box" src="{{ item.getWebPath() }}">
+                        <span class="bold">{{ item.battleItemInfo.weaponType }} : </span>
                         <span
                             class="{{ item.rarity.color }} cursor-click"
                             title="{{ item.name }}"
@@ -87,7 +88,8 @@
                 <h1 class="ma-20-bottom">Équipement :</h1>
                 {% for item in stuff.gears %}
                     <p>
-                        <span class="bold">{{ item.battleItemInfo.weaponType }} : </span>
+                        <img class="hf_box" src="{{ item.getWebPath() }}">
+                        <span class="bold">{{ item.itemSlot }} : </span>
                         <span
                             class="{{ item.rarity.color }} cursor-click"
                             title="{{ item.name }}"

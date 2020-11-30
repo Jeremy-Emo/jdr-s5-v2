@@ -5,12 +5,15 @@ namespace App\Scenario\Heroes;
 use App\AbstractClass\AbstractScenario;
 use App\Entity\Account;
 use App\Entity\FighterInfos;
+use App\Entity\FighterItem;
 use App\Entity\FighterSkill;
 use App\Entity\FighterStat;
 use App\Entity\Hero;
 use App\Exception\ScenarioException;
 use App\Manager\StatManager;
 use App\Repository\ElementRepository;
+use App\Repository\ItemRepository;
+use App\Repository\ItemSlotRepository;
 use App\Repository\StatRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -38,13 +41,19 @@ class CreateHeroScenario extends AbstractScenario
     public const DEFAULT_FURTIVE = 10;
     public const DEFAULT_LEADERSHIP = 0;
 
-    public const MAX_RARITY_BEGINNER_STUFF = 'Commun';
+    public const RARITY_BEGINNER_STUFF = 'Commun';
 
     /** @required */
     public StatRepository $statRepository;
 
     /** @required */
     public ElementRepository $elementRepository;
+
+    /** @required */
+    public ItemSlotRepository $itemSlotRepository;
+
+    /** @required */
+    public ItemRepository $itemRepository;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -93,7 +102,6 @@ class CreateHeroScenario extends AbstractScenario
      * @param Account $account
      * @param Hero $hero
      * @return FighterInfos
-     * @throws ScenarioException
      */
     private function getFighter(Account $account, Hero $hero): FighterInfos
     {
@@ -107,13 +115,13 @@ class CreateHeroScenario extends AbstractScenario
         ;
         $fighter = $this->addDefaultStats($fighter);
         $fighter = $this->addDefaultSkills($fighter, $account);
+        $fighter = $this->generateDefaultStuff($fighter);
         return $fighter;
     }
 
     /**
      * @param FighterInfos $fighter
      * @return FighterInfos
-     * @throws ScenarioException
      */
     private function addDefaultStats(FighterInfos $fighter): FighterInfos
     {
@@ -193,5 +201,37 @@ class CreateHeroScenario extends AbstractScenario
         return $hero->setElementAffinity(
             $this->elementRepository->findOneByRandom(rand(1, 100))
         );
+    }
+
+    /**
+     * @param FighterInfos $fighter
+     * @return FighterInfos
+     */
+    private function generateDefaultStuff(FighterInfos $fighter): FighterInfos
+    {
+        $slots = $this->itemSlotRepository->findAll();
+        foreach ($slots as $slot) {
+            $item = $this->itemRepository->findRandomByItemSlotAndRarity($slot, self::RARITY_BEGINNER_STUFF);
+            if ($item !== null) {
+                $fighter->addHeroItem(
+                    (new FighterItem())
+                        ->setHero($fighter)
+                        ->setIsEquipped(true)
+                        ->setItem($item)
+                );
+            }
+        }
+
+        $weapon = $this->itemRepository->findRandomWeaponByRarity(self::RARITY_BEGINNER_STUFF);
+        if ($weapon !== null) {
+            $fighter->addHeroItem(
+                (new FighterItem())
+                    ->setHero($fighter)
+                    ->setIsEquipped(true)
+                    ->setItem($weapon)
+            );
+        }
+
+        return $fighter;
     }
 }

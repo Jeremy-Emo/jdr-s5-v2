@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Item;
+use App\Entity\ItemSlot;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -19,32 +20,34 @@ class ItemRepository extends ServiceEntityRepository
         parent::__construct($registry, Item::class);
     }
 
-    // /**
-    //  * @return Item[] Returns an array of Item objects
-    //  */
-    /*
-    public function findByExampleField($value)
+    public function findRandomByItemSlotAndRarity(ItemSlot $itemSlot, string $rarity)
     {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->orderBy('i.id', 'ASC')
-            ->setMaxResults(10)
+        $items = $this->createQueryBuilder('i')
+            ->join('i.itemSlot', 'isl')
+            ->join('i.rarity', 'r')
+            ->andWhere('r.name = :rarity')
+            ->setParameter('rarity', $rarity)
+            ->andWhere('isl.id = :id')
+            ->setParameter('id', $itemSlot->getId())
             ->getQuery()
             ->getResult()
         ;
-    }
-    */
 
-    /*
-    public function findOneBySomeField($value): ?Item
-    {
-        return $this->createQueryBuilder('i')
-            ->andWhere('i.exampleField = :val')
-            ->setParameter('val', $value)
-            ->getQuery()
-            ->getOneOrNullResult()
-        ;
+        return !empty($items) ? $items[array_rand($items)] : null;
     }
-    */
+
+    public function findRandomWeaponByRarity(string $rarity)
+    {
+        $items = $this->createQueryBuilder('i')
+            ->join('i.battleItemInfo', 'bif')
+            ->join('bif.weaponType', 'wt')
+            ->join('i.rarity', 'r')
+            ->andWhere('r.name = :rarity')
+            ->setParameter('rarity', $rarity)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return !empty($items) ? $items[array_rand($items)] : null;
+    }
 }

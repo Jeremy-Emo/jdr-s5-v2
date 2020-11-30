@@ -79,7 +79,7 @@ class FighterInfos
     private ?int $currentSP;
 
     /**
-     * @ORM\OneToMany(targetEntity=FighterItem::class, mappedBy="hero")
+     * @ORM\OneToMany(targetEntity=FighterItem::class, mappedBy="hero", cascade={"persist", "remove"})
      */
     private Collection $heroItems;
 
