@@ -15,7 +15,7 @@ class Item extends UploadImageEntity
         $full = "<p>Rareté : <span class='" . $this->rarity->getColor() . "'>" . $this->rarity->getName() . "</span></p>";
 
         if (!empty($this->description)) {
-            $full .= "<p>" . $this->description . "</p>";
+            $full .= "<p class='pa-10-bottom border-bottom'>" . $this->description . "</p>";
         }
 
         if (!empty($this->getItemSlot())) {

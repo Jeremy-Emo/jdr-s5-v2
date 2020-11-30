@@ -15,7 +15,7 @@ class CustomEffectFixtures extends Fixture implements FixtureGroupInterface
     {
         $effects = [
             [
-                'name' => 'Drain de vie',
+                'name' => 'Drain de vie %',
                 'nameId' => 'drain_life_percent',
                 'value' => 15
             ]
