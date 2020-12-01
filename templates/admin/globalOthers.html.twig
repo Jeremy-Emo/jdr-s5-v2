@@ -1,17 +1,36 @@
 {% extends 'main/layout.html.twig' %}
 
-{% block page_title %}Admin - Gestion des comptes{% endblock %}
+{% block page_title %}Admin - Autres{% endblock %}
 
 {% block content %}
     <div class="row">
         <div class="col">
             <div class="pa-20 bg-white">
-                <a href="{{ path('admin_createElement') }}" class="ma-5-right"><button type="button" class="btn btn-primary">Éléments</button></a>
-                <a href="{{ path('admin_createStat') }}" class="ma-5-right"><button type="button" class="btn btn-primary">Statistiques</button></a>
-                <a href="{{ path('admin_createCurrency') }}" class="ma-5-right"><button type="button" class="btn btn-primary">Monnaies</button></a>
+                <a href="{{ path('admin_createCurrency') }}" class="ma-5-right"><button type="button" class="btn btn-primary">Monnaie</button></a>
                 <a href="{{ path('admin_createSBP') }}" class="ma-5-right"><button type="button" class="btn btn-primary">Bonus de stats</button></a>
+                --
+                <a href="{{ path('admin_listElements') }}" class="ma-5-right"><button type="button" class="btn btn-primary">Éléments</button></a>
                 <a href="{{ path('admin_listBS') }}" class="ma-5-right"><button type="button" class="btn btn-primary">Statuts en combat</button></a>
+                <a href="{{ path('admin_listStats') }}" class="ma-5-right"><button type="button" class="btn btn-primary">Statistiques</button></a>
             </div>
         </div>
     </div>
+
+    {% if states is defined %}
+        {% include 'admin/listBS.html.twig' %}
+    {% endif %}
+
+    {% if elements is defined %}
+        {% include 'admin/listElements.html.twig' %}
+    {% endif %}
+
+    {% if stats is defined %}
+        {% include 'admin/listStats.html.twig' %}
+    {% endif %}
+
+{% endblock %}
+
+{% block moreJS %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('searchBar') }}
 {% endblock %}

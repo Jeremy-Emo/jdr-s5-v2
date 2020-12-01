@@ -2,9 +2,9 @@
     <div class="row">
         <div class="col ma-25-top">
             <div class="pa-20 bg-white">
-                <h1 class="ma-20-bottom">Liste des statuts :</h1>
+                <h1 class="ma-20-bottom">Liste des éléments :</h1>
                 <p class="ma-10-bottom">
-                    <span>Nombre de buffs/debuffs : {{ states|length }}</span>
+                    <span>Nombre d'éléments : {{ elements|length }}</span>
                     <span class="f-right"><input type="text" id="searchBar"></span>
                 </p>
                 <table class="table" id="stupidTable">
@@ -12,18 +12,18 @@
                     <tr>
                         <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
                         <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> ID to code</th>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Rareté</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
                     <tbody>
-                    {% for state in states %}
-                        <tr class="searchedItem" data-search="{{ state.name|lower }}">
-                            <td>{{ state.name }}</td>
-                            <td>{{ state.nameId }}</td>
+                    {% for elem in elements %}
+                        <tr class="searchedItem" data-search="{{ elem.name|lower }}">
+                            <td>{{ elem.name }}</td>
+                            <td>{{ elem.nameId }}</td>
+                            <td>{{ elem.rarity }}</td>
                             <td>
-                                {% if state.fightingSkills|length == 0 %}
-                                <a href="{{ path('admin_deleteBS', {'id': state.id}) }}">Supprimer</a>
-                                {% endif %}
+                                <a href="#">Modifier</a>
                             </td>
                         </tr>
                     {% endfor %}

@@ -24,7 +24,7 @@ class ListBSController extends AbstractController implements ControllerInterface
     {
         $states = $this->bsRepo->findAll();
 
-        return $this->render('admin/listBS.html.twig', [
+        return $this->render('admin/globalOthers.html.twig', [
             'states' => $states
         ]);
     }

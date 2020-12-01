@@ -2,9 +2,9 @@
     <div class="row">
         <div class="col ma-25-top">
             <div class="pa-20 bg-white">
-                <h1 class="ma-20-bottom">Liste des statuts :</h1>
+                <h1 class="ma-20-bottom">Liste des statistiques :</h1>
                 <p class="ma-10-bottom">
-                    <span>Nombre de buffs/debuffs : {{ states|length }}</span>
+                    <span>Nombre de statistiques : {{ stats|length }}</span>
                     <span class="f-right"><input type="text" id="searchBar"></span>
                 </p>
                 <table class="table" id="stupidTable">
@@ -16,14 +16,12 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for state in states %}
-                        <tr class="searchedItem" data-search="{{ state.name|lower }}">
-                            <td>{{ state.name }}</td>
-                            <td>{{ state.nameId }}</td>
+                    {% for stat in stats %}
+                        <tr class="searchedItem" data-search="{{ stat.name|lower }}">
+                            <td>{{ stat.name }}</td>
+                            <td>{{ stat.nameId }}</td>
                             <td>
-                                {% if state.fightingSkills|length == 0 %}
-                                <a href="{{ path('admin_deleteBS', {'id': state.id}) }}">Supprimer</a>
-                                {% endif %}
+                                <a href="#">Modifier</a>
                             </td>
                         </tr>
                     {% endfor %}
