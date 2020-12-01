@@ -3,66 +3,64 @@
 {% block page_title %}Admin - Gestion des compétences{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <a href="{{ path('admin_createSkill') }}"><button type="button" class="btn btn-primary">Créer une nouvelle compétence</button></a>
-                <a href="{{ path('admin_createSkillTag') }}"><button type="button" class="btn btn-primary f-right">Créer un nouveau tag</button></a>
-                <a href="{{ path('adminCreateCE') }}"><button type="button" class="btn btn-primary f-right ma-5-right">Créer un effet custom</button></a>
-            </div>
+    <div class="row">
+        <div class="col">
+            <a href="{{ path('admin_createSkill') }}"><button type="button" class="btn btn-primary">Créer une nouvelle compétence</button></a>
+            <a href="{{ path('admin_createSkillTag') }}"><button type="button" class="btn btn-primary f-right">Créer un nouveau tag</button></a>
+            <a href="{{ path('adminCreateCE') }}"><button type="button" class="btn btn-primary f-right ma-5-right">Créer un effet custom</button></a>
         </div>
-        <div class="row">
-            <div class="col ma-25-top">
-                <div class="pa-20 bg-white">
-                    <p class="ma-10-bottom">
-                        <span>Nombre de compétences : {{ skills|length }}</span>
-                        <span class="f-right"><input type="text" id="searchBar"></span>
-                    </p>
-                    <table class="table" id="stupidTable">
-                        <thead>
-                        <tr>
-                            <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
-                            <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Passif</th>
-                            <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Bataille</th>
-                            <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Coût d'achat</th>
-                            <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nécessite</th>
-                            <th scope="col">Actions</th>
+    </div>
+    <div class="row">
+        <div class="col ma-25-top">
+            <div class="pa-20 bg-white">
+                <p class="ma-10-bottom">
+                    <span>Nombre de compétences : {{ skills|length }}</span>
+                    <span class="f-right"><input type="text" id="searchBar"></span>
+                </p>
+                <table class="table" id="stupidTable">
+                    <thead>
+                    <tr>
+                        <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Passif</th>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Bataille</th>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Coût d'achat</th>
+                        <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nécessite</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for skill in skills %}
+                        <tr class="searchedItem" data-search="{{ skill.name|lower }}">
+                            <td class="cursor-click" title="{{ skill.name }}" data-content="{{ skill.getFullDescription() }}" data-html=true data-toggle="popover">{{ skill.name }}</td>
+                            <td data-sort-value={{ skill.isPassive ? "1" : "0" }}>
+                                {% if skill.isPassive %}
+                                    <i class="green fas fa-check"></i>
+                                {% else %}
+                                    <i class="red fas fa-times"></i>
+                                {% endif %}
+                            </td>
+                            <td data-sort-value={{ skill.isUsableInBattle ? "1" : "0" }}>
+                                {% if skill.isUsableInBattle %}
+                                    <i class="green fas fa-check"></i>
+                                {% else %}
+                                    <i class="red fas fa-times"></i>
+                                {% endif %}
+                            </td>
+                            <td data-sort-value="{{ skill.cost }}">
+                                {{ skill.cost }}
+                            </td>
+                            <td>
+                                {% if skill.needSkill and skill.neededSkillLevel > 0 %}
+                                    {{ skill.needSkill }} - <span class="bold">LV {{ skill.neededSkillLevel }}</span>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('admin_editSkill', {'id': skill.id}) }}">Modifier</a>
+                            </td>
                         </tr>
-                        </thead>
-                        <tbody>
-                        {% for skill in skills %}
-                            <tr class="searchedItem" data-search="{{ skill.name|lower }}">
-                                <td class="cursor-click" title="{{ skill.name }}" data-content="{{ skill.getFullDescription() }}" data-html=true data-toggle="popover">{{ skill.name }}</td>
-                                <td data-sort-value={{ skill.isPassive ? "1" : "0" }}>
-                                    {% if skill.isPassive %}
-                                        <i class="green fas fa-check"></i>
-                                    {% else %}
-                                        <i class="red fas fa-times"></i>
-                                    {% endif %}
-                                </td>
-                                <td data-sort-value={{ skill.isUsableInBattle ? "1" : "0" }}>
-                                    {% if skill.isUsableInBattle %}
-                                        <i class="green fas fa-check"></i>
-                                    {% else %}
-                                        <i class="red fas fa-times"></i>
-                                    {% endif %}
-                                </td>
-                                <td data-sort-value="{{ skill.cost }}">
-                                    {{ skill.cost }}
-                                </td>
-                                <td>
-                                    {% if skill.needSkill and skill.neededSkillLevel > 0 %}
-                                        {{ skill.needSkill }} - <span class="bold">LV {{ skill.neededSkillLevel }}</span>
-                                    {% endif %}
-                                </td>
-                                <td>
-                                    <a href="{{ path('admin_editSkill', {'id': skill.id}) }}">Modifier</a>
-                                </td>
-                            </tr>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

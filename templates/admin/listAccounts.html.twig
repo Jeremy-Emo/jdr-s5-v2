@@ -3,61 +3,59 @@
 {% block page_title %}Admin - Gestion des comptes{% endblock %}
 
 {% block content %}
-    <div class="container">
-        <div class="row">
-            <div class="col">
-                <a href="{{ path('admin_createAccount') }}"><button type="button" class="btn btn-primary">Créer un nouveau compte</button></a>
-            </div>
+    <div class="row">
+        <div class="col">
+            <a href="{{ path('admin_createAccount') }}"><button type="button" class="btn btn-primary">Créer un nouveau compte</button></a>
         </div>
-        <div class="row">
-            <div class="col ma-25-top">
-                <div class="pa-20 bg-white">
-                    <p class="ma-10-bottom">
-                        <span>Nombre de comptes : {{ accounts|length }}</span>
-                        <span class="f-right"><input type="text" id="searchBar"></span>
-                    </p>
-                    <table class="table" id="stupidTable">
-                        <thead>
-                        <tr>
-                            <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
-                            <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Dernière connexion</th>
-                            <th scope="col">Actions</th>
+    </div>
+    <div class="row">
+        <div class="col ma-25-top">
+            <div class="pa-20 bg-white">
+                <p class="ma-10-bottom">
+                    <span>Nombre de comptes : {{ accounts|length }}</span>
+                    <span class="f-right"><input type="text" id="searchBar"></span>
+                </p>
+                <table class="table" id="stupidTable">
+                    <thead>
+                    <tr>
+                        <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Dernière connexion</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for user in accounts %}
+                        <tr class="searchedItem" data-search="{{ user.username|lower }}">
+                            <td>{{ user.username }}</td>
+                            <td data-sort-value="{{ user.lastVisitAt ? user.lastVisitAt|date("U") : '0' }}">{{ user.lastVisitAt ? user.lastVisitAt|date("d/m/Y") : 'Jamais' }}</td>
+                            <td>
+                                <a href="{{ path('admin_resetPassword', {'id':user.id}) }}">Changer mot de passe</a><br>
+                                <a href="{{ path('admin_editAccount', {'id':user.id}) }}">Modifier</a><br>
+                                <span class="like-a-link" data-toggle="modal" data-target="#deleteModal{{ user.id }}">Supprimer</span>
+                            </td>
                         </tr>
-                        </thead>
-                        <tbody>
-                        {% for user in accounts %}
-                            <tr class="searchedItem" data-search="{{ user.username|lower }}">
-                                <td>{{ user.username }}</td>
-                                <td data-sort-value="{{ user.lastVisitAt ? user.lastVisitAt|date("U") : '0' }}">{{ user.lastVisitAt ? user.lastVisitAt|date("d/m/Y") : 'Jamais' }}</td>
-                                <td>
-                                    <a href="{{ path('admin_resetPassword', {'id':user.id}) }}">Changer mot de passe</a><br>
-                                    <a href="{{ path('admin_editAccount', {'id':user.id}) }}">Modifier</a><br>
-                                    <span class="like-a-link" data-toggle="modal" data-target="#deleteModal{{ user.id }}">Supprimer</span>
-                                </td>
-                            </tr>
-                            <div class="modal fade" id="deleteModal{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ user.id }}" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="deleteModalLabel{{ user.id }}">Supprimer le compte de {{ user.username }}</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            Êtes-vous certain de vouloir supprimer le compte ?
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                                            <a href="{{ path('admin_deleteAccount', {'id':user.id}) }}"><button type="button" class="btn btn-primary">Supprimer</button></a>
-                                        </div>
+                        <div class="modal fade" id="deleteModal{{ user.id }}" tabindex="-1" role="dialog" aria-labelledby="deleteModalLabel{{ user.id }}" aria-hidden="true">
+                            <div class="modal-dialog modal-dialog-centered" role="document">
+                                <div class="modal-content">
+                                    <div class="modal-header">
+                                        <h5 class="modal-title" id="deleteModalLabel{{ user.id }}">Supprimer le compte de {{ user.username }}</h5>
+                                        <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                            <span aria-hidden="true">&times;</span>
+                                        </button>
+                                    </div>
+                                    <div class="modal-body">
+                                        Êtes-vous certain de vouloir supprimer le compte ?
+                                    </div>
+                                    <div class="modal-footer">
+                                        <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                        <a href="{{ path('admin_deleteAccount', {'id':user.id}) }}"><button type="button" class="btn btn-primary">Supprimer</button></a>
                                     </div>
                                 </div>
                             </div>
-                        {% endfor %}
-                        </tbody>
-                    </table>
-                </div>
+                        </div>
+                    {% endfor %}
+                    </tbody>
+                </table>
             </div>
         </div>
     </div>

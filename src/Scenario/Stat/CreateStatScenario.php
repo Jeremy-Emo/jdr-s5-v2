@@ -50,7 +50,7 @@ class CreateStatScenario extends AbstractScenario
             }
             $this->manager->flush();
 
-            return $this->redirectToRoute('admin_listHeroes');
+            return $this->redirectToRoute('admin_globalOthers');
         }
 
         return $this->renderNewResponse('admin/defaultGenericForm.html.twig', [

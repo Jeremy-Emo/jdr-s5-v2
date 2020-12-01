@@ -33,6 +33,6 @@ class CreateStatBonusPercentController extends AbstractController implements Con
         $form = $this->createForm(SBPType::class);
         $form->handleRequest($request);
 
-        return $this->scenario->handle($form, 'create_sbp', 'admin_listSkills');
+        return $this->scenario->handle($form, 'create_sbp', 'admin_globalOthers');
     }
 }

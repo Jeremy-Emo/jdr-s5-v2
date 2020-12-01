@@ -33,7 +33,6 @@ class CreateCurrencyController extends AbstractController implements ControllerI
         $form = $this->createForm(CurrencyType::class);
         $form->handleRequest($request);
 
-        //TODO : better redirect
-        return $this->scenario->handle($form, 'create_currency', 'index');
+        return $this->scenario->handle($form, 'create_currency', 'admin_globalOthers');
     }
 }

@@ -33,6 +33,6 @@ class CreateElementController extends AbstractController implements ControllerIn
         $form = $this->createForm(SaveElementType::class);
         $form->handleRequest($request);
 
-        return $this->scenario->handle($form, 'create_element', 'index');
+        return $this->scenario->handle($form, 'create_element', 'admin_globalOthers');
     }
 }
