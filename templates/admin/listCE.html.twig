@@ -1,15 +1,15 @@
 {% block content %}
     <div class="row">
         <div class="col ma-25-top">
-            <a href="{{ path('admin_createStat') }}"><button type="button" class="btn btn-primary">Créer une statistique</button></a>
+            <a href="{{ path('adminCreateCE') }}"><button type="button" class="btn btn-primary">Créer un effet custom</button></a>
         </div>
     </div>
     <div class="row">
         <div class="col ma-25-top">
             <div class="pa-20 bg-white">
-                <h1 class="ma-20-bottom">Liste des statistiques :</h1>
+                <h1 class="ma-20-bottom">Liste des effets personnalisés :</h1>
                 <p class="ma-10-bottom">
-                    <span>Nombre de statistiques : {{ stats|length }}</span>
+                    <span>Nombre d'effets personnalisés : {{ customEffects|length }}</span>
                     <span class="f-right"><input type="text" id="searchBar"></span>
                 </p>
                 <table class="table" id="stupidTable">
@@ -21,10 +21,10 @@
                     </tr>
                     </thead>
                     <tbody>
-                    {% for stat in stats %}
-                        <tr class="searchedItem" data-search="{{ stat.name|lower }}">
-                            <td>{{ stat.name }}</td>
-                            <td>{{ stat.nameId }}</td>
+                    {% for ce in customEffects %}
+                        <tr class="searchedItem" data-search="{{ ce.name|lower }}">
+                            <td>{{ ce.name }}</td>
+                            <td>{{ ce.nameId }}</td>
                             <td>
                                 <a href="#">Modifier</a>
                             </td>

@@ -6,12 +6,13 @@
     <div class="row">
         <div class="col">
             <div class="pa-20 bg-white">
-                <a href="{{ path('admin_createCurrency') }}" class="ma-5-right"><button type="button" class="btn btn-primary">Monnaie</button></a>
                 <a href="{{ path('admin_createSBP') }}" class="ma-5-right"><button type="button" class="btn btn-primary">Bonus de stats</button></a>
                 --
                 <a href="{{ path('admin_listElements') }}" class="ma-5-right"><button type="button" class="btn btn-primary">Éléments</button></a>
                 <a href="{{ path('admin_listBS') }}" class="ma-5-right"><button type="button" class="btn btn-primary">Statuts en combat</button></a>
                 <a href="{{ path('admin_listStats') }}" class="ma-5-right"><button type="button" class="btn btn-primary">Statistiques</button></a>
+                <a href="{{ path('admin_listCE') }}" class="ma-5-right"><button type="button" class="btn btn-primary">Effets personnalisés</button></a>
+                <a href="{{ path('admin_listMoney') }}" class="ma-5-right"><button type="button" class="btn btn-primary">Monnaies</button></a>
             </div>
         </div>
     </div>
@@ -26,6 +27,14 @@
 
     {% if stats is defined %}
         {% include 'admin/listStats.html.twig' %}
+    {% endif %}
+
+    {% if customEffects is defined %}
+        {% include 'admin/listCE.html.twig' %}
+    {% endif %}
+
+    {% if moneys is defined %}
+        {% include 'admin/listMoneys.html.twig' %}
     {% endif %}
 
 {% endblock %}
