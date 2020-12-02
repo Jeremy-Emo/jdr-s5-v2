@@ -16,7 +16,7 @@ class FighterItem
         $full = $this->getItem()->getFullDescription();
 
         if ($this->getItem()->getMaxDurability() !== null) {
-            $full .= "<p>Durabilité : " . $this->durability . " / " . $this->getItem()->getMaxDurability() . "</p>";
+            $full .= "<p>Durabilité : " . ($this->durability ?? 0) . " / " . $this->getItem()->getMaxDurability() . "</p>";
         }
 
         return $full;

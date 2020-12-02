@@ -88,16 +88,16 @@
                 <h1 class="ma-20-bottom">Équipement :</h1>
                 {% for item in stuff.gears %}
                     <p>
-                        <img class="hf_box" src="{{ item.getWebPath() }}">
-                        <span class="bold">{{ item.itemSlot }} : </span>
+                        <img class="hf_box" src="{{ item.item.getWebPath() }}">
+                        <span class="bold">{{ item.item.itemSlot }} : </span>
                         <span
-                            class="{{ item.rarity.color }} cursor-click"
-                            title="{{ item.name }}"
+                            class="{{ item.item.rarity.color }} cursor-click"
+                            title="{{ item.item.name }}"
                             data-content="{{ item.getFullDescription() }}"
                             data-html=true
                             data-toggle="popover"
                         >
-                            {{ item.name }}
+                            {{ item.item.name }}
                         </span>
                     </p>
                 {% endfor %}

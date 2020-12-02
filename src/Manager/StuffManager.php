@@ -15,9 +15,9 @@ class StuffManager
 
         foreach ($fighter->getHeroItems() as $item) {
             if ($item->getIsEquipped() && $item->getItem()->getItemSlot() !== null) {
-                $return['gears'][] = $item->getItem();
+                $return['gears'][] = $item;
             } elseif ($item->getIsEquipped() && $item->getItem()->getBattleItemInfo()->getWeaponType() !== null) {
-                $return['weapons'][] = $item->getItem();
+                $return['weapons'][] = $item;
             }
         }
 
