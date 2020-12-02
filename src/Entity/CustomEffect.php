@@ -47,6 +47,11 @@ class CustomEffect
      */
     private ?int $value;
 
+    /**
+     * @ORM\Column(type="text", nullable=true)
+     */
+    private ?string $advancedDescription;
+
     public function __construct()
     {
         $this->skillsWithThis = new ArrayCollection();
@@ -126,6 +131,18 @@ class CustomEffect
     public function setValue(?int $value): self
     {
         $this->value = $value;
+
+        return $this;
+    }
+
+    public function getAdvancedDescription(): ?string
+    {
+        return $this->advancedDescription;
+    }
+
+    public function setAdvancedDescription(?string $advancedDescription): self
+    {
+        $this->advancedDescription = $advancedDescription;
 
         return $this;
     }

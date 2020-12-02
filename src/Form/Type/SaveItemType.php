@@ -31,6 +31,7 @@ class SaveItemType extends AbstractType
             ])
             ->add('description')
             ->add('customEffect')
+            ->add('maxDurability')
             ->add('file', FileType::class, [
                 'constraints' => [
                     new File([

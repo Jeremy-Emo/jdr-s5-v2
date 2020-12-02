@@ -2,14 +2,36 @@
 
 namespace App\Entity;
 
-use App\Repository\HeroItemRepository;
+use App\Repository\FighterItemRepository;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
- * @ORM\Entity(repositoryClass=HeroItemRepository::class)
+ * @ORM\Entity(repositoryClass=FighterItemRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class FighterItem
 {
+    public function getFullDescription(): string
+    {
+        $full = $this->getItem()->getFullDescription();
+
+        if ($this->getItem()->getMaxDurability() !== null) {
+            $full .= "<p>Durabilité : " . $this->durability . " / " . $this->getItem()->getMaxDurability() . "</p>";
+        }
+
+        return $full;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setDefaults(): void
+    {
+        if ($this->getItem()->getMaxDurability() !== null) {
+            $this->setDurability($this->getItem()->getMaxDurability());
+        }
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -33,6 +55,11 @@ class FighterItem
      * @ORM\Column(type="boolean")
      */
     private ?bool $isEquipped;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $durability;
 
     public function getId(): ?int
     {
@@ -71,6 +98,18 @@ class FighterItem
     public function setIsEquipped(bool $isEquipped): self
     {
         $this->isEquipped = $isEquipped;
+
+        return $this;
+    }
+
+    public function getDurability(): ?int
+    {
+        return $this->durability;
+    }
+
+    public function setDurability(?int $durability): self
+    {
+        $this->durability = $durability;
 
         return $this;
     }

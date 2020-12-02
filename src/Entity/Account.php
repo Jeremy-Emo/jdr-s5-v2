@@ -14,6 +14,9 @@ use Symfony\Component\Security\Core\User\UserInterface;
  */
 class Account implements UserInterface
 {
+    /**
+     * @return Party|null
+     */
     public function getCurrentParty(): ?Party
     {
         foreach ($this->getParties() as $party) {
@@ -24,6 +27,9 @@ class Account implements UserInterface
         return null;
     }
 
+    /**
+     * @return Hero|null
+     */
     public function getCurrentHero(): ?Hero
     {
         foreach ($this->getHeroes() as $hero) {

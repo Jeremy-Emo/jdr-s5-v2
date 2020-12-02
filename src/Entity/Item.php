@@ -76,6 +76,11 @@ class Item extends UploadImageEntity
      */
     private ?BattleItemInfo $battleItemInfo;
 
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $maxDurability;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -166,6 +171,18 @@ class Item extends UploadImageEntity
         if ($battleItemInfo->getItem() !== $this) {
             $battleItemInfo->setItem($this);
         }
+
+        return $this;
+    }
+
+    public function getMaxDurability(): ?int
+    {
+        return $this->maxDurability;
+    }
+
+    public function setMaxDurability(?int $maxDurability): self
+    {
+        $this->maxDurability = $maxDurability;
 
         return $this;
     }
