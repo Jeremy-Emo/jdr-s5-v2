@@ -36,12 +36,12 @@ class StatBonusPercent
     private ?int $value;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Skill::class, inversedBy="statBonusPercents")
+     * @ORM\ManyToMany(targetEntity=Skill::class, mappedBy="statBonusPercents")
      */
     private Collection $skill;
 
     /**
-     * @ORM\ManyToMany(targetEntity=BattleItemInfo::class, inversedBy="statBonusPercents")
+     * @ORM\ManyToMany(targetEntity=BattleItemInfo::class, mappedBy="statBonusPercents")
      */
     private Collection $item;
 

@@ -91,7 +91,7 @@ class BattleItemInfo
     private Collection $elementMultipliers;
 
     /**
-     * @ORM\ManyToMany(targetEntity=StatBonusPercent::class, mappedBy="item")
+     * @ORM\ManyToMany(targetEntity=StatBonusPercent::class, inversedBy="item", cascade={"all"})
      */
     private Collection $statBonusPercents;
 

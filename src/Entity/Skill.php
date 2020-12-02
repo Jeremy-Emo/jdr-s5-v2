@@ -146,7 +146,7 @@ class Skill
     private Collection $tags;
 
     /**
-     * @ORM\ManyToMany(targetEntity=StatBonusPercent::class, mappedBy="skill")
+     * @ORM\ManyToMany(targetEntity=StatBonusPercent::class, inversedBy="skill", cascade={"all"})
      */
     private Collection $statBonusPercents;
 
