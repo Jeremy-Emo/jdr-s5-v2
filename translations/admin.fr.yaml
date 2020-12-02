@@ -12,3 +12,5 @@ create_stat : Ajouter une statistique
 create_item: Créer un objet
 edit_account : Modifier un compte
 create_currency : Créer une monnaie
+edit_stat : Modifier une statistique
+edit_skill_custom_effect : Modifier un effet personnalisé

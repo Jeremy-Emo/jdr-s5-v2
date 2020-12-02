@@ -19,17 +19,22 @@ class SaveStatType extends AbstractType
             ->add('description', TextareaType::class, [
                 'required' => true,
             ])
-            ->add('default', IntegerType::class, [
-                'mapped' => false,
-                'required' => true,
-            ])
         ;
+        if (!$options['isEdit']) {
+            $builder
+                ->add('default', IntegerType::class, [
+                    'mapped' => false,
+                    'required' => true,
+                ])
+            ;
+        }
     }
 
     public function configureOptions(OptionsResolver $resolver)
     {
         $resolver->setDefaults([
             'data_class' => Stat::class,
+            'isEdit' => false,
         ]);
     }
 }

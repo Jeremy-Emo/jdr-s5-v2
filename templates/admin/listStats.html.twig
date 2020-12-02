@@ -26,7 +26,7 @@
                             <td>{{ stat.name }}</td>
                             <td>{{ stat.nameId }}</td>
                             <td>
-                                <a href="#">Modifier</a>
+                                <a href="{{ path('admin_editStat', {'id': stat.id}) }}">Modifier</a>
                             </td>
                         </tr>
                     {% endfor %}

@@ -1,12 +1,12 @@
 <?php
 
-namespace App\Controller\Admin\BattleCustomEffects;
+namespace App\Controller\Admin\Others;
 
 use App\AbstractClass\AbstractController;
 use App\Exception\ScenarioException;
-use App\Form\Type\BattleCustomEffectType;
+use App\Form\Type\SaveStatType;
 use App\Interfaces\ControllerInterface;
-use App\Repository\CustomEffectRepository;
+use App\Repository\StatRepository;
 use App\Scenario\Generic\SaveFromGenericAdminFormScenario;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Request;
@@ -15,18 +15,18 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Routing\Annotation\Route;
 
 /**
- * Class EditCustomEffectController
- * @package App\Controller\Admin\BattleCustomEffects
- * @Route("/admin/modifier-effet-custom/{id<\d+>}", name="admin_editCustomEffect")
+ * Class EditStatController
+ * @package App\Controller\Admin\Others
+ * @Route("/admin/modifier-statistique/{id<\d+>}", name="admin_editStat")
  * @IsGranted("ROLE_ADMIN")
  */
-class EditCustomEffectController extends AbstractController implements ControllerInterface
+class EditStatController extends AbstractController implements ControllerInterface
 {
     /** @required  */
     public SaveFromGenericAdminFormScenario $scenario;
 
     /** @required  */
-    public CustomEffectRepository $ceRepository;
+    public StatRepository $statRepository;
 
     /**
      * @param Request $request
@@ -36,14 +36,16 @@ class EditCustomEffectController extends AbstractController implements Controlle
      */
     public function __invoke(Request $request, int $id): Response
     {
-        $ce = $this->ceRepository->find($id);
-        if ($ce === null) {
-            throw new NotFoundHttpException("Custom Effect not found");
+        $stat = $this->statRepository->find($id);
+        if ($stat === null) {
+            throw new NotFoundHttpException("Stat not found");
         }
 
-        $form = $this->createForm(BattleCustomEffectType::class, $ce);
+        $form = $this->createForm(SaveStatType::class, $stat, [
+            'isEdit' => true,
+        ]);
         $form->handleRequest($request);
 
-        return $this->scenario->handle($form, 'edit_skill_custom_effect', 'admin_listSkills');
+        return $this->scenario->handle($form, 'edit_stat', 'admin_globalOthers');
     }
 }
