@@ -23,7 +23,15 @@
                     <tbody>
                     {% for stat in stats %}
                         <tr class="searchedItem" data-search="{{ stat.name|lower }}">
-                            <td>{{ stat.name }}</td>
+                            <td
+                                class="cursor-click"
+                                title="{{ stat.name }}"
+                                data-content="{{ stat.description }}"
+                                data-html=true
+                                data-toggle="popover"
+                            >
+                                {{ stat.name }}
+                            </td>
                             <td>{{ stat.nameId }}</td>
                             <td>
                                 <a href="{{ path('admin_editStat', {'id': stat.id}) }}">Modifier</a>

@@ -22,7 +22,15 @@
                     <tbody>
                     {% for money in moneys %}
                         <tr class="searchedItem" data-search="{{ money.name|lower }}">
-                            <td>{{ money.name }}</td>
+                            <td
+                                class="cursor-click"
+                                title="{{ money.name }}"
+                                data-content="{{ money.description }}"
+                                data-html=true
+                                data-toggle="popover"
+                            >
+                                {{ money.name }}
+                            </td>
                             <td>
                                 <a href="#">Modifier</a>
                             </td>
