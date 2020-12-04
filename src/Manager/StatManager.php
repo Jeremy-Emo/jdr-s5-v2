@@ -183,7 +183,15 @@ class StatManager
         $bonusToStat = 100;
         foreach ($fighter->getSkills() as $fighterSkill) {
             $bonuses = $fighterSkill->getSkill()->getStatBonusPercents();
-            if ($bonuses !== null) {
+            foreach ($bonuses as $bonus) {
+                if ($bonus->getStat()->getId() === $stat->getId()) {
+                    $bonusToStat += $bonus->getValue();
+                }
+            }
+        }
+        foreach ($fighter->getHeroItems() as $item) {
+            if ($item->getIsEquipped()) {
+                $bonuses = $item->getItem()->getBattleItemInfo()->getStatBonusPercents();
                 foreach ($bonuses as $bonus) {
                     if ($bonus->getStat()->getId() === $stat->getId()) {
                         $bonusToStat += $bonus->getValue();
@@ -191,7 +199,6 @@ class StatManager
                 }
             }
         }
-        //TODO : equipements
         return $bonusToStat;
     }
 }
