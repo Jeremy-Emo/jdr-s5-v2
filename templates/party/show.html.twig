@@ -1,0 +1,24 @@
+{% extends 'main/layout.html.twig' %}
+
+{% block page_title %}{% trans from 'parties' %}show{% endtrans %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        {% for hero in party.heroes %}
+            <div class="col-md-3 ma-25-top">
+                <div class="pa-20 bg-white full-height">
+                    <p><span class="bold"><i class="w-20 fas fa-id-card"></i> Nom</span> : {{ hero.name }}</p>
+                    {% if hero.getWebPath() %}
+                        <p class="center">
+                            <img class="hero_box" src="{{ hero.getWebPath() }}" alt="Image du héros">
+                        </p>
+                    {% endif %}
+                    <p><span class="bold"><i class="w-20 fas fa-clock"></i> Date de création</span> : {{ hero.createdAt|date("d/m/Y") }}</p>
+                    {% if hero.isDead %}
+                        <p><span class="bold red"><i class="w-20 fas fa-skull-crossbones"></i> Mort</span></p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor%}
+    </div>
+{% endblock %}

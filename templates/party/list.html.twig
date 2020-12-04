@@ -26,7 +26,7 @@
                         <p><a class="bold grey line-through no-hover" href="{{ path('chooseParty', {'id':party.id}) }}"><span><i class="w-20 fas fa-star"></i> Groupe non-actif</span></a></p>
                     {% endif %}
                     <p class="t-align-right">
-                        <a href="#">Voir</a>
+                        <a href="{{ path('showParty', {'id': party.id}) }}">Voir</a>
                     </p>
                 </div>
             </div>
