@@ -94,6 +94,11 @@ class Hero extends UploadImageEntity
      */
     private Collection $heroMoney;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $isMale = false;
+
     public function __construct()
     {
         $this->heroMoney = new ArrayCollection();
@@ -248,6 +253,18 @@ class Hero extends UploadImageEntity
                 $heroMoney->setHero(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsMale(): ?bool
+    {
+        return $this->isMale;
+    }
+
+    public function setIsMale(bool $isMale): self
+    {
+        $this->isMale = $isMale;
 
         return $this;
     }
