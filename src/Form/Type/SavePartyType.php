@@ -23,6 +23,7 @@ class SavePartyType extends AbstractType
                     return $er->createQueryBuilder('h')
                         ->join('h.account', 'a')
                         ->where('a.id != :idAccount')
+                        ->andWhere('h.isDead = false')
                         ->setParameter('idAccount', $options['id'])
                         ->orderBy('h.name', 'ASC');
                 },
