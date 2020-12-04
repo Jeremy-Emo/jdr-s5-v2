@@ -29,7 +29,10 @@ class ShowHeroController extends AbstractController implements ControllerInterfa
      */
     public function __invoke(int $id): Response
     {
-        if (in_array(['ROLE_MJ', 'ROLE_ADMIN'], $this->getUser()->getRoles())) {
+        if (!empty(array_intersect(
+            ['ROLE_MJ', 'ROLE_ADMIN'],
+            $this->getUser()->getRoles())
+        )) {
             $hero = $this->heroRepository->find($id);
         } else {
             $hero = $this->heroRepository->findOneBy([
