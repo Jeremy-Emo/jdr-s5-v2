@@ -32,7 +32,7 @@
                                 {{ money.name }}
                             </td>
                             <td>
-                                <a href="#">Modifier</a>
+                                <a href="{{ path('admin_editMoney', {'id': money.id}) }}">Modifier</a>
                             </td>
                         </tr>
                     {% endfor %}
