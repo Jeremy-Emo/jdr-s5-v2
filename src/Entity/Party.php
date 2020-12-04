@@ -38,7 +38,7 @@ class Party
     /**
      * @ORM\Column(type="boolean")
      */
-    private ?bool $isActive;
+    private ?bool $isActive = false;
 
     public function __construct()
     {

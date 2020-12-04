@@ -20,6 +20,11 @@
                             {% endfor %}
                         </ul>
                     </p>
+                    {% if party.isActive %}
+                        <p><span class="bold green"><i class="w-20 fas fa-star"></i> Groupe actif</span></p>
+                    {% else %}
+                        <p><a class="bold grey line-through no-hover" href="{{ path('chooseParty', {'id':party.id}) }}"><span><i class="w-20 fas fa-star"></i> Groupe non-actif</span></a></p>
+                    {% endif %}
                     <p class="t-align-right">
                         <a href="#">Voir</a>
                     </p>

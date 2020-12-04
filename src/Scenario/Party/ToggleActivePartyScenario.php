@@ -1,21 +1,21 @@
 <?php
 
-namespace App\Scenario\Heroes;
+namespace App\Scenario\Party;
 
 use App\AbstractClass\AbstractScenario;
 use App\Entity\Account;
 use App\Exception\ScenarioException;
-use App\Repository\HeroRepository;
+use App\Repository\PartyRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
-class ToggleActiveHeroScenario extends AbstractScenario
+class ToggleActivePartyScenario extends AbstractScenario
 {
-    /** @required */
-    public HeroRepository $heroRepository;
+    /** @required  */
+    public PartyRepository $partyRepository;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -33,26 +33,26 @@ class ToggleActiveHeroScenario extends AbstractScenario
      * @return Response
      * @throws ScenarioException
      */
-    public function handle(int $id, Account $account, $routeToRedirect = 'listHeroes'): Response
+    public function handle(int $id, Account $account, $routeToRedirect = 'listParties'): Response
     {
-        $defaultHero = $this->heroRepository->findOneBy([
-            'account' => $account,
-            'isCurrent' => true
+        $defaultParty = $this->partyRepository->findOneBy([
+            'mj' => $account,
+            'isActive' => true
         ]);
-        $heroToSetCurrent = $this->heroRepository->findOneBy([
-            'account' => $account,
+        $partyToSetCurrent = $this->partyRepository->findOneBy([
+            'mj' => $account,
             'id' => $id
         ]);
 
-        if ($heroToSetCurrent === null || $defaultHero === null) {
+        if ($partyToSetCurrent === null || $defaultParty === null) {
             throw new ScenarioException("Heroes not found");
         }
 
-        $defaultHero->setIsCurrent(false);
-        $heroToSetCurrent->setIsCurrent(true);
+        $defaultParty->setIsActive(false);
+        $partyToSetCurrent->setIsActive(true);
 
-        $this->manager->persist($defaultHero);
-        $this->manager->persist($heroToSetCurrent);
+        $this->manager->persist($defaultParty);
+        $this->manager->persist($partyToSetCurrent);
         $this->manager->flush();
 
         return $this->redirectToRoute($routeToRedirect);
