@@ -16,6 +16,7 @@ Encore
     .addEntry('collectionType', './assets/js/collectionType.js')
     .addEntry('skillList', './assets/js/skillList.js')
     .addEntry('showHero', './assets/js/showHero.js')
+    .addEntry('showParty', './assets/js/showParty.js')
 
     .splitEntryChunks()
     .enableSingleRuntimeChunk()

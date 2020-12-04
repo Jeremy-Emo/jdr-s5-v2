@@ -4,7 +4,16 @@
 
 {% block content %}
     <div class="row">
-        {% for hero in party.heroes %}
+        <div class="col ma-25-top">
+            <div class="pa-20 bg-white full-height">
+                {% for hero in party.heroes %}
+                    <button class="btn btn-primary btn-show-hero" data-target="{{ hero.id }}">{{ hero }}</button>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    {% for hero in party.heroes %}
+        <div class="row hero_box_to_show" id="hero-{{ hero.id }}" style="display: none;">
             <div class="col-md-3 ma-25-top">
                 <div class="pa-20 bg-white full-height">
                     <p><span class="bold"><i class="w-20 fas fa-id-card"></i> Nom</span> : {{ hero.name }}</p>
@@ -19,6 +28,16 @@
                     {% endif %}
                 </div>
             </div>
-        {% endfor%}
-    </div>
+            <div class="col-md-9 ma-25-top">
+                <div class="pa-20 bg-white full-height">
+
+                </div>
+            </div>
+        </div>
+    {% endfor%}
+{% endblock %}
+
+{% block moreJS %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('showParty') }}
 {% endblock %}
