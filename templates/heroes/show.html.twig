@@ -58,7 +58,7 @@
                         >
                             {{ stat.name }} :
                         </span>
-                        {% if hero in app.user.heroes %}
+                        {% if hero in app.user.heroes and hero == app.user.getCurrentHero() %}
                         <span class="f-right buy-stat cursor-click ma-5-left" data-statid="{{ stat.id }}"><i class="w-20 fas fa-plus-square"></i></span>
                         {% endif %}
                         <span class="f-right stat-value">{{ stat.value }}</span>
