@@ -28,7 +28,7 @@
                             <td>{{ elem.nameId }}</td>
                             <td>{{ elem.rarity }}</td>
                             <td>
-                                <a href="#">Modifier</a>
+                                <a href="{{ path('admin_editElement', {'id' : elem.id}) }}">Modifier</a>
                             </td>
                         </tr>
                     {% endfor %}
