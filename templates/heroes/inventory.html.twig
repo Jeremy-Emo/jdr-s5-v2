@@ -119,11 +119,14 @@
                                 </td>
                                 <td>
                                     {% if item.item.isConsumable %}
-                                        <a href="{{ path('notImplemented') }}">Utiliser</a>
+                                        <a href="{{ path('notImplemented') }}">Utiliser</a><br>
                                     {% endif %}
                                     {% if not item.isEquipped and item.canBeEquipped() %}
-                                        <a href="{{ path('notImplemented') }}">Équiper</a>
+                                        <a href="{{ path('notImplemented') }}">Équiper</a><br>
+                                    {% elseif item.isEquipped %}
+                                        <a href="{{ path('notImplemented') }}">Enlever</a><br>
                                     {% endif %}
+                                    <a href="{{ path('notImplemented') }}">Mettre en commun</a>
                                 </td>
                             </tr>
                         {% endfor %}
