@@ -58,6 +58,13 @@ class FightingSkillInfoType extends AbstractType
                 'label' => 'Compétence de zone',
                 'required' => false
             ])
+            ->add('isShield', CheckboxType::class, [
+                'row_attr' => [
+                    'class' => 'pretty p-default d-block',
+                ],
+                'label' => 'Compétence de bouclier',
+                'required' => false
+            ])
             ->add('elementsMultipliers', CollectionType::class, [
                 'entry_type' => ElementMultiplierType::class,
                 'entry_options' => ['label' => false],
@@ -79,6 +86,8 @@ class FightingSkillInfoType extends AbstractType
             ->add('element')
             ->add('needWeaponType')
             ->add('needStatusToCast')
+            ->add('criticalDamages')
+            ->add('drainLife')
         ;
     }
 

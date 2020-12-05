@@ -37,6 +37,14 @@ class FightingSkillInfo
             $full .= "<p>Compétence de zone</p>";
         }
 
+        if (!empty($this->drainLife)) {
+            $full .= "<p>Drain de vie : " . $this->drainLife . "%</p>";
+        }
+
+        if (!empty($this->criticalDamages)) {
+            $full .= "<p>Dégâts critiques bonus : " . $this->criticalDamages . "%</p>";
+        }
+
         if ($this->customEffects !== null) {
             $full .= "<p>" . $this->customEffects . "</p>";
         }
@@ -47,6 +55,10 @@ class FightingSkillInfo
 
         if ($this->isOnSelfOnly) {
         $full .= "<p>Ne peut cibler que soi.</p>";
+        }
+
+        if ($this->isShield) {
+            $full .= "<p>Crée un bouclier.</p>";
         }
 
         if ($this->getElementsMultipliers()->count() > 0) {
@@ -202,6 +214,21 @@ class FightingSkillInfo
      * @ORM\Column(type="boolean")
      */
     private ?bool $isHeal;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $drainLife = 0;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $criticalDamages = 0;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $isShield = false;
 
     public function __construct()
     {
@@ -471,6 +498,42 @@ class FightingSkillInfo
     public function setIsHeal(bool $isHeal): self
     {
         $this->isHeal = $isHeal;
+
+        return $this;
+    }
+
+    public function getDrainLife(): ?int
+    {
+        return $this->drainLife;
+    }
+
+    public function setDrainLife(?int $drainLife): self
+    {
+        $this->drainLife = $drainLife;
+
+        return $this;
+    }
+
+    public function getCriticalDamages(): ?int
+    {
+        return $this->criticalDamages;
+    }
+
+    public function setCriticalDamages(?int $criticalDamages): self
+    {
+        $this->criticalDamages = $criticalDamages;
+
+        return $this;
+    }
+
+    public function getIsShield(): ?bool
+    {
+        return $this->isShield;
+    }
+
+    public function setIsShield(bool $isShield): self
+    {
+        $this->isShield = $isShield;
 
         return $this;
     }
