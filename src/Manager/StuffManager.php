@@ -5,6 +5,7 @@ namespace App\Manager;
 use App\Entity\FighterInfos;
 use App\Entity\FighterItem;
 use Doctrine\Common\Collections\Collection;
+use phpDocumentor\Reflection\Types\Iterable_;
 
 class StuffManager
 {
@@ -26,7 +27,7 @@ class StuffManager
         return $return;
     }
 
-    public static function getStuffWithEmptySlots(FighterInfos $fighter, Collection $slots): array
+    public static function getStuffWithEmptySlots(FighterInfos $fighter, array $slots): array
     {
         $stuff = self::returnStuffForDisplay($fighter);
         $return = [
