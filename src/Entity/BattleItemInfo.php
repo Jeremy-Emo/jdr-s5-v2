@@ -100,7 +100,7 @@ class BattleItemInfo
     private Collection $statBonusPercents;
 
     /**
-     * @ORM\Column(type="integer")
+     * @ORM\Column(type="integer", nullable=true)
      */
     private ?int $drainLife = 0;
 
