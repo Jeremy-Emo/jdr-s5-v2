@@ -3,6 +3,8 @@
 namespace App\Manager;
 
 use App\Entity\FighterInfos;
+use App\Entity\FighterItem;
+use Doctrine\Common\Collections\Collection;
 
 class StuffManager
 {
@@ -19,6 +21,28 @@ class StuffManager
             } elseif ($item->getIsEquipped() && $item->getItem()->getBattleItemInfo()->getWeaponType() !== null) {
                 $return['weapons'][] = $item;
             }
+        }
+
+        return $return;
+    }
+
+    public static function getStuffWithEmptySlots(FighterInfos $fighter, Collection $slots): array
+    {
+        $stuff = self::returnStuffForDisplay($fighter);
+        $return = [
+            'weapons' => $stuff['weapons'],
+            'gears' => []
+        ];
+
+        foreach ($slots as $slot) {
+            $toAdd = null;
+            /** @var FighterItem $gear */
+            foreach ($stuff['gears'] as $gear) {
+                if ($gear->getItem()->getItemSlot() === $slot) {
+                    $toAdd = $gear;
+                }
+            }
+            $return['gears'][$slot->getName()] = $toAdd;
         }
 
         return $return;

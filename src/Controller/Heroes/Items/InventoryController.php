@@ -4,7 +4,9 @@ namespace App\Controller\Heroes\Items;
 
 use App\AbstractClass\AbstractController;
 use App\Interfaces\ControllerInterface;
+use App\Manager\StuffManager;
 use App\Repository\HeroRepository;
+use App\Repository\ItemSlotRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
@@ -20,6 +22,9 @@ class InventoryController extends AbstractController implements ControllerInterf
 {
     /** @required  */
     public HeroRepository $heroRepository;
+
+    /** @required  */
+    public ItemSlotRepository $itemSlotRepository;
 
     /**
      * @param int $id
@@ -43,8 +48,11 @@ class InventoryController extends AbstractController implements ControllerInterf
             throw new NotFoundHttpException("Hero not found");
         }
 
+        $slots = $this->itemSlotRepository->findAll();
+
         return $this->render('heroes/inventory.html.twig', [
             'hero' => $hero,
+            'stuff' => StuffManager::getStuffWithEmptySlots($hero->getFighterInfos(), $slots),
         ]);
     }
 }
