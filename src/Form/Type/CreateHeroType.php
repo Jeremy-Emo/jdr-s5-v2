@@ -4,6 +4,7 @@ namespace App\Form\Type;
 
 use App\Entity\Hero;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\IntegerType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
@@ -53,6 +54,12 @@ class CreateHeroType extends AbstractType
                     new Positive([
                         'message' => 'L\'âge doit toujours être positif !'
                     ])
+                ]
+            ])
+            ->add('isMale', ChoiceType::class, [
+                'choices' => [
+                    'Homme' => true,
+                    'Femme' => false,
                 ]
             ])
         ;

@@ -19,6 +19,7 @@
                 <p><span class="bold"><i class="w-20 fas fa-clock"></i> Date de création</span> : {{ hero.createdAt|date("d/m/Y") }}</p>
                 <p><span class="bold"><i class="w-20 fas fa-leaf"></i> Affinité</span> : {{ hero.ElementAffinity }}</p>
                 <p><span class="bold"><i class="w-20 fas fa-birthday-cake"></i> Age</span> : {{ hero.age ? hero.age : "Inconnu" }}</p>
+                <p><span class="bold"><i class="w-20 fas fa-venus-mars"></i> Sexe</span> : {{ hero.isMale ? "Homme" : "Femme" }}</p>
 
                 {% if hero.isDead %}
                     <p><span class="bold">Statut : </span><span class="red"><i class="w-20 fas fa-skull-crossbones"></i> Mort</span></p>
