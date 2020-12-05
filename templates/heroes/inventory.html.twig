@@ -6,8 +6,116 @@
     <div class="row">
         <div class="col ma-25-top">
             <div class="pa-20 bg-white">
-                <h1 class="ma-20-bottom">Équipement :</h1>
-
+                <h1 class="ma-20-bottom d-flex align-items-center">
+                    <a class="toggle-angle no-hover" data-toggle="collapse" href="#stuff" aria-expanded="true" aria-controls="stuff">
+                        <i class="fas fa-angle-up icon-toggler"></i>
+                    </a>
+                    <span>Équipement</span>
+                </h1>
+                <div class="row collapse show border-top pa-20-top" id="stuff">
+                    <div class="col-md-6">
+                        <h2 class="ma-20-bottom">Armures :</h2>
+                        {% for key, item in stuff.gears %}
+                            {% if item %}
+                                <p>
+                                    <span class="bold">{{ item.item.itemSlot }} : </span>
+                                    <img
+                                            class="hf_box"
+                                            src="{{ item.item.getWebPath() }}"
+                                            title="{{ item.item.name }}"
+                                            data-content="{{ item.getFullDescription() }}"
+                                            data-html=true
+                                            data-toggle="popover"
+                                    >
+                                    <span
+                                            class="{{ item.item.rarity.color }} cursor-click"
+                                            title="{{ item.item.name }}"
+                                            data-content="{{ item.getFullDescription() }}"
+                                            data-html=true
+                                            data-toggle="popover"
+                                    >
+                                        {{ item.item.name }}
+                                    </span>
+                                </p>
+                            {% else %}
+                                <p>
+                                    <span class="bold">{{ key }} : </span>
+                                    <span>(vide)</span>
+                                </p>
+                            {% endif %}
+                        {% endfor %}
+                    </div>
+                    <div class="col-md-6">
+                        <h2 class="ma-20-bottom">Armes :</h2>
+                        {% for item in stuff.weapons %}
+                            <p>
+                                <span class="bold">{{ item.item.battleItemInfo.weaponType }} : </span>
+                                <img class="hf_box" src="{{ item.item.getWebPath() }}">
+                                <span
+                                        class="{{ item.item.rarity.color }} cursor-click"
+                                        title="{{ item.item.name }}"
+                                        data-content="{{ item.getFullDescription() }}"
+                                        data-html=true
+                                        data-toggle="popover"
+                                >
+                                    {{ item.item.name }}
+                                </span>
+                            </p>
+                        {% endfor %}
+                    </div>
+                    <div class="col">
+                        <p><span class="f-right"><a href="#">Modifier</a></span></p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col ma-25-top">
+            <div class="pa-20 bg-white">
+                <h1 class="ma-20-bottom d-flex align-items-center">
+                    <a class="toggle-angle no-hover" data-toggle="collapse" href="#personalInventory" aria-expanded="true" aria-controls="personalInventory">
+                        <i class="fas fa-angle-up icon-toggler"></i>
+                    </a>
+                    <span>Inventaire personnel</span>
+                </h1>
+                <div class="collapse show border-top pa-20-top" id="personalInventory">
+                    <p class="ma-10-bottom">
+                        <span>Nombre d'objets : {{ heroItems|length }}</span>
+                        <span class="f-right"><input type="text" id="searchBar"></span>
+                    </p>
+                    <table class="table" id="stupidTable">
+                        <thead>
+                        <tr>
+                            <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
+                            <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Équipé</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in heroItems %}
+                            <tr class="searchedItem" data-search="{{ item.item.name|lower }}">
+                                <td
+                                        class="cursor-click"
+                                        title="{{ item.item.name }}"
+                                        data-content="{{ item.getFullDescription() }}"
+                                        data-html=true
+                                        data-toggle="popover"
+                                >
+                                    <img class="hf_box" src="{{ item.item.getWebPath() }}">
+                                    <span>{{ item.item.name }}</span>
+                                </td>
+                                <td data-sort-value={{ item.isEquipped ? "1" : "0" }}>
+                                    {% if item.isEquipped %}
+                                        <i class="green fas fa-check"></i>
+                                    {% else %}
+                                        <i class="red fas fa-times"></i>
+                                    {% endif %}
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
             </div>
         </div>
     </div>
@@ -15,4 +123,5 @@
 
 {% block moreJS %}
     {{ parent() }}
+    {{ encore_entry_script_tags('searchBar') }}
 {% endblock %}

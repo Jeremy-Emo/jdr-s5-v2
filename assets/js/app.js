@@ -25,11 +25,11 @@ $(document).ready(function() {
 
     $('[data-toggle="popover"]').popover();
 
-    $('[data-toggle=popover]').on('click', function(e){
+    $('[data-toggle=popover]').on('click', function (e){
         $('[data-toggle=popover]').not(this).popover('hide');
     });
 
-    $('body').on("click", ".popover", function(){
+    $('body').on("click", ".popover", function (){
         $('[aria-describedby="'+$(this).attr('id')+'"]').popover('hide');
     });
 
@@ -49,5 +49,15 @@ $(document).ready(function() {
     });
 
     $("select").select2();
+
+    $("body").on('click', '.toggle-angle', function () {
+        let icon = $(this).find('.icon-toggler');
+        if (icon.hasClass('fa-angle-down')) {
+            icon.removeClass('fa-angle-down').addClass('fa-angle-up');
+        } else {
+            icon.removeClass('fa-angle-up').addClass('fa-angle-down');
+        }
+
+    })
 
 });

@@ -53,6 +53,7 @@ class InventoryController extends AbstractController implements ControllerInterf
         return $this->render('heroes/inventory.html.twig', [
             'hero' => $hero,
             'stuff' => StuffManager::getStuffWithEmptySlots($hero->getFighterInfos(), $slots),
+            'heroItems' => $hero->getFighterInfos()->getHeroItems(),
         ]);
     }
 }
