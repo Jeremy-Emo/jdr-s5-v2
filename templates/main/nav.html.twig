@@ -34,8 +34,8 @@
                     <a aria-expanded="false" role="button" href="#" class="dropdown-toggle text-uppercase" data-toggle="dropdown"> MJ - Groupe actif <span class="caret"></span></a>
                     <ul role="menu" class="dropdown-menu">
                         <li><a href="{{ path('showParty', {'id': app.user.getCurrentParty.id}) }}" class="text-uppercase">Personnages</a></li>
-                        <li><a href="#" class="text-uppercase">Inventaire</a></li>
-                        <li><a href="#" class="text-uppercase">Combat</a></li>
+                        <li><a href="{{ path('notImplemented') }}" class="text-uppercase">Inventaire</a></li>
+                        <li><a href="{{ path('notImplemented') }}" class="text-uppercase">Combat</a></li>
                     </ul>
                 </li>
                 {% endif %}

@@ -89,6 +89,7 @@
                         <tr>
                             <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
                             <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Équipé</th>
+                            <th scope="col">Actions</th>
                         </tr>
                         </thead>
                         <tbody>
@@ -109,6 +110,11 @@
                                         <i class="green fas fa-check"></i>
                                     {% else %}
                                         <i class="red fas fa-times"></i>
+                                    {% endif %}
+                                </td>
+                                <td>
+                                    {% if item.item.isConsumable %}
+                                        <a href="{{ path('notImplemented') }}">Utiliser</a>
                                     {% endif %}
                                 </td>
                             </tr>
