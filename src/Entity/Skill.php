@@ -13,22 +13,6 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Skill
 {
-    /**
-     * @ORM\PrePersist
-     */
-    public function setDefaults(): void
-    {
-        if (empty($this->cost)) {
-            $this->cost = 1;
-        }
-        if (empty($this->isPassive)) {
-            $this->isPassive = false;
-        }
-        if (empty($this->isUsableInBattle)) {
-            $this->isUsableInBattle = false;
-        }
-    }
-
     public function __toString(): string
     {
         return $this->name;
@@ -92,7 +76,7 @@ class Skill
     /**
      * @ORM\Column(type="integer")
      */
-    private ?int $cost;
+    private ?int $cost = 1;
 
     /**
      * @ORM\OneToOne(targetEntity=FightingSkillInfo::class, mappedBy="skill", cascade={"persist", "remove"})
@@ -102,27 +86,27 @@ class Skill
     /**
      * @ORM\Column(type="boolean")
      */
-    private ?bool $isPassive;
+    private ?bool $isPassive = false;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private ?bool $isUsableInBattle;
+    private ?bool $isUsableInBattle = false;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private ?int $mpCost;
+    private ?int $mpCost = 0;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private ?int $hpCost;
+    private ?int $hpCost = 0;
 
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private ?int $spCost;
+    private ?int $spCost = 0;
 
     /**
      * @ORM\ManyToOne(targetEntity=Skill::class)
