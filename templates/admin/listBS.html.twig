@@ -17,6 +17,7 @@
                     <tr>
                         <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
                         <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> ID to code</th>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Transformation</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
@@ -25,6 +26,13 @@
                         <tr class="searchedItem" data-search="{{ state.name|lower }}">
                             <td>{{ state.name }}</td>
                             <td>{{ state.nameId }}</td>
+                            <td data-sort-value={{ state.isTransformation ? "1" : "0" }}>
+                                {% if state.isTransformation %}
+                                    <i class="green fas fa-check"></i>
+                                {% else %}
+                                    <i class="red fas fa-times"></i>
+                                {% endif %}
+                            </td>
                             <td>
                                 {% if state.fightingSkills|length == 0 %}
                                 <a href="{{ path('admin_deleteBS', {'id': state.id}) }}">Supprimer</a>
