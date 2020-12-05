@@ -63,9 +63,6 @@
                             </p>
                         {% endfor %}
                     </div>
-                    <div class="col">
-                        <p><span class="f-right"><a href="#">Modifier</a></span></p>
-                    </div>
                 </div>
             </div>
         </div>
@@ -88,6 +85,7 @@
                         <thead>
                         <tr>
                             <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
+                            <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Équipement</th>
                             <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Équipé</th>
                             <th scope="col">Actions</th>
                         </tr>
@@ -105,6 +103,13 @@
                                     <img class="hf_box" src="{{ item.item.getWebPath() }}">
                                     <span>{{ item.item.name }}</span>
                                 </td>
+                                <td data-sort-value={{ item.canBeEquipped() ? "1" : "0" }}>
+                                    {% if item.canBeEquipped() %}
+                                        <i class="green fas fa-check"></i>
+                                    {% else %}
+                                        <i class="red fas fa-times"></i>
+                                    {% endif %}
+                                </td>
                                 <td data-sort-value={{ item.isEquipped ? "1" : "0" }}>
                                     {% if item.isEquipped %}
                                         <i class="green fas fa-check"></i>
@@ -115,6 +120,9 @@
                                 <td>
                                     {% if item.item.isConsumable %}
                                         <a href="{{ path('notImplemented') }}">Utiliser</a>
+                                    {% endif %}
+                                    {% if not item.isEquipped and item.canBeEquipped() %}
+                                        <a href="{{ path('notImplemented') }}">Équiper</a>
                                     {% endif %}
                                 </td>
                             </tr>

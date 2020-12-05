@@ -22,6 +22,14 @@ class FighterItem
         return $full;
     }
 
+    public function canBeEquipped(): bool
+    {
+        return (
+            $this->getItem()->getItemSlot() !== null
+            || $this->getItem()->getBattleItemInfo()->getWeaponType() !== null
+        );
+    }
+
     /**
      * @ORM\PrePersist
      */
