@@ -34,7 +34,6 @@ class EditImageScenario extends AbstractScenario
             $this->manager->persist($hero);
             $this->manager->flush();
 
-            //TODO : better redirect
             return $this->redirectToRoute('listHeroes');
         }
 
