@@ -54,7 +54,11 @@
             {% endif %}
             <li class="nav-item user-navbox">
                 <a href="{{ path('index') }}"><i class="fas fa-user"></i> {{ app.user.username }}</a>
-                <a href="{{ path('app_logout') }}" class="ma-10-left"><i class="fas fa-sign-out-alt"></i></a>
+                {% if is_granted('IS_IMPERSONATOR') %}
+                    <a href="{{ path('index', {'_compte': '_exit'}) }}" class="ma-10-left"><i class="fas fa-sign-out-alt"></i></a>
+                {% else %}
+                    <a href="{{ path('app_logout') }}" class="ma-10-left"><i class="fas fa-sign-out-alt"></i></a>
+                {% endif %}
             </li>
         </ul>
     </div>
