@@ -27,7 +27,7 @@ class Item extends UploadImageEntity
         }
 
         if (!empty($this->customEffect)) {
-            $full .= "<p>" . $this->customEffect . "</p>";
+            $full .= "<p>Effet spécial : " . $this->customEffect . "</p>";
         }
 
         return $full;

@@ -28,6 +28,10 @@ class BattleItemInfo
             $full .= "<p>Capacité offensive : " . $this->trueDamages . "</p>";
         }
 
+        if (!empty($this->drainLife)) {
+            $full .= "<p>Drain de vie : " . $this->drainLife . "%</p>";
+        }
+
         foreach ($this->getStatBonusPercents() as $bonusPercent) {
             $full .= "<p>" . $bonusPercent->getStat()->getName() . " +" . $bonusPercent->getValue() . "%</p>";
         }
@@ -94,6 +98,11 @@ class BattleItemInfo
      * @ORM\ManyToMany(targetEntity=StatBonusPercent::class, inversedBy="item", cascade={"all"})
      */
     private Collection $statBonusPercents;
+
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private ?int $drainLife = 0;
 
     public function __construct()
     {
@@ -207,6 +216,18 @@ class BattleItemInfo
         if ($this->statBonusPercents->removeElement($statBonusPercent)) {
             $statBonusPercent->removeItem($this);
         }
+
+        return $this;
+    }
+
+    public function getDrainLife(): ?int
+    {
+        return $this->drainLife;
+    }
+
+    public function setDrainLife(int $drainLife): self
+    {
+        $this->drainLife = $drainLife;
 
         return $this;
     }
