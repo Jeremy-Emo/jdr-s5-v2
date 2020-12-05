@@ -29,6 +29,9 @@
                             <td>{{ ce.nameId }}</td>
                             <td>
                                 <a href="{{ path('admin_editCustomEffect', {'id': ce.id}) }}">Modifier</a>
+                                {% if ce.skillsWithThis|length == 0 %}
+                                    <br><a href="{{ path('admin_deleteCE', {'id': ce.id}) }}">Supprimer</a>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
