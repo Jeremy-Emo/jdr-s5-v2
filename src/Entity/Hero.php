@@ -99,9 +99,15 @@ class Hero extends UploadImageEntity
      */
     private ?bool $isMale = false;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Quest::class, inversedBy="heroes")
+     */
+    private $quests;
+
     public function __construct()
     {
         $this->heroMoney = new ArrayCollection();
+        $this->quests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -265,6 +271,30 @@ class Hero extends UploadImageEntity
     public function setIsMale(bool $isMale): self
     {
         $this->isMale = $isMale;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Quest[]
+     */
+    public function getQuests(): Collection
+    {
+        return $this->quests;
+    }
+
+    public function addQuest(Quest $quest): self
+    {
+        if (!$this->quests->contains($quest)) {
+            $this->quests[] = $quest;
+        }
+
+        return $this;
+    }
+
+    public function removeQuest(Quest $quest): self
+    {
+        $this->quests->removeElement($quest);
 
         return $this;
     }

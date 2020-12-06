@@ -40,9 +40,15 @@ class Party
      */
     private ?bool $isActive = false;
 
+    /**
+     * @ORM\ManyToMany(targetEntity=Quest::class, inversedBy="parties")
+     */
+    private $quests;
+
     public function __construct()
     {
         $this->heroes = new ArrayCollection();
+        $this->quests = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -112,6 +118,30 @@ class Party
     public function setIsActive(bool $isActive): self
     {
         $this->isActive = $isActive;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Quest[]
+     */
+    public function getQuests(): Collection
+    {
+        return $this->quests;
+    }
+
+    public function addQuest(Quest $quest): self
+    {
+        if (!$this->quests->contains($quest)) {
+            $this->quests[] = $quest;
+        }
+
+        return $this;
+    }
+
+    public function removeQuest(Quest $quest): self
+    {
+        $this->quests->removeElement($quest);
 
         return $this;
     }
