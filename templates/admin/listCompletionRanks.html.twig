@@ -1,0 +1,36 @@
+{% block content %}
+    <div class="row">
+        <div class="col ma-25-top">
+            <a href="{{ path('admin_createCompletionRank') }}"><button type="button" class="btn btn-primary">Créer un rang de complétion</button></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col ma-25-top">
+            <div class="pa-20 bg-white">
+                <h1 class="ma-20-bottom">Liste des rangs de complétion :</h1>
+                <p class="ma-10-bottom">
+                    <span>Nombre de rangs de complétion : {{ completionRanks|length }}</span>
+                    <span class="f-right"><input type="text" id="searchBar"></span>
+                </p>
+                <table class="table" id="stupidTable">
+                    <thead>
+                    <tr>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Valeur</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for cr in completionRanks %}
+                        <tr class="searchedItem" data-search="{{ cr.value|lower }}">
+                            <td>{{ cr.value }}</td>
+                            <td>
+                                <a href="{{ path('notImplemented') }}">Modifier</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}

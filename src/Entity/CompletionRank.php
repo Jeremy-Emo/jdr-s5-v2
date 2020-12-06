@@ -15,12 +15,12 @@ class CompletionRank
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $value;
+    private ?string $value;
 
     public function getId(): ?int
     {
