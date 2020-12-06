@@ -27,6 +27,11 @@ class Monster
      */
     private ?FighterInfos $fighterInfos;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $isFinished = false;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -58,6 +63,18 @@ class Monster
         if ($fighterInfos->getMonster() !== $newMonster) {
             $fighterInfos->setMonster($newMonster);
         }
+
+        return $this;
+    }
+
+    public function getIsFinished(): ?bool
+    {
+        return $this->isFinished;
+    }
+
+    public function setIsFinished(bool $isFinished): self
+    {
+        $this->isFinished = $isFinished;
 
         return $this;
     }

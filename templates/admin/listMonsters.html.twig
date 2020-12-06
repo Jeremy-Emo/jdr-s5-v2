@@ -1,0 +1,54 @@
+{% extends 'main/layout.html.twig' %}
+
+{% block page_title %}Admin - Gestion des monstres{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+            <a href="{{ path('notImplemented') }}"><button type="button" class="btn btn-primary">Créer un nouveau monstre</button></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col ma-25-top">
+            <div class="pa-20 bg-white">
+                <p class="ma-10-bottom">
+                    <span>Nombre de monstres : {{ monsters|length }}</span>
+                    <span class="f-right"><input type="text" id="searchBar"></span>
+                </p>
+                <table class="table" id="stupidTable">
+                    <thead>
+                    <tr>
+                        <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Terminé</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for monster in monsters %}
+                        <tr class="searchedItem" data-search="{{ monster.name|lower }}">
+                            <td>{{ monster.name }}</td>
+                            <td data-sort-value={{ monster.isFinished ? "1" : "0" }}>
+                                {% if monster.isFinished %}
+                                    <i class="green fas fa-check"></i>
+                                {% else %}
+                                    <i class="red fas fa-times"></i>
+                                {% endif %}
+                            </td>
+                            <td>
+                                <a href="{{ path('notImplemented') }}">Modifier</a><br>
+                                <a href="{{ path('notImplemented') }}">Gérer équipement</a><br>
+                                <a href="{{ path('notImplemented') }}">Gérer compétences</a><br>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block moreJS %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('searchBar') }}
+{% endblock %}
