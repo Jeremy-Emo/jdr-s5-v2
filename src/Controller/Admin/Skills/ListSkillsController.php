@@ -32,6 +32,7 @@ class ListSkillsController extends AbstractController implements ControllerInter
         return $this->render('admin/listSkills.html.twig', [
             'skills' => $skills,
             'tags' => $tags,
+            'fluid' => true,
         ]);
     }
 }
