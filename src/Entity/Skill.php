@@ -18,6 +18,15 @@ class Skill
         return $this->name;
     }
 
+    public function getTagsForSearch(): string
+    {
+        $tags = "|";
+        foreach ($this->getTags() as $tag) {
+            $tags .= $tag->getId() . "|";
+        }
+        return $tags;
+    }
+
     public function getFullDescription(?int $level = 1): string
     {
         $full = "<p>" . $this->description .  "</p>";
