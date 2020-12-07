@@ -43,6 +43,8 @@ class CreateHeroScenario extends AbstractScenario
 
     public const RARITY_BEGINNER_STUFF = 'Commun';
 
+    public const GAIN_STAT_BY_SKILL = 'transcend_stat';
+
     /** @required */
     public StatRepository $statRepository;
 
@@ -107,7 +109,7 @@ class CreateHeroScenario extends AbstractScenario
     {
         $fighter = (new FighterInfos())
             ->setSkillPoints(self::DEFAULT_SKILL_POINTS)
-            ->setStatPoints(self::DEFAULT_STAT_POINTS)
+            ->setStatPoints($this->calculateStatPoints($account))
             ->setHero($hero)
             ->setCurrentSP(0)
             ->setCurrentHP(StatManager::calculateMaxHP(self::DEFAULT_STAMINA))
@@ -117,6 +119,19 @@ class CreateHeroScenario extends AbstractScenario
         $fighter = $this->addDefaultSkills($fighter, $account);
         $fighter = $this->generateDefaultStuff($fighter);
         return $fighter;
+    }
+
+    private function calculateStatPoints(Account $account): int
+    {
+        $bonus = 0;
+        foreach ($account->getAccountSkills() as $skill) {
+            if (
+                $skill->getSkill()->getFightingSkillInfo()->getCustomEffects()->getNameId() === self::GAIN_STAT_BY_SKILL
+            ) {
+                $bonus += $skill->getLevel();
+            }
+        }
+        return $bonus + self::DEFAULT_STAT_POINTS;
     }
 
     /**
