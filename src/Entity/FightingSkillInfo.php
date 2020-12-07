@@ -90,6 +90,8 @@ class FightingSkillInfo
         if ($this->getStatMultipliers()->count() > 0) {
             if ($this->isHeal) {
                 $full .= "<p>Soin :</p><ul>";
+            } elseif($this->isShield) {
+                $full .= "<p>Protection :</p><ul>";
             } else {
                 $full .= "<p>Multiplicateurs de dégâts :</p><ul>";
             }
