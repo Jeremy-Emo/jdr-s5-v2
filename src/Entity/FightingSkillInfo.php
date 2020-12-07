@@ -46,7 +46,11 @@ class FightingSkillInfo
         }
 
         if ($this->customEffects !== null) {
-            $full .= "<p>Effet spécial : " . $this->customEffects . "</p>";
+            $full .= "<p>Effet spécial : " . $this->customEffects;
+            if (!empty($this->customEffects->getAdvancedDescription())) {
+                $full .= "<br>" . $this->customEffects->getAdvancedDescription();
+            }
+            $full.= "</p>";
         }
 
         if ($this->accuracy !== null) {
