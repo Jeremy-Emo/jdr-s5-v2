@@ -16,7 +16,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
-class CreateMonsterScenario extends AbstractScenario
+class SaveMonsterScenario extends AbstractScenario
 {
     /** @required  */
     public StatRepository $statRepository;
@@ -35,7 +35,7 @@ class CreateMonsterScenario extends AbstractScenario
      * @return Response
      * @throws ScenarioException
      */
-    public function handle(FormInterface $form): Response
+    public function handle(FormInterface $form, ?string $title = 'create_monster'): Response
     {
         if($form->isSubmitted() && $form->isValid()) {
             /** @var Monster $monster */
@@ -53,7 +53,7 @@ class CreateMonsterScenario extends AbstractScenario
 
         return $this->renderNewResponse('admin/createMonster.html.twig', [
             'form' => $form->createView(),
-            'title' => 'create_monster',
+            'title' => $title,
         ]);
     }
 
