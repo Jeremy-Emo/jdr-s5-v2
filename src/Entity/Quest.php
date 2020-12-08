@@ -17,52 +17,50 @@ class Quest
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private $name;
+    private ?string $name;
 
     /**
      * @ORM\Column(type="text")
      */
-    private $description;
+    private ?string $description;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isCompleted;
+    private ?bool $isCompleted;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isFailed;
+    private ?bool $isFailed;
 
     /**
      * @ORM\ManyToOne(targetEntity=CompletionRank::class)
      */
-    private $completionRank;
+    private ?CompletionRank $completionRank;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Hero::class, mappedBy="quests")
+     * @ORM\ManyToOne(targetEntity=Hero::class, inversedBy="quests")
      */
-    private $heroes;
+    private ?Hero $hero;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Party::class, mappedBy="quests")
+     * @ORM\ManyToOne(targetEntity=Party::class, inversedBy="quests")
      */
-    private $parties;
+    private ?Party $party;
 
     /**
      * @ORM\OneToMany(targetEntity=Reward::class, mappedBy="quest", orphanRemoval=true)
      */
-    private $rewards;
+    private Collection $rewards;
 
     public function __construct()
     {
-        $this->heroes = new ArrayCollection();
-        $this->parties = new ArrayCollection();
         $this->rewards = new ArrayCollection();
     }
 
@@ -132,55 +130,31 @@ class Quest
     }
 
     /**
-     * @return Collection|Hero[]
+     * @return Hero|null
      */
-    public function getHeroes(): Collection
+    public function getHero(): ?Hero
     {
-        return $this->heroes;
+        return $this->hero;
     }
 
-    public function addHero(Hero $hero): self
+    public function setHero(Hero $hero): self
     {
-        if (!$this->heroes->contains($hero)) {
-            $this->heroes[] = $hero;
-            $hero->addQuest($this);
-        }
-
-        return $this;
-    }
-
-    public function removeHero(Hero $hero): self
-    {
-        if ($this->heroes->removeElement($hero)) {
-            $hero->removeQuest($this);
-        }
+        $this->hero = $hero;
 
         return $this;
     }
 
     /**
-     * @return Collection|Party[]
+     * @return null|Party
      */
-    public function getParties(): Collection
+    public function getParty(): ?Party
     {
-        return $this->parties;
+        return $this->party;
     }
 
-    public function addParty(Party $party): self
+    public function setParty(Party $party): self
     {
-        if (!$this->parties->contains($party)) {
-            $this->parties[] = $party;
-            $party->addQuest($this);
-        }
-
-        return $this;
-    }
-
-    public function removeParty(Party $party): self
-    {
-        if ($this->parties->removeElement($party)) {
-            $party->removeQuest($this);
-        }
+        $this->party = $party;
 
         return $this;
     }

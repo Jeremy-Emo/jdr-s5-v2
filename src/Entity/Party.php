@@ -41,9 +41,9 @@ class Party
     private ?bool $isActive = false;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Quest::class, inversedBy="parties")
+     * @ORM\OneToMany(targetEntity=Quest::class, mappedBy="party")
      */
-    private $quests;
+    private Collection $quests;
 
     public function __construct()
     {

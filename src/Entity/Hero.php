@@ -100,9 +100,9 @@ class Hero extends UploadImageEntity
     private ?bool $isMale = false;
 
     /**
-     * @ORM\ManyToMany(targetEntity=Quest::class, inversedBy="heroes")
+     * @ORM\OneToMany(targetEntity=Quest::class, mappedBy="hero")
      */
-    private $quests;
+    private Collection $quests;
 
     public function __construct()
     {
