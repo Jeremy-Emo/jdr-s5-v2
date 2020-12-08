@@ -20,6 +20,7 @@
                     <tr>
                         <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
                         <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Terminé</th>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Création</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
@@ -34,6 +35,7 @@
                                     <i class="red fas fa-times"></i>
                                 {% endif %}
                             </td>
+                            <td data-sort-value="{{ monster.createdAt|date("U") }}">{{ monster.createdAt|date("d/m/Y") }}</td>
                             <td>
                                 <a href="{{ path('admin_editMonster', {'id': monster.id}) }}">Modifier</a><br>
                                 <a href="{{ path('notImplemented') }}">Gérer équipement</a><br>

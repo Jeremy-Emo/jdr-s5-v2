@@ -7,9 +7,20 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=MonsterRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Monster
 {
+    /**
+     * @ORM\PrePersist
+     */
+    public function setDefaults(): void
+    {
+        if (empty($this->createdAt)) {
+            $this->createdAt = new \DateTime();
+        }
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -31,6 +42,11 @@ class Monster
      * @ORM\Column(type="boolean")
      */
     private ?bool $isFinished = false;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private ?\DateTimeInterface $createdAt;
 
     public function getId(): ?int
     {
@@ -75,6 +91,18 @@ class Monster
     public function setIsFinished(bool $isFinished): self
     {
         $this->isFinished = $isFinished;
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }
