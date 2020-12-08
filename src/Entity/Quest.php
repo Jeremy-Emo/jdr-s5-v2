@@ -9,9 +9,34 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=QuestRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Quest
 {
+    /**
+     * @ORM\PrePersist
+     */
+    public function setDefaults(): void
+    {
+        if (empty($this->createdAt)) {
+            $this->createdAt = new \DateTime();
+        }
+    }
+
+    /**
+     * @return string
+     */
+    public function getAttribution(): string
+    {
+        if ($this->getHero() !== null) {
+            return "Héros : " . $this->hero->getName();
+        }
+        if ($this->getParty() !== null) {
+            return "Groupe : " . $this->party->getName();
+        }
+        return "(vide)";
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -58,6 +83,11 @@ class Quest
      * @ORM\OneToMany(targetEntity=Reward::class, mappedBy="quest", orphanRemoval=true)
      */
     private Collection $rewards;
+
+    /**
+     * @ORM\Column(type="datetime")
+     */
+    private $createdAt;
 
     public function __construct()
     {
@@ -185,6 +215,18 @@ class Quest
                 $reward->setQuest(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCreatedAt(): ?\DateTimeInterface
+    {
+        return $this->createdAt;
+    }
+
+    public function setCreatedAt(\DateTimeInterface $createdAt): self
+    {
+        $this->createdAt = $createdAt;
 
         return $this;
     }

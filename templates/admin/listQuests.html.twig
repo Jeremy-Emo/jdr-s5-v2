@@ -1,0 +1,54 @@
+{% extends 'main/layout.html.twig' %}
+
+{% block page_title %}Admin - Gestion des quêtes{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+            <a href="{{ path('notImplemented') }}"><button type="button" class="btn btn-primary">Créer une nouvelle quête</button></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col ma-25-top">
+            <div class="pa-20 bg-white">
+                <p class="ma-10-bottom">
+                    <span>Nombre de quêtes : {{ quests|length }}</span>
+                    <span class="f-right"><input type="text" id="searchBar"></span>
+                </p>
+                <table class="table" id="stupidTable">
+                    <thead>
+                    <tr>
+                        <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
+                        <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Attribution</th>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Création</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for quest in quests %}
+                        <tr class="searchedItem" data-search="{{ quest.name|lower }}">
+                            <td>{{ quest.name }}</td>
+                            <td>{{ quest.getAttribution() }}</td>
+                            <td data-sort-value="{{ quest.createdAt|date("U") }}">{{ quest.createdAt|date("d/m/Y") }}</td>
+                            <td>
+                                <a href="{{ path('notImplemented') }}">Modifier</a><br>
+                                {% if not quest.hero and not quest.party %}
+                                <a href="{{ path('notImplemented') }}">Attribuer</a><br>
+                                {% endif %}
+                                {% if quest.hero or quest.party %}
+                                    <a href="{{ path('notImplemented') }}">Achever</a><br>
+                                {% endif %}
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block moreJS %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('searchBar') }}
+{% endblock %}
