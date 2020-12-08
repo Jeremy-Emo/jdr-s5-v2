@@ -2,7 +2,7 @@
 
 {% block form_label %}
     {{ parent() }}
-    {% if required %}
+    {% if required and label is not same as(false) %}
         <span class="required" title="Champ requis">*</span>
     {% endif %}
 {% endblock %}
