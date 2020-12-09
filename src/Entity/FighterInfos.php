@@ -14,19 +14,6 @@ use Doctrine\ORM\Mapping as ORM;
 class FighterInfos
 {
     /**
-     * @ORM\PrePersist
-     */
-    public function setDefaults(): void
-    {
-        if (empty($this->statPoints)) {
-            $this->statPoints = 0;
-        }
-        if (empty($this->skillPoints)) {
-            $this->skillPoints = 0;
-        }
-    }
-
-    /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
@@ -46,12 +33,12 @@ class FighterInfos
     /**
      * @ORM\Column(type="integer")
      */
-    private ?int $statPoints;
+    private ?int $statPoints = 0;
 
     /**
      * @ORM\Column(type="integer")
      */
-    private ?int $skillPoints;
+    private ?int $skillPoints = 0;
 
     /**
      * @ORM\OneToMany(targetEntity=FighterStat::class, mappedBy="fighter", orphanRemoval=true, cascade={"persist"})

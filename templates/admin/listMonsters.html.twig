@@ -38,7 +38,7 @@
                             <td data-sort-value="{{ monster.createdAt|date("U") }}">{{ monster.createdAt|date("d/m/Y") }}</td>
                             <td>
                                 <a href="{{ path('admin_editMonster', {'id': monster.id}) }}">Modifier</a><br>
-                                <a href="{{ path('notImplemented') }}">Gérer équipement</a><br>
+                                <a href="{{ path('admin_equipMonster', {'id': monster.id}) }}">Gérer équipement</a><br>
                                 <a href="{{ path('notImplemented') }}">Gérer compétences</a><br>
                             </td>
                         </tr>

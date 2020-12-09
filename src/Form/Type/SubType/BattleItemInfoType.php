@@ -21,7 +21,10 @@ class BattleItemInfoType extends AbstractType
                 'required' => false,
             ])
             ->add('weaponType')
-            ->add('drainLife')
+            ->add('drainLife', IntegerType::class, [
+                'empty_data' => 0,
+                'required' => false,
+            ])
             ->add('elementMultipliers', CollectionType::class, [
                 'entry_type' => ElementMultiplierType::class,
                 'entry_options' => ['label' => false],

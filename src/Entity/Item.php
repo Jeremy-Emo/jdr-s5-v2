@@ -10,6 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Item extends UploadImageEntity
 {
+    public function __toString(): string
+    {
+        return $this->getName();
+    }
+
     public function getFullDescription(): string
     {
         $full = "<p>Rareté : <span class='" . $this->rarity->getColor() . "'>" . $this->rarity->getName() . "</span></p>";

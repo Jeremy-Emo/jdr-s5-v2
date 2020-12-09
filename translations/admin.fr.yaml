@@ -19,3 +19,4 @@ edit_element : Modifier un élément
 create_completion_rank : Créer un rang de complétion
 create_monster : Créer un monstre
 edit_monster : Modifier un monstre
+equip_monster : Équiper un monstre

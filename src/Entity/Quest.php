@@ -87,7 +87,7 @@ class Quest
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private ?\DateTimeInterface $createdAt;
 
     public function __construct()
     {
