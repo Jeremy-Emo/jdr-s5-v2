@@ -49,10 +49,16 @@ class Element
      */
     private Collection $heroes;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Monster::class, mappedBy="elementAffinity")
+     */
+    private Collection $monsters;
+
     public function __construct()
     {
         $this->fightingSkills = new ArrayCollection();
         $this->heroes = new ArrayCollection();
+        $this->monsters = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -154,6 +160,36 @@ class Element
             // set the owning side to null (unless already changed)
             if ($hero->getElementAffinity() === $this) {
                 $hero->setElementAffinity(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Monster[]
+     */
+    public function getMonsters(): Collection
+    {
+        return $this->monsters;
+    }
+
+    public function addMonster(Monster $monster): self
+    {
+        if (!$this->monsters->contains($monster)) {
+            $this->monsters[] = $monster;
+            $monster->setElementAffinity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeMonster(Monster $monster): self
+    {
+        if ($this->monsters->removeElement($monster)) {
+            // set the owning side to null (unless already changed)
+            if ($monster->getElementAffinity() === $this) {
+                $monster->setElementAffinity(null);
             }
         }
 

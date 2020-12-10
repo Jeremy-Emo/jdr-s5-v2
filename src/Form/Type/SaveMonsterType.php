@@ -22,6 +22,7 @@ class SaveMonsterType extends AbstractType
                 'label' => 'Terminé',
                 'required' => false
             ])
+            ->add('elementAffinity')
             ->add('fighterInfos', FighterInfosType::class, [
                 'label' => false,
             ])

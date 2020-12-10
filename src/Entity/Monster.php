@@ -48,6 +48,11 @@ class Monster
      */
     private ?\DateTimeInterface $createdAt;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Element::class, inversedBy="monsters")
+     */
+    private ?Element $elementAffinity;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -103,6 +108,18 @@ class Monster
     public function setCreatedAt(\DateTimeInterface $createdAt): self
     {
         $this->createdAt = $createdAt;
+
+        return $this;
+    }
+
+    public function getElementAffinity(): ?Element
+    {
+        return $this->elementAffinity;
+    }
+
+    public function setElementAffinity(?Element $elementAffinity): self
+    {
+        $this->elementAffinity = $elementAffinity;
 
         return $this;
     }
