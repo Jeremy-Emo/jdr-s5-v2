@@ -20,7 +20,6 @@ class FighterSkill
         }
     }
 
-
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

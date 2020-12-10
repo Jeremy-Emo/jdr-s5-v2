@@ -29,6 +29,7 @@ class BattleItemInfoType extends AbstractType
                 'entry_type' => ElementMultiplierType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
+                'allow_delete' => true,
                 'block_name' => 'elementMultipliers',
             ])
             ->add('statBonusPercents')

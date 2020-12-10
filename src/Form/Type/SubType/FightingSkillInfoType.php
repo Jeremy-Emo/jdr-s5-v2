@@ -69,18 +69,21 @@ class FightingSkillInfoType extends AbstractType
                 'entry_type' => ElementMultiplierType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
+                'allow_delete' => true,
                 'block_name' => 'elementMultipliers',
             ])
             ->add('statMultipliers', CollectionType::class, [
                 'entry_type' => StatMultiplierType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
+                'allow_delete' => true,
                 'block_name' => 'statMultipliers',
             ])
             ->add('battleStates', CollectionType::class, [
                 'entry_type' => FSBattleStateType::class,
                 'entry_options' => ['label' => false],
                 'allow_add' => true,
+                'allow_delete' => true,
                 'block_name' => 'battleStates',
             ])
             ->add('element')

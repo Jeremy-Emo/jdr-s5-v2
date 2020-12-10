@@ -1,0 +1,40 @@
+{% extends 'main/forms.html.twig' %}
+
+{% macro printSkillsRow(form) %}
+    <table class="ma-15-top centerCells f-width-table">
+        <thead>
+        <tr>
+            <th>{{ form_label(form.skill) }}</th>
+            <th>{{ form_label(form.level) }}</th>
+            <th><label>Supprimer</label></th>
+        </tr>
+        </thead>
+        <tbody>
+        <tr>
+            <td>{{ form_widget(form.skill) }}</td>
+            <td>{{ form_widget(form.level) }}</td>
+            <td>
+                <a href="#" class="remove_item_link">
+                    <i class="fas fa-window-close"></i>
+                </a>
+            </td>
+        </tr>
+        </tbody>
+    </table>
+{% endmacro %}
+
+{% block _fighter_manage_skills_widget %}
+    <p class="ma-5-bottom">Compétences : </p>
+    <div
+        class="row collection_wrapper"
+        data-prototype="{{ _self.printSkillsRow(form.skills.vars.prototype)|e }}"
+        data-index="{{ form.skills|length }}"
+    >
+        {% for skill in form.skills %}
+            {{ _self.printSkillsRow(skill) }}
+        {% endfor %}
+        <button type="button" class="add_item_link btn btn-primary ma-10-top" data-collection-holder-class="skills">
+            Ajout de compétence
+        </button>
+    </div>
+{% endblock %}
