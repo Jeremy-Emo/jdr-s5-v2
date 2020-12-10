@@ -72,7 +72,7 @@ class Item extends UploadImageEntity
     private ?string $description;
 
     /**
-     * @ORM\ManyToOne(targetEntity=CustomEffect::class)
+     * @ORM\ManyToOne(targetEntity=CustomEffect::class, inversedBy="items")
      */
     private ?CustomEffect $customEffect;
 

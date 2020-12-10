@@ -20,6 +20,11 @@ class CustomEffect
         return $this->name;
     }
 
+    public function hasLinkedObjects(): bool
+    {
+        return ($this->items->count() > 0 || $this->skillsWithThis->count() > 0);
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
@@ -43,6 +48,11 @@ class CustomEffect
     private Collection $skillsWithThis;
 
     /**
+     * @ORM\OneToMany(targetEntity=Item::class, mappedBy="customEffect")
+     */
+    private Collection $items;
+
+    /**
      * @ORM\Column(type="integer", nullable=true)
      */
     private ?int $value;
@@ -55,6 +65,7 @@ class CustomEffect
     public function __construct()
     {
         $this->skillsWithThis = new ArrayCollection();
+        $this->items = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -121,6 +132,14 @@ class CustomEffect
         }
 
         return $this;
+    }
+
+    /**
+     * @return Collection|Item[]
+     */
+    public function getItems(): Collection
+    {
+        return $this->items;
     }
 
     public function getValue(): ?int
