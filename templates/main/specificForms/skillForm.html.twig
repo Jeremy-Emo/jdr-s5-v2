@@ -115,9 +115,9 @@
     </div>
     <p class="ma-5-bottom">Statuts de combat : </p>
     <div
-            class="row collection_wrapper"
-            data-prototype="{{ _self.printBattleStatesRow(form.battleStates.vars.prototype)|e }}"
-            data-index="{{ form.battleStates|length }}"
+        class="row collection_wrapper"
+        data-prototype="{{ _self.printBattleStatesRow(form.battleStates.vars.prototype)|e }}"
+        data-index="{{ form.battleStates|length }}"
     >
         {% for battleState in form.battleStates %}
             {{ _self.printBattleStatesRow(battleState) }}

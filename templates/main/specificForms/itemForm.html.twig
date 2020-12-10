@@ -33,9 +33,9 @@
     {{ form_row(form.statBonusPercents) }}
     <p class="ma-5-bottom">Bonus élémentaux : </p>
     <div
-            class="row collection_wrapper"
-            data-prototype="{{ _self.printElementMultiplierRow(form.elementMultipliers.vars.prototype)|e }}"
-            data-index="{{ form.elementMultipliers|length }}"
+        class="row collection_wrapper"
+        data-prototype="{{ _self.printElementMultiplierRow(form.elementMultipliers.vars.prototype)|e }}"
+        data-index="{{ form.elementMultipliers|length }}"
     >
         {% for elementsMultiplier in form.elementMultipliers %}
             {{ _self.printElementMultiplierRow(elementsMultiplier) }}
