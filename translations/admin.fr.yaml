@@ -22,3 +22,4 @@ edit_monster : Modifier un monstre
 equip_monster : Équiper un monstre
 monster_skills : Compétences du monstre
 create_quest : Créer une quête
+edit_quest: Modifier une quête

@@ -31,7 +31,7 @@
                             <td>{{ quest.getAttribution() }}</td>
                             <td data-sort-value="{{ quest.createdAt|date("U") }}">{{ quest.createdAt|date("d/m/Y") }}</td>
                             <td>
-                                <a href="{{ path('notImplemented') }}">Modifier</a><br>
+                                <a href="{{ path('admin_editQuest', {'id': quest.id}) }}">Modifier</a><br>
                                 {% if not quest.hero and not quest.party %}
                                 <a href="{{ path('notImplemented') }}">Attribuer</a><br>
                                 {% endif %}
