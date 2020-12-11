@@ -118,6 +118,13 @@ class FighterInfos
         return $this;
     }
 
+    public function addStatPoints(int $adding = 0): self
+    {
+        $this->statPoints = $this->statPoints + $adding;
+
+        return $this;
+    }
+
     public function getSkillPoints(): ?int
     {
         return $this->skillPoints;
@@ -126,6 +133,13 @@ class FighterInfos
     public function setSkillPoints(int $skillPoints): self
     {
         $this->skillPoints = $skillPoints;
+
+        return $this;
+    }
+
+    public function addSkillPoints(int $adding = 0): self
+    {
+        $this->skillPoints = $this->skillPoints + $adding;
 
         return $this;
     }

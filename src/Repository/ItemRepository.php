@@ -4,6 +4,7 @@ namespace App\Repository;
 
 use App\Entity\Item;
 use App\Entity\ItemSlot;
+use App\Entity\Rarity;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -44,6 +45,19 @@ class ItemRepository extends ServiceEntityRepository
             ->join('i.rarity', 'r')
             ->andWhere('r.name = :rarity')
             ->setParameter('rarity', $rarity)
+            ->getQuery()
+            ->getResult()
+        ;
+
+        return !empty($items) ? $items[array_rand($items)] : null;
+    }
+
+    public function findRandomByRarity(Rarity $rarity)
+    {
+        $items = $this->createQueryBuilder('i')
+            ->join('i.rarity', 'r')
+            ->andWhere('r.id = :rarity')
+            ->setParameter('rarity', $rarity->getId())
             ->getQuery()
             ->getResult()
         ;

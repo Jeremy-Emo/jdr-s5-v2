@@ -26,7 +26,10 @@ class FighterItem
     {
         return (
             $this->getItem()->getItemSlot() !== null
-            || $this->getItem()->getBattleItemInfo()->getWeaponType() !== null
+            || (
+                $this->getItem()->getBattleItemInfo() !== null
+                && $this->getItem()->getBattleItemInfo()->getWeaponType() !== null
+            )
         );
     }
 
@@ -62,7 +65,7 @@ class FighterItem
     /**
      * @ORM\Column(type="boolean")
      */
-    private ?bool $isEquipped;
+    private ?bool $isEquipped = false;
 
     /**
      * @ORM\Column(type="integer", nullable=true)

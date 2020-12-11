@@ -33,8 +33,8 @@
                             <td>
                                 <a href="{{ path('admin_editQuest', {'id': quest.id}) }}">Modifier</a><br>
                                 <a href="{{ path('admin_giveQuest', {'id': quest.id}) }}">Attribuer</a><br>
-                                {% if quest.hero or quest.party %}
-                                    <a href="{{ path('notImplemented') }}">Achever</a><br>
+                                {% if (quest.hero or quest.party) and not quest.isCompleted %}
+                                    <a href="{{ path('admin_completeQuest', {'id': quest.id}) }}">Achever</a><br>
                                 {% endif %}
                             </td>
                         </tr>
