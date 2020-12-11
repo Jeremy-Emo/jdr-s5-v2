@@ -167,7 +167,7 @@ class Quest
         return $this->hero;
     }
 
-    public function setHero(Hero $hero): self
+    public function setHero(?Hero $hero): self
     {
         $this->hero = $hero;
 
@@ -182,7 +182,7 @@ class Quest
         return $this->party;
     }
 
-    public function setParty(Party $party): self
+    public function setParty(?Party $party): self
     {
         $this->party = $party;
 
