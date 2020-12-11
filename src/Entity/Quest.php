@@ -57,12 +57,12 @@ class Quest
     /**
      * @ORM\Column(type="boolean")
      */
-    private ?bool $isCompleted;
+    private ?bool $isCompleted = false;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private ?bool $isFailed;
+    private ?bool $isFailed = false;
 
     /**
      * @ORM\ManyToOne(targetEntity=CompletionRank::class)
@@ -80,7 +80,7 @@ class Quest
     private ?Party $party;
 
     /**
-     * @ORM\OneToMany(targetEntity=Reward::class, mappedBy="quest", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=Reward::class, mappedBy="quest", orphanRemoval=true, cascade={"all"})
      */
     private Collection $rewards;
 

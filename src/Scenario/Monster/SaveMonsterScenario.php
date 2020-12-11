@@ -32,6 +32,7 @@ class SaveMonsterScenario extends AbstractScenario
 
     /**
      * @param FormInterface $form
+     * @param string|null $title
      * @return Response
      * @throws ScenarioException
      */

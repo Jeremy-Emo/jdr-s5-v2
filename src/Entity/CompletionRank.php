@@ -10,6 +10,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class CompletionRank
 {
+    public function __toString(): string
+    {
+        return $this->value;
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

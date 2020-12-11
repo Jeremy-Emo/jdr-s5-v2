@@ -55,7 +55,7 @@ class SaveItemScenario extends AbstractScenario
         return $this->renderNewResponse('admin/createItem.html.twig', [
             'form' => $form->createView(),
             'title' => 'create_item',
-            'specificJS' => 'collectionType'
+            'specificJS' => 'collectionType',
         ]);
     }
 }
