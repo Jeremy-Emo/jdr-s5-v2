@@ -55,11 +55,17 @@ class Party
      */
     private $partyItems;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Battle::class, mappedBy="party", orphanRemoval=true)
+     */
+    private $battles;
+
     public function __construct()
     {
         $this->heroes = new ArrayCollection();
         $this->quests = new ArrayCollection();
         $this->partyItems = new ArrayCollection();
+        $this->battles = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -181,6 +187,36 @@ class Party
             // set the owning side to null (unless already changed)
             if ($partyItem->getParty() === $this) {
                 $partyItem->setParty(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Battle[]
+     */
+    public function getBattles(): Collection
+    {
+        return $this->battles;
+    }
+
+    public function addBattle(Battle $battle): self
+    {
+        if (!$this->battles->contains($battle)) {
+            $this->battles[] = $battle;
+            $battle->setParty($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBattle(Battle $battle): self
+    {
+        if ($this->battles->removeElement($battle)) {
+            // set the owning side to null (unless already changed)
+            if ($battle->getParty() === $this) {
+                $battle->setParty(null);
             }
         }
 

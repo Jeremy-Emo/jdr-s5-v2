@@ -3,6 +3,8 @@
 namespace App\Entity;
 
 use App\Repository\MonsterRepository;
+use Doctrine\Common\Collections\ArrayCollection;
+use Doctrine\Common\Collections\Collection;
 use Doctrine\ORM\Mapping as ORM;
 
 /**
@@ -52,6 +54,16 @@ class Monster
      * @ORM\ManyToOne(targetEntity=Element::class, inversedBy="monsters")
      */
     private ?Element $elementAffinity;
+
+    /**
+     * @ORM\ManyToMany(targetEntity=Battle::class, mappedBy="monsters")
+     */
+    private $battles;
+
+    public function __construct()
+    {
+        $this->battles = new ArrayCollection();
+    }
 
     public function getId(): ?int
     {
@@ -120,6 +132,33 @@ class Monster
     public function setElementAffinity(?Element $elementAffinity): self
     {
         $this->elementAffinity = $elementAffinity;
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Battle[]
+     */
+    public function getBattles(): Collection
+    {
+        return $this->battles;
+    }
+
+    public function addBattle(Battle $battle): self
+    {
+        if (!$this->battles->contains($battle)) {
+            $this->battles[] = $battle;
+            $battle->addMonster($this);
+        }
+
+        return $this;
+    }
+
+    public function removeBattle(Battle $battle): self
+    {
+        if ($this->battles->removeElement($battle)) {
+            $battle->removeMonster($this);
+        }
 
         return $this;
     }
