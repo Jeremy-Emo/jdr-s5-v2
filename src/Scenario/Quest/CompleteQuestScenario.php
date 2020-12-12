@@ -5,6 +5,7 @@ namespace App\Scenario\Quest;
 use App\AbstractClass\AbstractScenario;
 use App\Entity\FighterItem;
 use App\Entity\Hero;
+use App\Entity\PartyItem;
 use App\Entity\Quest;
 use App\Entity\Reward;
 use App\Exception\ScenarioException;
@@ -62,6 +63,9 @@ class CompleteQuestScenario extends AbstractScenario
         ]);
     }
 
+    /**
+     * @param Quest $quest
+     */
     private function giveRewards(Quest $quest): void
     {
         $reward = null;
@@ -73,18 +77,36 @@ class CompleteQuestScenario extends AbstractScenario
 
         if ($reward !== null) {
             if ($quest->getHero() !== null) {
-                $this->giveRewardsOfOnePerson($quest->getHero(), $reward);
+                $this->giveRewardsOfOnePersonExceptFixedItem($quest->getHero(), $reward);
+                if ($reward->getItems()->count() > 0) {
+                    foreach ($reward->getItems() as $item) {
+                        $quest->getHero()->getFighterInfos()->addHeroItem(
+                            (new FighterItem())->setItem($item)->setHero($quest->getHero()->getFighterInfos())
+                        );
+                    }
+                }
             }
             if ($quest->getParty() !== null) {
                 $party = $quest->getParty();
                 foreach ($party->getHeroes() as $hero) {
-                    $this->giveRewardsOfOnePerson($hero, $reward);
+                    $this->giveRewardsOfOnePersonExceptFixedItem($hero, $reward);
+                }
+                if ($reward->getItems()->count() > 0) {
+                    foreach ($reward->getItems() as $item) {
+                        $quest->getParty()->addPartyItem(
+                            (new PartyItem())->setItem($item)->setParty($quest->getParty())
+                        );
+                    }
                 }
             }
         }
     }
 
-    private function giveRewardsOfOnePerson(Hero $hero, Reward $reward): void
+    /**
+     * @param Hero $hero
+     * @param Reward $reward
+     */
+    private function giveRewardsOfOnePersonExceptFixedItem(Hero $hero, Reward $reward): void
     {
         if ($reward->getRandomItem() !== null) {
             $item = $this->itemRepository->findRandomByRarity($reward->getRandomItem());
@@ -97,13 +119,6 @@ class CompleteQuestScenario extends AbstractScenario
         }
         if (!empty($reward->getSkillPoints())) {
             $hero->getFighterInfos()->addSkillPoints($reward->getSkillPoints());
-        }
-        if ($reward->getItems()->count() > 0) {
-            foreach ($reward->getItems() as $item) {
-                $hero->getFighterInfos()->addHeroItem(
-                    (new FighterItem())->setItem($item)->setHero($hero->getFighterInfos())
-                );
-            }
         }
         if ($reward->getSkills()->count() > 0) {
             foreach ($reward->getSkills() as $skill) {

@@ -50,10 +50,16 @@ class Party
      */
     private Collection $quests;
 
+    /**
+     * @ORM\OneToMany(targetEntity=PartyItem::class, mappedBy="party", orphanRemoval=true)
+     */
+    private $partyItems;
+
     public function __construct()
     {
         $this->heroes = new ArrayCollection();
         $this->quests = new ArrayCollection();
+        $this->partyItems = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -147,6 +153,36 @@ class Party
     public function removeQuest(Quest $quest): self
     {
         $this->quests->removeElement($quest);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|PartyItem[]
+     */
+    public function getPartyItems(): Collection
+    {
+        return $this->partyItems;
+    }
+
+    public function addPartyItem(PartyItem $partyItem): self
+    {
+        if (!$this->partyItems->contains($partyItem)) {
+            $this->partyItems[] = $partyItem;
+            $partyItem->setParty($this);
+        }
+
+        return $this;
+    }
+
+    public function removePartyItem(PartyItem $partyItem): self
+    {
+        if ($this->partyItems->removeElement($partyItem)) {
+            // set the owning side to null (unless already changed)
+            if ($partyItem->getParty() === $this) {
+                $partyItem->setParty(null);
+            }
+        }
 
         return $this;
     }
