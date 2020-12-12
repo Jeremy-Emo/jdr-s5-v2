@@ -25,3 +25,4 @@ create_quest : Créer une quête
 edit_quest: Modifier une quête
 give_quest : Attribuer une quête
 complete_quest : Terminer une quête
+create_battle : Créer un combat

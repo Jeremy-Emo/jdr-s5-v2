@@ -13,6 +13,11 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class Monster
 {
+    public function __toString(): string
+    {
+        return $this->name;
+    }
+
     /**
      * @ORM\PrePersist
      */
@@ -58,7 +63,7 @@ class Monster
     /**
      * @ORM\ManyToMany(targetEntity=Battle::class, mappedBy="monsters")
      */
-    private $battles;
+    private Collection $battles;
 
     public function __construct()
     {

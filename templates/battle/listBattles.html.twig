@@ -1,0 +1,45 @@
+{% extends 'main/layout.html.twig' %}
+
+{% block page_title %}MJ - Gestion des combats{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+            <a href="{{ path('mj_createBattle') }}"><button type="button" class="btn btn-primary">Créer un nouveau combat</button></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col ma-25-top">
+            <div class="pa-20 bg-white">
+                <p class="ma-10-bottom">
+                    <span>Nombre de combats : {{ battles|length }}</span>
+                </p>
+                <table class="table" id="stupidTable">
+                    <thead>
+                    <tr>
+                        <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Ennemis</th>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Créé le</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for battle in battles %}
+                        <tr>
+                            <td>{{ battle.getEnnemiesAsString() }}</td>
+                            <td data-sort-value="{{ battle.createdAt|date("U") }}">{{ battle.createdAt|date("d/m/Y") }}</td>
+                            <td>
+                                <a href="{{ path('notImplemented') }}">Poursuivre</a><br>
+                                <a href="{{ path('notImplemented') }}">Terminer</a><br>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block moreJS %}
+    {{ parent() }}
+{% endblock %}

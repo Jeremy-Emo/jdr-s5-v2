@@ -9,36 +9,61 @@ use Doctrine\ORM\Mapping as ORM;
 
 /**
  * @ORM\Entity(repositoryClass=BattleRepository::class)
+ * @ORM\HasLifecycleCallbacks()
  */
 class Battle
 {
+    public function getEnnemiesAsString(): string
+    {
+        $return = "";
+
+        foreach ($this->getMonsters() as $monster) {
+            $return .= $monster->getName();
+            if ($this->getMonsters()->last() !== $monster) {
+                $return .= " | ";
+            }
+        }
+
+        return $return;
+    }
+
+    /**
+     * @ORM\PrePersist
+     */
+    public function setDefaults(): void
+    {
+        if (empty($this->createdAt)) {
+            $this->createdAt = new \DateTime();
+        }
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
      */
-    private $id;
+    private ?int $id;
 
     /**
      * @ORM\Column(type="datetime")
      */
-    private $createdAt;
+    private ?\DateTimeInterface $createdAt;
 
     /**
      * @ORM\ManyToOne(targetEntity=Party::class, inversedBy="battles")
      * @ORM\JoinColumn(nullable=false)
      */
-    private $party;
+    private ?Party $party;
 
     /**
      * @ORM\ManyToMany(targetEntity=Monster::class, inversedBy="battles")
      */
-    private $monsters;
+    private Collection $monsters;
 
     /**
      * @ORM\OneToMany(targetEntity=BattleTurn::class, mappedBy="battle", orphanRemoval=true)
      */
-    private $turns;
+    private Collection $turns;
 
     public function __construct()
     {
