@@ -36,7 +36,7 @@ class CreateTurnScenario extends AbstractScenario
      */
     public function handle(array $fighters, ?int $actualTurn = null, ?string $action = ''): BattleTurn
     {
-        $fighters = $this->prepareATB($fighters);
+        $fighters = $this->prepareFighters($fighters);
         $battleState = [
             'fighters' => $fighters,
             'nextActor' => $this->getNextActor($fighters),
@@ -58,23 +58,39 @@ class CreateTurnScenario extends AbstractScenario
      * @return array
      * @throws ScenarioException
      */
-    private function prepareATB(array $fighters): array
+    private function prepareFighters(array $fighters): array
     {
         $totalSpeed = 0;
         foreach ($fighters as &$fighter) {
-            if ($fighter['currentHP'] > 0) {
-                $dbFighter = $this->fighterRepository->find($fighter['id']);
-                $stats = StatManager::returnMetaStats($dbFighter);
-                foreach ($stats as $stat) {
-                    if ($stat['name'] === 'Vitesse') {
-                        $speed = $stat['value'];
-                    }
+            $dbFighter = $this->fighterRepository->find($fighter['id']);
+            $stats = StatManager::returnMetaStats($dbFighter);
+            foreach ($stats as $stat) {
+                if ($stat['name'] === 'Vitesse') {
+                    $speed = $stat['value'];
+                    $fighter['speed'] = $speed;
                 }
+                if ($stat['name'] === 'Points de vie') {
+                    $fighter['maxHP'] = explode(" / ", $stat['value'])[1];
+                }
+                if ($stat['name'] === 'Points de mana') {
+                    $fighter['maxMP'] = explode(" / ", $stat['value'])[1];
+                }
+                if ($stat['name'] === 'Fatigue') {
+                    $fighter['maxSP'] = explode(" / ", $stat['value'])[1];
+                }
+            }
+            if ($fighter['currentHP'] > 0) {
                 if (!isset($speed)) {
                     throw new ScenarioException("Stat not found !");
                 }
-                $fighter['speed'] = $speed;
                 $totalSpeed += $speed;
+            }
+            if ($dbFighter->getHero() !== null) {
+                $fighter['ennemy'] = false;
+                $fighter['name'] = $dbFighter->getHero()->getName();
+            } else {
+                $fighter['ennemy'] = true;
+                $fighter['name'] = $dbFighter->getMonster()->getName();
             }
         }
 

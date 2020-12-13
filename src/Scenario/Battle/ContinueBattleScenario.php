@@ -64,10 +64,22 @@ class ContinueBattleScenario extends AbstractScenario
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //TODO : if form is validated => calculate all actions, reset atb of current actor, save turn and redirect
+            //TODO : if form is validated => calculate all actions, reset atb of current actor, save turn
+
+            return $this->redirectToRoute('mj_continueBattle', [
+                'id' => $this->battle->getId(),
+            ]);
         }
 
-        //TODO : front
+        /** @var BattleTurn $activeTurn */
+        $activeTurn = $this->battle->getTurns()->last();
+        $fighters = $activeTurn->getBattleState()['fighters'];
+
+        return $this->renderNewResponse('battle/continueBattle.html.twig', [
+            'form' => $form->createView(),
+            'battle' => $this->battle,
+            'fighters' => $fighters,
+        ]);
     }
 
     /**
@@ -115,7 +127,9 @@ class ContinueBattleScenario extends AbstractScenario
             if ($dbFighter === null) {
                 throw new ScenarioException("Fighter not found.");
             }
-            $fightersChoiceList[$dbFighter->getHero() ?? $dbFighter->getMonster() ?? "(Erreur lors de la récupération du nom)"] = $fighter['id'];
+            $fightersChoiceList[
+                $dbFighter->getHero() ? "Héros - " . $dbFighter->getHero()->getName() : "Ennemi - " . $dbFighter->getMonster()->getName()
+            ] = $fighter['id'];
         }
         return $fightersChoiceList;
     }
@@ -139,7 +153,7 @@ class ContinueBattleScenario extends AbstractScenario
 
         foreach ($dbActor->getSkills() as $fighterSkill) {
             if ($fighterSkill->getSkill()->getIsUsableInBattle()) {
-                $actionsList['skill.' . $fighterSkill->getId()] = $fighterSkill->getSkill()->getName();
+                $actionsList[$fighterSkill->getSkill()->getName()] = $fighterSkill->getId();
             }
         }
 

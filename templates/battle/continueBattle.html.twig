@@ -1,0 +1,57 @@
+{% extends 'main/layout.html.twig' %}
+
+{% form_theme form with ['main/forms.html.twig'] %}
+
+{% block page_title %}{% trans from 'battle' %}continue{% endtrans %}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col-md-6 ma-25-top">
+            <div class="pa-20 bg-white full-height">
+                {{ form_start(form) }}
+                {{ form_widget(form) }}
+                <input type="submit" value="Suivant">
+                {{ form_end(form) }}
+            </div>
+        </div>
+        <div class="col-md-6 ma-25-top">
+            <div class="pa-20 bg-white full-height">
+                {% for turn in battle.turns %}
+                    <p>Tour {{ turn.turnNumber }} : {{ turn.action }}</p>
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col-md-6 ma-25-top">
+            <div class="pa-20 bg-white full-height">
+                <h2 class="ma-20-bottom">Alliés : </h2>
+                {% for fighter in fighters %}
+                    {% if not fighter.ennemy %}
+                        <div class="border-bottom ma-10-bottom">
+                            <p class="bold">{{ fighter.name }}</p>
+                            <p>Points de vie : {{ fighter.currentHP }} / {{ fighter.maxHP }}</p>
+                            <p>Points de mana : {{ fighter.currentMP }} / {{ fighter.maxMP }}</p>
+                            <p>Fatigue : {{ fighter.currentSP }} / {{ fighter.maxSP }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <div class="col-md-6 ma-25-top">
+            <div class="pa-20 bg-white full-height">
+                <h2 class="ma-20-bottom">Ennemis : </h2>
+                {% for fighter in fighters %}
+                    {% if fighter.ennemy %}
+                        <div class="border-bottom ma-10-bottom">
+                            <p class="bold">{{ fighter.name }}</p>
+                            <p>Points de vie : {{ fighter.currentHP }} / {{ fighter.maxHP }}</p>
+                            <p>Points de mana : {{ fighter.currentMP }} / {{ fighter.maxMP }}</p>
+                            <p>Fatigue : {{ fighter.currentSP }} / {{ fighter.maxSP }}</p>
+                        </div>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
