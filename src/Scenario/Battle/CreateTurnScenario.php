@@ -80,8 +80,11 @@ class CreateTurnScenario extends AbstractScenario
                     if ($fighter['atb'] >= 100) {
                         $breakHundred = true;
                     }
+                } else {
+                    $fighter['atb'] = 0;
                 }
             }
+            //TODO : add security for infinite loop ?
         }
 
         return $fighters;
