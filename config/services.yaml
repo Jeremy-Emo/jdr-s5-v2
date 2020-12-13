@@ -27,3 +27,8 @@ services:
 
     # add more service definitions when explicit configuration is needed
     # please note that last definitions always *replace* previous ones
+    App\Form\Listener\CheckSpellCastingListener:
+        arguments:
+            - "@App\\Repository\\FighterSkillRepository"
+            - "@App\\Repository\\FighterInfosRepository"
+            - [] # empty because this will be instantiated by form

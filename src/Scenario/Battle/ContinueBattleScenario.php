@@ -8,6 +8,7 @@ use App\Entity\BattleTurn;
 use App\Exception\ScenarioException;
 use App\Form\Listener\CheckSpellCastingListener;
 use App\Repository\FighterInfosRepository;
+use App\Repository\FighterSkillRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
@@ -27,6 +28,9 @@ class ContinueBattleScenario extends AbstractScenario
 
     /** @required  */
     public FighterInfosRepository $fighterRepository;
+
+    /** @required  */
+    public FighterSkillRepository $fsRepository;
 
     private ?Battle $battle = null;
 
@@ -67,16 +71,15 @@ class ContinueBattleScenario extends AbstractScenario
             //TODO : finish listener for smooth actions after that
             //TODO : calculate all actions, reset atb of current actor, save turn
 
-            return $this->redirectToRoute('mj_continueBattle', [
-                'id' => $this->battle->getId(),
-            ]);
+//            return $this->redirectToRoute('mj_continueBattle', [
+//                'id' => $this->battle->getId(),
+//            ]);
         }
 
         /** @var BattleTurn $activeTurn */
         $activeTurn = $this->battle->getTurns()->last();
         $fighters = $activeTurn->getBattleState()['fighters'];
         $actor = $activeTurn->getBattleState()['nextActor'];
-
 
         return $this->renderNewResponse('battle/continueBattle.html.twig', [
             'form' => $form->createView(),
@@ -113,7 +116,11 @@ class ContinueBattleScenario extends AbstractScenario
             ])
         ;
 
-        $form->addEventSubscriber(new CheckSpellCastingListener());
+        $form->addEventSubscriber(new CheckSpellCastingListener(
+            $this->fsRepository,
+            $this->fighterRepository,
+            $actor
+        ));
 
         return $form->getForm();
     }

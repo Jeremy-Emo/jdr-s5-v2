@@ -10,13 +10,12 @@ use Symfony\Component\Form\FormEvents;
 
 class CheckQuestCompletionListener implements EventSubscriberInterface
 {
-
     public static function getSubscribedEvents(): array
     {
-        return [FormEvents::PRE_SUBMIT => 'onPreSubmit'];
+        return [FormEvents::PRE_SUBMIT => 'onSubmit'];
     }
 
-    public function onPreSubmit(FormEvent $event): void
+    public function onSubmit(FormEvent $event): void
     {
         /** @var Quest $quest */
         $quest = $event->getData();
