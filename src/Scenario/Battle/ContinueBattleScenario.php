@@ -5,8 +5,13 @@ namespace App\Scenario\Battle;
 use App\AbstractClass\AbstractScenario;
 use App\Entity\Battle;
 use App\Entity\BattleTurn;
+use App\Exception\ScenarioException;
+use App\Form\Listener\CheckSpellCastingListener;
+use App\Repository\FighterInfosRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
+use Symfony\Component\Form\Extension\Core\Type\ChoiceType;
+use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
@@ -17,6 +22,16 @@ class ContinueBattleScenario extends AbstractScenario
     /** @required  */
     public CreateTurnScenario $createTurnScenario;
 
+    /** @required  */
+    public FormFactoryInterface $formFactory;
+
+    /** @required  */
+    public FighterInfosRepository $fighterRepository;
+
+    private ?Battle $battle = null;
+
+    public const ATTACK_WITH_WEAPON = "attack.with.weapon";
+
     public function __construct(
         EntityManagerInterface $entityManager,
         UrlGeneratorInterface $urlGenerator,
@@ -26,26 +41,108 @@ class ContinueBattleScenario extends AbstractScenario
         parent::__construct($entityManager, $urlGenerator, $twig, $logger);
     }
 
-    public function handle(FormInterface $form, Battle $battle): Response
+    /**
+     * @param Battle $battle
+     * @return $this
+     */
+    public function setBattle(Battle $battle): self
     {
-        /** @var BattleTurn $activeTurn */
-        $activeTurn = $battle->getTurns()->last();
-        $fighters = $activeTurn->getBattleState();
+        $this->battle = $battle;
 
-        //Get current fighter which do something
-        $actor = null;
+        return $this;
+    }
+
+    /**
+     * @param FormInterface $form
+     * @return Response
+     * @throws ScenarioException
+     */
+    public function handle(FormInterface $form): Response
+    {
+        if ($this->battle === null) {
+            throw new ScenarioException("Battle not set.");
+        }
+
+        if ($form->isSubmitted() && $form->isValid()) {
+            //TODO : if form is validated => calculate all actions, reset atb of current actor, save turn and redirect
+        }
+
+        //TODO : front
+    }
+
+    /**
+     * @return FormInterface
+     * @throws ScenarioException
+     */
+    public function getForm(): FormInterface
+    {
+        if ($this->battle === null) {
+            throw new ScenarioException("Battle not set.");
+        }
+
+        /** @var BattleTurn $activeTurn */
+        $activeTurn = $this->battle->getTurns()->last();
+        $actor = $activeTurn->getBattleState()['nextActor'];
+        $fighters = $activeTurn->getBattleState()['fighters'];
+
+        $fightersList = $this->getFightersAsChoiceList($fighters);
+        $actionsList = $this->getActionsList($actor);
+
+        $form = $this->formFactory->createBuilder()
+            ->add('action', ChoiceType::class, [
+                'choices' => $actionsList,
+            ])
+            ->add('target', ChoiceType::class, [
+                'choices' => $fightersList,
+            ])
+        ;
+
+        $form->addEventSubscriber(new CheckSpellCastingListener());
+
+        return $form->getForm();
+    }
+
+    /**
+     * @param array $fighters
+     * @return array
+     * @throws ScenarioException
+     */
+    private function getFightersAsChoiceList(array $fighters): array
+    {
+        $fightersChoiceList = [];
         foreach ($fighters as $fighter) {
-            if ($actor === null || $fighter['atb'] >= $actor['atb']) {
-                if ($actor['atb'] === $fighter['atb']) {
-                    $rand = [$actor, $fighter];
-                    $actor = $rand[array_rand($rand)];
-                } else {
-                    $actor = $fighter;
-                }
+            $dbFighter = $this->fighterRepository->find($fighter['id']);
+            if ($dbFighter === null) {
+                throw new ScenarioException("Fighter not found.");
+            }
+            $fightersChoiceList[$dbFighter->getHero() ?? $dbFighter->getMonster() ?? "(Erreur lors de la récupération du nom)"] = $fighter['id'];
+        }
+        return $fightersChoiceList;
+    }
+
+    /**
+     * @param array $actor
+     * @return array
+     * @throws ScenarioException
+     */
+    private function getActionsList(array $actor): array
+    {
+        $actionsList = [
+            'Ne rien faire' => null,
+            'Attaquer avec son arme' => self::ATTACK_WITH_WEAPON,
+        ];
+
+        $dbActor = $this->fighterRepository->find($actor['id']);
+        if ($dbActor === null) {
+            throw new ScenarioException("Actor not found.");
+        }
+
+        foreach ($dbActor->getSkills() as $fighterSkill) {
+            if ($fighterSkill->getSkill()->getIsUsableInBattle()) {
+                $actionsList['skill.' . $fighterSkill->getId()] = $fighterSkill->getSkill()->getName();
             }
         }
 
-        //TODO : edit form
-        //TODO : if form is validated => calculate all actions, reset atb of current actor, save turn and redirect
+        return $actionsList;
     }
 }

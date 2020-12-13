@@ -36,7 +36,13 @@ class CreateTurnScenario extends AbstractScenario
      */
     public function handle(array $fighters, ?int $actualTurn = null, ?string $action = ''): BattleTurn
     {
-        $battleTurn = (new BattleTurn())->setBattleState($this->prepareATB($fighters));
+        $fighters = $this->prepareATB($fighters);
+        $battleState = [
+            'fighters' => $fighters,
+            'nextActor' => $this->getNextActor($fighters),
+        ];
+        $battleTurn = (new BattleTurn())->setBattleState($battleState);
+
         if ($actualTurn === null) {
             $battleTurn->setTurnNumber(0);
             $action = "Début du combat";
@@ -88,5 +94,26 @@ class CreateTurnScenario extends AbstractScenario
         }
 
         return $fighters;
+    }
+
+    /**
+     * @param $fighters
+     * @return array|null
+     */
+    private function getNextActor($fighters): array
+    {
+        $actor = null;
+        foreach ($fighters as $fighter) {
+            if ($actor === null || $fighter['atb'] >= $actor['atb']) {
+                if ($actor !== null && $actor['atb'] === $fighter['atb']) {
+                    $rand = [$actor, $fighter];
+                    $actor = $rand[array_rand($rand)];
+                } else {
+                    $actor = $fighter;
+                }
+            }
+        }
+
+        return $actor;
     }
 }
