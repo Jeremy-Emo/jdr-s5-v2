@@ -6,6 +6,7 @@ use App\AbstractClass\AbstractScenario;
 use App\Entity\Battle;
 use App\Entity\Party;
 use App\Exception\ScenarioException;
+use App\Repository\FighterInfosRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\FormInterface;
@@ -15,6 +16,12 @@ use Twig\Environment;
 
 class CreateBattleScenario extends AbstractScenario
 {
+    /** @required  */
+    public CreateTurnScenario $createTurnScenario;
+
+    /** @required  */
+    public FighterInfosRepository $fighterRepository;
+
     public function __construct(
         EntityManagerInterface $entityManager,
         UrlGeneratorInterface $urlGenerator,
@@ -36,6 +43,7 @@ class CreateBattleScenario extends AbstractScenario
             /** @var Battle $battle */
             $battle = $form->getData();
             $battle->setParty($party);
+            $battle = $this->initializeBattle($battle);
 
             $this->manager->persist($battle);
             $this->manager->flush();
@@ -48,5 +56,16 @@ class CreateBattleScenario extends AbstractScenario
             'form' => $form->createView(),
             'title' => 'create_battle'
         ]);
+    }
+
+    /**
+     * @param Battle $battle
+     * @return Battle
+     */
+    private function initializeBattle(Battle $battle): Battle
+    {
+        $fighters = $this->fighterRepository->findAllInBattle($battle);
+        $turn = $this->createTurnScenario->handle($fighters);
+        return $battle->addTurn($turn);
     }
 }

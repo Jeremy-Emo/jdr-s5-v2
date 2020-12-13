@@ -61,7 +61,7 @@ class Battle
     private Collection $monsters;
 
     /**
-     * @ORM\OneToMany(targetEntity=BattleTurn::class, mappedBy="battle", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=BattleTurn::class, mappedBy="battle", orphanRemoval=true, cascade={"persist", "remove"})
      */
     private Collection $turns;
 

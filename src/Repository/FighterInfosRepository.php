@@ -2,9 +2,11 @@
 
 namespace App\Repository;
 
+use App\Entity\Battle;
 use App\Entity\FighterInfos;
 use App\Entity\Skill;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
+use Doctrine\ORM\Query;
 use Doctrine\Persistence\ManagerRegistry;
 
 /**
@@ -54,5 +56,24 @@ class FighterInfosRepository extends ServiceEntityRepository
         shuffle($allSkills);
 
         return $allSkills;
+    }
+
+    public function findAllInBattle(Battle $battle)
+    {
+        $listIds = [];
+        foreach ($battle->getParty()->getHeroes() as $hero) {
+            $listIds[] = $hero->getFighterInfos()->getId();
+        }
+        foreach ($battle->getMonsters() as $monster) {
+            $listIds[] = $monster->getFighterInfos()->getId();
+        }
+
+        $qb = $this->createQueryBuilder('fi');
+        $qb
+            ->where("fi.id in (:ids)")
+            ->setParameter('ids', $listIds);
+        ;
+
+        return $qb->getQuery()->getResult(Query::HYDRATE_ARRAY);
     }
 }

@@ -70,6 +70,11 @@ class FighterInfos
      */
     private Collection $heroItems;
 
+    /**
+     * @ORM\Column(type="integer")
+     */
+    private ?int $currentShieldValue = 0;
+
     public function __construct()
     {
         $this->stats = new ArrayCollection();
@@ -266,6 +271,18 @@ class FighterInfos
                 $heroItem->setHero(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getCurrentShieldValue(): ?int
+    {
+        return $this->currentShieldValue;
+    }
+
+    public function setCurrentShieldValue(int $currentShieldValue): self
+    {
+        $this->currentShieldValue = $currentShieldValue;
 
         return $this;
     }
