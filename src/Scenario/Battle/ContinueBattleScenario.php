@@ -64,7 +64,8 @@ class ContinueBattleScenario extends AbstractScenario
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //TODO : if form is validated => calculate all actions, reset atb of current actor, save turn
+            //TODO : finish listener for smooth actions after that
+            //TODO : calculate all actions, reset atb of current actor, save turn
 
             return $this->redirectToRoute('mj_continueBattle', [
                 'id' => $this->battle->getId(),
@@ -74,11 +75,14 @@ class ContinueBattleScenario extends AbstractScenario
         /** @var BattleTurn $activeTurn */
         $activeTurn = $this->battle->getTurns()->last();
         $fighters = $activeTurn->getBattleState()['fighters'];
+        $actor = $activeTurn->getBattleState()['nextActor'];
+
 
         return $this->renderNewResponse('battle/continueBattle.html.twig', [
             'form' => $form->createView(),
             'battle' => $this->battle,
             'fighters' => $fighters,
+            'actor' => $actor,
         ]);
     }
 

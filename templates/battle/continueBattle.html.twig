@@ -8,6 +8,7 @@
     <div class="row">
         <div class="col-md-6 ma-25-top">
             <div class="pa-20 bg-white full-height">
+                <p class="bold">Combattant actif : {{ actor.name }}</p>
                 {{ form_start(form) }}
                 {{ form_widget(form) }}
                 <input type="submit" value="Suivant">
@@ -33,6 +34,7 @@
                             <p>Points de vie : {{ fighter.currentHP }} / {{ fighter.maxHP }}</p>
                             <p>Points de mana : {{ fighter.currentMP }} / {{ fighter.maxMP }}</p>
                             <p>Fatigue : {{ fighter.currentSP }} / {{ fighter.maxSP }}</p>
+                            <p>Barre d'attaque : {{ fighter.atb }} / 100</p>
                         </div>
                     {% endif %}
                 {% endfor %}
@@ -48,6 +50,7 @@
                             <p>Points de vie : {{ fighter.currentHP }} / {{ fighter.maxHP }}</p>
                             <p>Points de mana : {{ fighter.currentMP }} / {{ fighter.maxMP }}</p>
                             <p>Fatigue : {{ fighter.currentSP }} / {{ fighter.maxSP }}</p>
+                            <p>Barre d'attaque : {{ fighter.atb }} / 100</p>
                         </div>
                     {% endif %}
                 {% endfor %}
