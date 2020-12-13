@@ -28,7 +28,7 @@
                             <td>{{ battle.getEnnemiesAsString() }}</td>
                             <td data-sort-value="{{ battle.createdAt|date("U") }}">{{ battle.createdAt|date("d/m/Y") }}</td>
                             <td>
-                                <a href="{{ path('notImplemented') }}">Poursuivre</a><br>
+                                <a href="{{ path('mj_continueBattle', {'id': battle.id}) }}">Poursuivre</a><br>
                                 <a href="{{ path('notImplemented') }}">Terminer</a><br>
                             </td>
                         </tr>

@@ -48,8 +48,7 @@ class CreateBattleScenario extends AbstractScenario
             $this->manager->persist($battle);
             $this->manager->flush();
 
-            //TODO : better redirect
-            return $this->redirectToRoute('index');
+            return $this->redirectToRoute('mj_listBattles');
         }
 
         return $this->renderNewResponse('admin/defaultGenericForm.html.twig', [
@@ -61,11 +60,13 @@ class CreateBattleScenario extends AbstractScenario
     /**
      * @param Battle $battle
      * @return Battle
+     * @throws ScenarioException
      */
     private function initializeBattle(Battle $battle): Battle
     {
         $fighters = $this->fighterRepository->findAllInBattle($battle);
         $turn = $this->createTurnScenario->handle($this->prepareFighters($fighters));
+
         return $battle->addTurn($turn);
     }
 
