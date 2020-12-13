@@ -65,7 +65,19 @@ class CreateBattleScenario extends AbstractScenario
     private function initializeBattle(Battle $battle): Battle
     {
         $fighters = $this->fighterRepository->findAllInBattle($battle);
-        $turn = $this->createTurnScenario->handle($fighters);
+        $turn = $this->createTurnScenario->handle($this->prepareFighters($fighters));
         return $battle->addTurn($turn);
+    }
+
+    /**
+     * @param array $fighters
+     * @return array
+     */
+    private function prepareFighters(array $fighters): array
+    {
+        foreach ($fighters as &$fighter) {
+            $fighter['atb'] = 0;
+        }
+        return $fighters;
     }
 }
