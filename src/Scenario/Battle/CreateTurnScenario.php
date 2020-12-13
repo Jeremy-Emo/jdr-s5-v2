@@ -20,6 +20,13 @@ class CreateTurnScenario extends AbstractScenario
         parent::__construct($entityManager, $urlGenerator, $twig, $logger);
     }
 
+    /**
+     * Convertir chaque fighter en array
+     * @param array $fighters
+     * @param int|null $actualTurn
+     * @param string|null $action
+     * @return BattleTurn
+     */
     public function handle(array $fighters, ?int $actualTurn = null, ?string $action = ''): BattleTurn
     {
         $battleTurn = (new BattleTurn())->setBattleState($fighters);
