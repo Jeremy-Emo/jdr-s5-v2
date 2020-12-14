@@ -19,6 +19,7 @@
                     <tr>
                         <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Ennemis</th>
                         <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Créé le</th>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Terminé</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
@@ -27,6 +28,13 @@
                         <tr>
                             <td>{{ battle.getEnnemiesAsString() }}</td>
                             <td data-sort-value="{{ battle.createdAt|date("U") }}">{{ battle.createdAt|date("d/m/Y") }}</td>
+                            <td data-sort-value={{ battle.isFinished ? "1" : "0" }}>
+                            {% if battle.isFinished %}
+                                <i class="green fas fa-check"></i>
+                            {% else %}
+                                <i class="red fas fa-times"></i>
+                            {% endif %}
+                            </td>
                             <td>
                                 <a href="{{ path('mj_continueBattle', {'id': battle.id}) }}">Poursuivre</a><br>
                                 <a href="{{ path('notImplemented') }}">Terminer</a><br>

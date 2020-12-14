@@ -65,6 +65,11 @@ class Battle
      */
     private Collection $turns;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $isFinished = false;
+
     public function __construct()
     {
         $this->monsters = new ArrayCollection();
@@ -150,6 +155,18 @@ class Battle
                 $turn->setBattle(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsFinished(): ?bool
+    {
+        return $this->isFinished;
+    }
+
+    public function setIsFinished(bool $isFinished): self
+    {
+        $this->isFinished = $isFinished;
 
         return $this;
     }

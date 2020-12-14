@@ -21,6 +21,7 @@
                         <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
                         <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Attribution</th>
                         <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Création</th>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Terminée</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
@@ -30,9 +31,18 @@
                             <td>{{ quest.name }}</td>
                             <td>{{ quest.getAttribution() }}</td>
                             <td data-sort-value="{{ quest.createdAt|date("U") }}">{{ quest.createdAt|date("d/m/Y") }}</td>
+                            <td data-sort-value={{ quest.isCompleted ? "1" : "0" }}>
+                                {% if quest.isCompleted %}
+                                    <i class="green fas fa-check"></i>
+                                {% else %}
+                                    <i class="red fas fa-times"></i>
+                                {% endif %}
+                            </td>
                             <td>
                                 <a href="{{ path('admin_editQuest', {'id': quest.id}) }}">Modifier</a><br>
-                                <a href="{{ path('admin_giveQuest', {'id': quest.id}) }}">Attribuer</a><br>
+                                {% if not quest.isCompleted %}
+                                    <a href="{{ path('admin_giveQuest', {'id': quest.id}) }}">Attribuer</a><br>
+                                {% endif %}
                                 {% if (quest.hero or quest.party) and not quest.isCompleted %}
                                     <a href="{{ path('admin_completeQuest', {'id': quest.id}) }}">Achever</a><br>
                                 {% endif %}

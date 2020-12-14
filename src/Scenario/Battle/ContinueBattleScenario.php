@@ -68,12 +68,11 @@ class ContinueBattleScenario extends AbstractScenario
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //TODO : finish listener for smooth actions after that
             //TODO : calculate all actions, reset atb of current actor, save turn
 
-//            return $this->redirectToRoute('mj_continueBattle', [
-//                'id' => $this->battle->getId(),
-//            ]);
+            return $this->redirectToRoute('mj_continueBattle', [
+                'id' => $this->battle->getId(),
+            ]);
         }
 
         /** @var BattleTurn $activeTurn */
