@@ -43,6 +43,8 @@ class CheckSpellCastingListener implements EventSubscriberInterface
         $form = $event->getForm();
         $turnAction = $event->getData();
 
+        //TODO : vérifier type d'arme
+
         if ($turnAction["action"] !== null && $turnAction["action"] !== ContinueBattleScenario::ATTACK_WITH_WEAPON) {
             $fsSkill = $this->fighterSkillRepository->find($turnAction["action"]);
             if ($fsSkill === null) {

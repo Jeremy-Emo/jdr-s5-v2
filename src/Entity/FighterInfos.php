@@ -13,6 +13,18 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class FighterInfos
 {
+    public function getName(): string
+    {
+        if ($this->getMonster() !== null) {
+            return $this->getMonster()->getName();
+        }
+        if ($this->getHero() !== null) {
+            return $this->getMonster()->getName();
+        }
+
+        return "Truc inconnu";
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue

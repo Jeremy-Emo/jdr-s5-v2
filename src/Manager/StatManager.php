@@ -32,6 +32,7 @@ class StatManager
     public const ONE_SP_STRENGTH = 2;
     public const ONE_SPEED_AGILITY = 0.5;
     public const ONE_DODGE_AGILITY = 0.1;
+    public const ONE_OFFENSIVE_POWER_STRENGTH = 0.05;
 
     /**
      * @param int $cr
@@ -102,6 +103,15 @@ class StatManager
         return $strength * self::ONE_SP_STRENGTH;
     }
 
+    /**
+     * @param int $strength
+     * @return int
+     */
+    public static function calculateOffensivePower(int $strength): int
+    {
+        return $strength * self::ONE_OFFENSIVE_POWER_STRENGTH;
+    }
+
     public static function returnMetaStats(FighterInfos $fighter): array
     {
         $statsToReturn = [];
@@ -122,6 +132,12 @@ class StatManager
                         'value' => $fighter->getCurrentSP() . " / " . self::calculateMaxSP(
                             ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100)
                         )
+                    ];
+                    $statsToReturn[] = [
+                        'name' => 'Capacité offensive naturelle',
+                        'value' => self::calculateOffensivePower(
+                                ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100)
+                            )
                     ];
                     break;
                 case self::WISDOM:

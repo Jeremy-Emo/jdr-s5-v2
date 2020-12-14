@@ -32,6 +32,9 @@ class ContinueBattleScenario extends AbstractScenario
     /** @required  */
     public FighterSkillRepository $fsRepository;
 
+    /** @required  */
+    public CalculateBattleActionScenario $calculateBattleScenario;
+
     private ?Battle $battle = null;
 
     public const ATTACK_WITH_WEAPON = "attack.with.weapon";
@@ -68,7 +71,13 @@ class ContinueBattleScenario extends AbstractScenario
         }
 
         if ($form->isSubmitted() && $form->isValid()) {
-            //TODO : calculate all actions, reset atb of current actor, save turn
+            $targetId = $form->get('target')->getData();
+            $action = $form->get('action')->getData();
+            if (empty($action)) {
+                $action = "";
+            }
+
+            $this->calculateBattleScenario->handle($this->battle, (string)$targetId, (string)$action);
 
             return $this->redirectToRoute('mj_continueBattle', [
                 'id' => $this->battle->getId(),
@@ -77,8 +86,8 @@ class ContinueBattleScenario extends AbstractScenario
 
         /** @var BattleTurn $activeTurn */
         $activeTurn = $this->battle->getTurns()->last();
-        $fighters = $activeTurn->getBattleState()['fighters'];
         $actor = $activeTurn->getBattleState()['nextActor'];
+        $fighters = $activeTurn->getBattleState()['fighters'];
 
         return $this->renderNewResponse('battle/continueBattle.html.twig', [
             'form' => $form->createView(),
