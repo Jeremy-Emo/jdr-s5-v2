@@ -65,17 +65,17 @@ class CreateTurnScenario extends AbstractScenario
             $dbFighter = $this->fighterRepository->find($fighter['id']);
             $stats = StatManager::returnMetaStats($dbFighter);
             foreach ($stats as $stat) {
-                if ($stat['name'] === 'Vitesse') {
+                if ($stat['name'] === StatManager::LABEL_SPEED) {
                     $speed = $stat['value'];
                     $fighter['speed'] = $speed;
                 }
-                if ($stat['name'] === 'Points de vie') {
+                if ($stat['name'] === StatManager::LABEL_HP) {
                     $fighter['maxHP'] = explode(" / ", $stat['value'])[1];
                 }
-                if ($stat['name'] === 'Points de mana') {
+                if ($stat['name'] === StatManager::LABEL_MP) {
                     $fighter['maxMP'] = explode(" / ", $stat['value'])[1];
                 }
-                if ($stat['name'] === 'Fatigue') {
+                if ($stat['name'] === StatManager::LABEL_SP) {
                     $fighter['maxSP'] = explode(" / ", $stat['value'])[1];
                 }
             }
@@ -94,11 +94,18 @@ class CreateTurnScenario extends AbstractScenario
             }
         }
 
+        //Gestion ATB
         $breakHundred = false;
         while (!$breakHundred) {
             foreach ($fighters as &$fighter) {
                 if ($fighter['currentHP'] > 0) {
-                    $fighter['atb'] += floor($fighter['speed'] / $totalSpeed * 100);
+                    // Gestion debuff speed
+                    $reducSpeed = (
+                        isset($fighter['statuses'])
+                        && !empty($fighter['statuses']['slow'])
+                    ) ? 2 : 1;
+                    // Add ATB
+                    $fighter['atb'] += floor($fighter['speed'] / $totalSpeed * 100 / $reducSpeed);
                     if ($fighter['atb'] >= 100) {
                         $breakHundred = true;
                     }
@@ -107,6 +114,17 @@ class CreateTurnScenario extends AbstractScenario
                 }
             }
             //TODO : add security for infinite loop ?
+        }
+
+        //Gestion statuts
+        foreach ($fighters as &$fighter) {
+            if (isset($fighter['statuses'])) {
+                foreach ($fighter['statutes'] as &$status) {
+                    if ($status > 0) {
+                        $status -= 1;
+                    }
+                }
+            }
         }
 
         return $fighters;

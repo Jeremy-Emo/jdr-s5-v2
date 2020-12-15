@@ -5,6 +5,8 @@ namespace App\Scenario\Battle;
 use App\AbstractClass\AbstractScenario;
 use App\Entity\Battle;
 use App\Entity\BattleTurn;
+use App\Entity\Element;
+use App\Entity\ElementMultiplier;
 use App\Entity\FighterInfos;
 use App\Entity\FighterSkill;
 use App\Exception\ScenarioException;
@@ -38,6 +40,8 @@ class CalculateBattleActionScenario extends AbstractScenario
     private ?FighterSkill $fSkill = null;
     private int $currentDamages = 0;
     private bool $itsADodge = false;
+
+    public const UNIVERSAL_ELEMENT = 'all';
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -135,7 +139,7 @@ class CalculateBattleActionScenario extends AbstractScenario
             // Add natural offensive ability
             $stats = StatManager::returnMetaStats($this->actor);
             foreach ($stats as $stat) {
-                if ($stat['name'] === 'Capacité offensive naturelle') {
+                if ($stat['name'] === StatManager::LABEL_OP) {
                     $this->offensivePower += $stat['value'];
                 }
             }
@@ -170,7 +174,7 @@ class CalculateBattleActionScenario extends AbstractScenario
                         && $actorItem->getItem()->getBattleItemInfo()->getElementMultipliers() !== null
                     ) {
                         foreach ($actorItem->getItem()->getBattleItemInfo()->getElementMultipliers() as $em) {
-                            if ($em->getElement() === $element && !$em->getIsResistance()) {
+                            if ($this->checkElement($element, $em)) {
                                 $multipliers += $em->getValue();
                             }
                         }
@@ -185,7 +189,7 @@ class CalculateBattleActionScenario extends AbstractScenario
                         && $fighterSkill->getSkill()->getFightingSkillInfo()->getElementsMultipliers() !== null
                     ) {
                         foreach ($fighterSkill->getSkill()->getFightingSkillInfo()->getElementsMultipliers() as $em) {
-                            if ($em->getElement() === $element && !$em->getIsResistance()) {
+                            if ($this->checkElement($element, $em)) {
                                 $multipliers += ($em->getValue() * $fighterSkill->getLevel());
                             }
                         }
@@ -209,6 +213,21 @@ class CalculateBattleActionScenario extends AbstractScenario
 
             //END
         }
+    }
+
+    /**
+     * @param Element $element
+     * @param ElementMultiplier $em
+     * @param bool $isResistance
+     * @return bool
+     */
+    private function checkElement(Element $element, ElementMultiplier $em, $isResistance = false): bool
+    {
+        return (
+            $em->getElement() === $element
+            || $element->getNameId() === self::UNIVERSAL_ELEMENT
+            || $em->getElement()->getNameId() === self::UNIVERSAL_ELEMENT
+        ) && $em->getIsResistance() === $isResistance;
     }
 
     /**

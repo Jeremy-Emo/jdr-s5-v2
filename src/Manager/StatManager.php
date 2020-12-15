@@ -20,6 +20,13 @@ class StatManager
     public const FURTIVE = 'furtivite';
     public const LEADERSHIP = 'leadership';
 
+    public const LABEL_HP = 'Points de vie';
+    public const LABEL_MP = 'Points de mana';
+    public const LABEL_SP = 'Fatigue';
+    public const LABEL_DODGE = 'Esquive';
+    public const LABEL_SPEED = 'Vitesse';
+    public const LABEL_OP = 'Capacité offensive naturelle';
+
     public const CAP_CRITICAL_RATE = 60;
     public const ONE_PERCENT_CRITICAL_RATE = 2;
 
@@ -120,7 +127,7 @@ class StatManager
             switch ($stat->getStat()->getNameId()) {
                 case self::STAMINA:
                     $statsToReturn[] = [
-                        'name' => 'Points de vie',
+                        'name' => self::LABEL_HP,
                         'value' => $fighter->getCurrentHP() . " / " . self::calculateMaxHP(
                             ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100)
                         )
@@ -128,13 +135,13 @@ class StatManager
                     break;
                 case self::STRENGTH:
                     $statsToReturn[] = [
-                        'name' => 'Fatigue',
+                        'name' => self::LABEL_SP,
                         'value' => $fighter->getCurrentSP() . " / " . self::calculateMaxSP(
                             ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100)
                         )
                     ];
                     $statsToReturn[] = [
-                        'name' => 'Capacité offensive naturelle',
+                        'name' => self::LABEL_OP,
                         'value' => self::calculateOffensivePower(
                                 ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100)
                             )
@@ -142,7 +149,7 @@ class StatManager
                     break;
                 case self::WISDOM:
                     $statsToReturn[] = [
-                        'name' => 'Points de mana',
+                        'name' => self::LABEL_MP,
                         'value' => $fighter->getCurrentMP() . " / " . self::calculateMaxMP(
                             ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100)
                         )
@@ -150,13 +157,13 @@ class StatManager
                     break;
                 case self::AGILITY:
                     $statsToReturn[] = [
-                        'name' => 'Vitesse',
+                        'name' => self::LABEL_SPEED,
                         'value' => self::calculateSpeed(
                             ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100)
                         )
                     ];
                     $statsToReturn[] = [
-                        'name' => 'Esquive',
+                        'name' => self::LABEL_DODGE,
                         'value' => self::calculateDodge(
                             ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100)
                         )
