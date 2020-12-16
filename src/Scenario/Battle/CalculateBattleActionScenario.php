@@ -148,6 +148,9 @@ class CalculateBattleActionScenario extends AbstractScenario
                     }
 
                     $target['currentHP'] -= $this->currentDamages;
+                    if ($target['currentHP'] < 0) {
+                        $target['currentHP'] = 0;
+                    }
                     $totalDamages += $this->currentDamages;
                 } else {
                     $this->addStringAtEnd .= $target["name"] . " a esquivé. ";
@@ -297,7 +300,8 @@ class CalculateBattleActionScenario extends AbstractScenario
                     }
                 }
             }
-            $this->defensivePower = ceil($this->defensivePower * $resistances / 100);
+
+            $this->defensivePower = ceil($this->defensivePower * (100 + $resistances) / 100);
         }
     }
 
@@ -381,7 +385,7 @@ class CalculateBattleActionScenario extends AbstractScenario
             }
 
             //Calculate total
-            $this->offensivePower += floor($baseOffensivePower * $multipliers / 100);
+            $this->offensivePower += floor($baseOffensivePower * (100 + $multipliers) / 100);
 
             //END
         }
