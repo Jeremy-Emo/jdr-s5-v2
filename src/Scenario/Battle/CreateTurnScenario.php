@@ -155,7 +155,10 @@ class CreateTurnScenario extends AbstractScenario
                         }
                     }
                     //HoT
-                    if ($this->checkStatus($fighter, 'heal_on_time')) {
+                    if (
+                        $this->checkStatus($fighter, 'heal_on_time')
+                        && !$this->checkStatus($fighter, 'anti_heal')
+                    ) {
                         $fighter['currentHP'] += ceil($fighter['maxHP'] / 10);
                         if ($fighter['currentHP'] > $fighter['maxHP']) {
                             $fighter['currentHP'] = $fighter['maxHP'];

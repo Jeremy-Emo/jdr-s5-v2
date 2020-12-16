@@ -44,6 +44,7 @@ class CalculateBattleActionScenario extends AbstractScenario
     private ?FighterSkill $fSkill = null;
     private int $currentDamages = 0;
     private bool $itsADodge = false;
+    private int $triggerAffinity = 0;
 
     public const UNIVERSAL_ELEMENT = 'all';
     public const CRITICAL_BONUS = 50;
@@ -157,7 +158,7 @@ class CalculateBattleActionScenario extends AbstractScenario
                     $this->addStringAtEnd .= $target["name"] . " a esquivé. ";
                 }
             } else {
-                if ($this->isHeal) {
+                if ($this->isHeal && !$this->checkStatus($target, 'anti_heal')) {
                     $target['currentHP'] += $this->offensivePower;
                     if ($target['currentHP'] > $target['maxHP']) {
                         $target['currentHP'] = $target['maxHP'];
@@ -172,11 +173,24 @@ class CalculateBattleActionScenario extends AbstractScenario
                 $this->fSkill !== null
                 && $this->fSkill->getSkill()->getFightingSkillInfo() !== null
             ) {
+                //Application réactions élémentaires
+                $this->checkElementalReactions($target);
+                //Application statuts
                 foreach ($this->fSkill->getSkill()->getFightingSkillInfo()->getBattleStates() as $state) {
                     foreach ($state->getStates() as $status) {
                         $target['statuses'][] = [
                             $status->getNameId() => $state->getTurnsNumber()
                         ];
+                    }
+                }
+                //Drain de vie
+                if (
+                    !empty($this->fSkill->getSkill()->getFightingSkillInfo()->getDrainLife())
+                    && !$this->checkStatus($actor, 'anti_heal')
+                ) {
+                    $actor['currentHP'] += floor($this->currentDamages * $this->fSkill->getSkill()->getFightingSkillInfo()->getDrainLife() / 100);
+                    if ($actor['currentHP'] > $actor['maxHP']) {
+                        $actor['currentHP'] = $actor['maxHP'];
                     }
                 }
             }
@@ -199,7 +213,34 @@ class CalculateBattleActionScenario extends AbstractScenario
         $this->actionString .= $this->addStringAtEnd;
 
         if ($this->fSkill !== null) {
-            //TODO : update actor with skill costs
+            $actor['currentHP'] = $actor['currentHP'] - (int)$this->fSkill->getSkill()->getHpCost();
+            $actor['currentMP'] = $actor['currentMP'] - (int)$this->fSkill->getSkill()->getMpCost();
+            $actor['currentSP'] = $actor['currentSP'] + (int)$this->fSkill->getSkill()->getSpCost();
+            foreach ($fighters as &$fighter) {
+                if ($fighter['id'] === $actor['id']) {
+                    $fighter = $actor;
+                }
+            }
+        }
+    }
+
+    /**
+     * @param $fighter
+     */
+    private function checkElementalReactions(&$fighter): void
+    {
+        if ($this->fSkill === null || $this->fSkill->getSkill()->getFightingSkillInfo() === null) {
+            return;
+        }
+
+        foreach ($this->fSkill->getFightingSkillInfo()->getElement() as $element) {
+            // Check waterized + ice
+            if ($element->getNameId() === 'ice' && $this->checkStatus($fighter, 'waterized')) {
+                $fighter['statuses'][] = [
+                    'frozen' => 1,
+                    'slow' => 2,
+                ];
+            }
         }
     }
 
@@ -402,14 +443,20 @@ class CalculateBattleActionScenario extends AbstractScenario
                 }
             }
 
+            foreach ($elements as $element) {
+                if ($this->actor->getAffinity() === $element) {
+                    $this->triggerAffinity = 100;
+                }
+            }
+
             //Calculate total
-            $this->offensivePower += floor($baseOffensivePower * (100 + $multipliers) / 100);
+            $this->offensivePower += floor($baseOffensivePower * (100 + $multipliers + $this->triggerAffinity) / 100);
 
             //END
         }
 
         if ($this->checkStatus($actor, 'immortal_king_barbarian')) {
-            $this->offensivePower *= self::SECOND_IMMORTAL_KING_MULT;
+            $this->offensivePower = $this->offensivePower * self::SECOND_IMMORTAL_KING_MULT;
         }
     }
 

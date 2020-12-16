@@ -25,6 +25,18 @@ class FighterInfos
         return "Truc inconnu";
     }
 
+    public function getAffinity(): ?Element
+    {
+        if ($this->getMonster() !== null) {
+            return $this->getMonster()->getElementAffinity();
+        }
+        if ($this->getHero() !== null) {
+            return $this->getHero()->getElementAffinity();
+        }
+
+        return null;
+    }
+
     public function getEquippedWeapons(): array
     {
         $return = [];
