@@ -119,6 +119,12 @@ class StatManager
         return $strength * self::ONE_OFFENSIVE_POWER_STRENGTH;
     }
 
+    /**
+     * @param string $name
+     * @param FighterInfos $fighter
+     * @return array
+     * @throws \Exception
+     */
     public static function returnMetaStat(string $name, FighterInfos $fighter): array
     {
         $stats = self::returnMetaStats($fighter);
@@ -127,7 +133,7 @@ class StatManager
                 return $stat;
             }
         }
-        return [];
+        throw new \Exception("Stat not found");
     }
 
     public static function returnMetaStats(FighterInfos $fighter): array

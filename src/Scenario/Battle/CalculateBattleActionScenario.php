@@ -206,6 +206,7 @@ class CalculateBattleActionScenario extends AbstractScenario
      * @param $action
      * @param $actor
      * @throws ScenarioException
+     * @throws \Exception
      */
     private function calculateOffensivePower($action, array $actor): void
     {
@@ -213,12 +214,8 @@ class CalculateBattleActionScenario extends AbstractScenario
             $this->actionString .= " attaque avec son arme pour ";
 
             // Add natural offensive ability
-            $stats = StatManager::returnMetaStats($this->actor);
-            foreach ($stats as $stat) {
-                if ($stat['name'] === StatManager::LABEL_OP) {
-                    $this->offensivePower += $stat['value'];
-                }
-            }
+            $stat = StatManager::returnMetaStat(StatManager::LABEL_OP, $this->actor);
+            $this->offensivePower += $stat['value'];
 
             // Add weapons offensive abilities
             foreach ($this->actor->getHeroItems() as $actorItem) {
