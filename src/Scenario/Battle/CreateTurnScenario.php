@@ -63,7 +63,7 @@ class CreateTurnScenario extends AbstractScenario
      * @return array
      * @throws ScenarioException
      */
-    private function prepareFighters(array $fighters, ?array $actor = null): array
+    private function prepareFighters(array &$fighters, ?array $actor = null): array
     {
         $totalSpeed = 0;
         foreach ($fighters as &$fighter) {
@@ -163,10 +163,10 @@ class CreateTurnScenario extends AbstractScenario
                     }
 
                     // Update statuses number of turns
-                    if (isset($fighter['statuses'])) {
-                        foreach ($fighter['statutes'] as &$status) {
+                    if (!empty($fighter['statuses'])) {
+                        foreach ($fighter['statuses'] as $key => &$status) {
                             if ($status > 0) {
-                                $status -= 1;
+                                $status --;
                             }
                         }
                     }

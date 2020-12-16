@@ -119,7 +119,8 @@ class CalculateBattleActionScenario extends AbstractScenario
                 || ($fighter['ennemy'] === ($this->target->getMonster() !== null) && $this->isAoE)
                 || (!$fighter['ennemy'] === ($this->target->getMonster() !== null) && $this->isAoE)
             ) {
-                $targets[] = $fighter;
+
+                $targets[] = &$fighter;
             }
         }
 
