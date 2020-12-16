@@ -40,7 +40,7 @@ class FighterInfos
         return $return;
     }
 
-    public function getNonEquippedWeapons(): array
+    public function getEquippedSlots(): array
     {
         $return = [];
         foreach ($this->getHeroItems() as $fItem) {
@@ -48,6 +48,17 @@ class FighterInfos
                 $fItem->getIsEquipped()
                 && $fItem->getItem()->getItemSlot() !== null
             ) {
+                $return[] = $fItem;
+            }
+        }
+        return $return;
+    }
+
+    public function getEquipment(): array
+    {
+        $return = [];
+        foreach ($this->getHeroItems() as $fItem) {
+            if ($fItem->getIsEquipped()) {
                 $return[] = $fItem;
             }
         }

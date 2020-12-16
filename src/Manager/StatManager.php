@@ -119,6 +119,17 @@ class StatManager
         return $strength * self::ONE_OFFENSIVE_POWER_STRENGTH;
     }
 
+    public static function returnMetaStat(string $name, FighterInfos $fighter): array
+    {
+        $stats = self::returnMetaStats($fighter);
+        foreach ($stats as $stat) {
+            if ($stat['name'] === $name) {
+                return $stat;
+            }
+        }
+        return [];
+    }
+
     public static function returnMetaStats(FighterInfos $fighter): array
     {
         $statsToReturn = [];

@@ -8,6 +8,7 @@ use App\Entity\BattleTurn;
 use App\Entity\Element;
 use App\Entity\ElementMultiplier;
 use App\Entity\FighterInfos;
+use App\Entity\FighterItem;
 use App\Entity\FighterSkill;
 use App\Exception\ScenarioException;
 use App\Manager\StatManager;
@@ -30,18 +31,26 @@ class CalculateBattleActionScenario extends AbstractScenario
     public FighterSkillRepository $fighterSkillRepository;
 
     private string $actionString = "";
+    private string $addStringAtEnd = "";
     private ?FighterInfos $actor;
     private ?FighterInfos $target;
+    private ?FighterInfos $currentTarget;
 
     private bool $isDefenseIgnored = false;
     private bool $isHeal = false;
     private bool $isAoE = false;
     private int $offensivePower = 0;
+    private int $defensivePower = 0;
     private ?FighterSkill $fSkill = null;
     private int $currentDamages = 0;
     private bool $itsADodge = false;
 
     public const UNIVERSAL_ELEMENT = 'all';
+
+    //BUFFS BONUSES
+    public const FIRST_IMMORTAL_KING_MULT = 1;
+    public const SECOND_IMMORTAL_KING_MULT = 1.5;
+
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -91,7 +100,7 @@ class CalculateBattleActionScenario extends AbstractScenario
      */
     private function processBattle(array &$fighters, string $action): void
     {
-        $this->calculateOffensivePower($action);
+        $this->calculateOffensivePower($action, $fighters['nextActor']);
 
         //Get targets in fighters array for direct modification and get additional information like shield
         $targets = [];
@@ -106,12 +115,23 @@ class CalculateBattleActionScenario extends AbstractScenario
         }
 
         foreach ($targets as &$target) {
-            //TODO : calculate defensive power (think about ignore def) (think about dodge)
+            if (!$this->isAoE) {
+                $this->currentTarget = $this->target;
+            } else {
+                $this->currentTarget = $this->fighterRepository->find($target['id']);
+            }
 
-            //TODO : calculate damages (think about statuses and resistance) (think about criticals)
-            //TODO : apply damages (think about shields)
+            $this->checkIfDodged();
+            if (!$this->itsADodge) {
+                $this->calculateDefensivePower();
 
-            //TODO : apply statuses
+                //TODO : calculate damages (think about statuses) (think about criticals)
+                //TODO : apply damages (think about shields)
+
+                //TODO : apply statuses
+            } else {
+                $this->addStringAtEnd .= $target["name"] . " a esquivé. ";
+            }
         }
 
         if ($this->isHeal) {
@@ -123,15 +143,71 @@ class CalculateBattleActionScenario extends AbstractScenario
         if ($this->isAoE) {
             $this->actionString .= " en zone !";
         } else {
-            $this->actionString .= " sur " . $this->target->getName() . ".";
+            $this->actionString .= " sur " . $this->target->getName() . ". ";
+        }
+        $this->actionString .= $this->addStringAtEnd;
+    }
+
+    private function checkIfDodged(): void
+    {
+        $dodgeStat = StatManager::returnMetaStat(StatManager::LABEL_DODGE, $this->currentTarget);
+        $rand = rand(0, 2000);
+        if ($dodgeStat['value'] <= $rand) {
+            $this->itsADodge = true;
+        }
+    }
+
+    private function calculateDefensivePower(): void
+    {
+        $stuff = $this->currentTarget->getEquipment();
+        /** @var FighterItem $fItem */
+        foreach ($stuff as $fItem) {
+            $this->defensivePower += $fItem->getItem()->getBattleItemInfo()->getArmor();
+        }
+
+        if ($this->fSkill !== null) {
+            $resistances = 0;
+            $elements = $this->fSkill->getSkill()->getFightingSkillInfo()->getElement();
+            foreach ($elements as $element) {
+                // Get stuff multipliers
+                foreach ($stuff as $fItem) {
+                    if (
+                        $fItem->getItem()->getBattleItemInfo() !== null
+                        && $fItem->getItem()->getBattleItemInfo()->getElementMultipliers() !== null
+                    ) {
+                        foreach ($fItem->getItem()->getBattleItemInfo()->getElementMultipliers() as $em) {
+                            if ($this->checkElement($element, $em, true)) {
+                                $resistances += $em->getValue();
+                            }
+                        }
+                    }
+                }
+
+                // Get passives multipliers
+                foreach ($this->currentTarget->getSkills() as $fighterSkill) {
+                    if (
+                        $fighterSkill->getSkill()->getIsPassive()
+                        && $fighterSkill->getSkill()->getFightingSkillInfo() !== null
+                        && $fighterSkill->getSkill()->getFightingSkillInfo()->getElementsMultipliers() !== null
+                    ) {
+                        foreach ($fighterSkill->getSkill()->getFightingSkillInfo()->getElementsMultipliers() as $em) {
+                            if ($this->checkElement($element, $em, true)) {
+                                $resistances += ($em->getValue() * $fighterSkill->getLevel());
+                            }
+                        }
+                    }
+                }
+            }
+            $this->defensivePower = ceil($this->defensivePower * $resistances / 100);
         }
     }
 
     /**
      * @param $action
+     * @param $actor
      * @throws ScenarioException
      */
-    private function calculateOffensivePower($action): void
+    private function calculateOffensivePower($action, array $actor): void
     {
         if ($action === ContinueBattleScenario::ATTACK_WITH_WEAPON) {
             $this->actionString .= " attaque avec son arme pour ";
@@ -213,6 +289,23 @@ class CalculateBattleActionScenario extends AbstractScenario
 
             //END
         }
+
+        if ($this->checkStatus($actor, 'immortal_king_barbarian')) {
+            $this->offensivePower *= self::SECOND_IMMORTAL_KING_MULT;
+        }
+    }
+
+    /**
+     * @param array $fighter
+     * @param string $statusName
+     * @return bool
+     */
+    private function checkStatus(array $fighter, string $statusName): bool
+    {
+        return (
+            isset($fighter['statuses'])
+            && !empty($fighter['statuses'][$statusName])
+        );
     }
 
     /**
