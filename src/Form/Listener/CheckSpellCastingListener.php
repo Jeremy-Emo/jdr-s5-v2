@@ -46,18 +46,29 @@ class CheckSpellCastingListener implements EventSubscriberInterface
         $turnAction = $event->getData();
 
         if ($turnAction["action"] !== null && $turnAction["action"] !== ContinueBattleScenario::ATTACK_WITH_WEAPON) {
+            //Check silence
+            if (
+                isset($this->actor['statuses'])
+                && !empty($this->actor['statuses']['silence'])
+            ) {
+                throw new ListenerException("Le personnage est sous effet de silence.");
+            }
+
             $fsSkill = $this->fighterSkillRepository->find($turnAction["action"]);
             if ($fsSkill === null) {
                 throw new ListenerException("Missing informations.");
             }
             $skill = $fsSkill->getSkill();
 
+            //Check costs (do not check SP because it turn into damages)
             if ($skill->getMpCost() > $this->actor['currentMP']) {
                 $form->addError(new FormError("Mana insuffisant."));
             }
             if ($skill->getHpCost() > $this->actor['currentHP']) {
                 $form->addError(new FormError("PV insuffisant."));
             }
+
+            //Check if valid target
             if (
                 $skill->getFightingSkillInfo() !== null
                 && $skill->getFightingSkillInfo()->getIsOnSelfOnly()
@@ -65,6 +76,8 @@ class CheckSpellCastingListener implements EventSubscriberInterface
             ) {
                 $form->addError(new FormError("Ne peut s'utiliser que sur soi."));
             }
+
+            //Check if weapon is ok
             if (
                 $skill->getFightingSkillInfo() !== null
                 && $skill->getFightingSkillInfo()->getNeedWeaponType() !== null

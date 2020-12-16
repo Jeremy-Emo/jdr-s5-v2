@@ -77,7 +77,9 @@ class ContinueBattleScenario extends AbstractScenario
                 $action = "";
             }
 
-            $this->calculateBattleScenario->handle($this->battle, (string)$targetId, (string)$action);
+            $turn = $this->calculateBattleScenario->handle($this->battle, (string)$targetId, (string)$action);
+            $this->manager->persist($turn->setBattle($this->battle));
+            $this->manager->flush();
 
             return $this->redirectToRoute('mj_continueBattle', [
                 'id' => $this->battle->getId(),

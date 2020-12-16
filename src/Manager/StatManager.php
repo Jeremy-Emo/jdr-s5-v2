@@ -195,6 +195,23 @@ class StatManager
     }
 
     /**
+     * @param string $nameId
+     * @param FighterInfos $fighter
+     * @return array
+     * @throws \Exception
+     */
+    public static function returnTotalStat(string $nameId, FighterInfos $fighter): array
+    {
+        $stats = self::returnTotalStats($fighter);
+        foreach ($stats as $stat) {
+            if ($stat['nameId'] === $nameId) {
+                return $stat;
+            }
+        }
+        throw new \Exception("Stat not found");
+    }
+
+    /**
      * @param FighterInfos $fighter
      * @return array
      */
@@ -204,6 +221,7 @@ class StatManager
         foreach ($fighter->getStats() as $stat) {
             $statsToReturn[] = [
                 'name' => $stat->getStat()->getName(),
+                'nameId' => $stat->getStat()->getNameId(),
                 'description' => $stat->getStat()->getDescription(),
                 'value' => ceil($stat->getValue() * self::getBonus($fighter, $stat) / 100),
                 'id' => $stat->getStat()->getId()

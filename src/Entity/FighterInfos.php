@@ -19,7 +19,7 @@ class FighterInfos
             return $this->getMonster()->getName();
         }
         if ($this->getHero() !== null) {
-            return $this->getMonster()->getName();
+            return $this->getHero()->getName();
         }
 
         return "Truc inconnu";

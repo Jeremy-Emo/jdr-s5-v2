@@ -46,6 +46,7 @@ class CalculateBattleActionScenario extends AbstractScenario
     private bool $itsADodge = false;
 
     public const UNIVERSAL_ELEMENT = 'all';
+    public const CRITICAL_BONUS = 50;
 
     //BUFFS BONUSES
     public const FIRST_IMMORTAL_KING_MULT = 1;
@@ -83,24 +84,32 @@ class CalculateBattleActionScenario extends AbstractScenario
 
         if ($action !== "") {
             $this->actionString .= $this->actor->getName();
-            $this->processBattle($fighters, $action);
+            if ($this->checkStatus($actor, 'stun')) {
+                $this->actionString .= " est étourdi !";
+            } elseif ($this->checkStatus($actor, 'frozen')) {
+                $this->actionString .= " est gelé !";
+            } else {
+                $this->processBattle($fighters, $actor, $action);
+            }
         } else {
             $this->actionString .= $this->actor->getName() . " ne fait rien.";
         }
 
         $this->resetActorAtb($fighters, $this->actor->getId());
 
-        return $this->createTurnScenario->handle($fighters, $activeTurn->getTurnNumber(), $this->actionString);
+        return $this->createTurnScenario->handle($fighters, $activeTurn->getTurnNumber(), $this->actionString, $actor);
     }
 
     /**
      * @param array $fighters
+     * @param array $actor
      * @param string $action
      * @throws ScenarioException
+     * @throws \Exception
      */
-    private function processBattle(array &$fighters, string $action): void
+    private function processBattle(array &$fighters, array &$actor, string $action): void
     {
-        $this->calculateOffensivePower($action, $fighters['nextActor']);
+        $this->calculateOffensivePower($action, $actor);
 
         //Get targets in fighters array for direct modification and get additional information like shield
         $targets = [];
@@ -110,10 +119,11 @@ class CalculateBattleActionScenario extends AbstractScenario
                 || ($fighter['ennemy'] === ($this->target->getMonster() !== null) && $this->isAoE)
                 || (!$fighter['ennemy'] === ($this->target->getMonster() !== null) && $this->isAoE)
             ) {
-                $targets[] &= $fighter;
+                $targets[] = $fighter;
             }
         }
 
+        $totalDamages = 0;
         foreach ($targets as &$target) {
             if (!$this->isAoE) {
                 $this->currentTarget = $this->target;
@@ -121,23 +131,54 @@ class CalculateBattleActionScenario extends AbstractScenario
                 $this->currentTarget = $this->fighterRepository->find($target['id']);
             }
 
-            $this->checkIfDodged();
-            if (!$this->itsADodge) {
-                $this->calculateDefensivePower();
+            if (!$this->isHeal) {
+                $this->checkIfDodged();
+                if (!$this->itsADodge) {
+                    $this->calculateDefensivePower();
+                    $this->calculateDamages($actor, $target);
 
-                //TODO : calculate damages (think about statuses) (think about criticals)
-                //TODO : apply damages (think about shields)
+                    if ($target['currentShieldValue'] > 0) {
+                        if ($target['currentShieldValue'] < $this->currentDamages) {
+                            $this->currentDamages -= $target['currentShieldValue'];
+                            $target['currentShieldValue'] = 0;
+                        } else {
+                            $target['currentShieldValue'] -= $this->currentDamages;
+                            $this->currentDamages = 0;
+                        }
+                    }
 
-                //TODO : apply statuses
+                    $target['currentHP'] -= $this->currentDamages;
+                    $totalDamages += $this->currentDamages;
+                } else {
+                    $this->addStringAtEnd .= $target["name"] . " a esquivé. ";
+                }
             } else {
-                $this->addStringAtEnd .= $target["name"] . " a esquivé. ";
+                // It's a heal !
+                $target['currentHP'] += $this->offensivePower;
+                if ($target['currentHP'] > $target['maxHP']) {
+                    $target['currentHP'] = $target['maxHP'];
+                }
+            }
+
+            if (
+                $this->fSkill !== null
+                && $this->fSkill->getSkill()->getFightingSkillInfo() !== null
+            ) {
+                foreach ($this->fSkill->getSkill()->getFightingSkillInfo()->getBattleStates() as $state) {
+                    foreach ($state->getStates() as $status) {
+                        $target['statuses'][] = [
+                            $status->getNameId() => $state->getTurnsNumber()
+                        ];
+                    }
+                }
             }
         }
 
         if ($this->isHeal) {
-            $this->actionString .= " de soin";
+            $this->actionString .= " " . $this->offensivePower . " de soin";
         } else {
-            $this->actionString .= " de dégâts";
+            $displayDamages = floor($totalDamages / count($targets));
+            $this->actionString .= " " . $displayDamages . " de dégâts";
         }
 
         if ($this->isAoE) {
@@ -148,11 +189,69 @@ class CalculateBattleActionScenario extends AbstractScenario
         $this->actionString .= $this->addStringAtEnd;
     }
 
+    /**
+     * @param array $actor
+     * @param array $target
+     * @throws \Exception
+     */
+    private function calculateDamages(array $actor, array $target): void
+    {
+        //Check if critical
+        $critical = StatManager::returnTotalStat(StatManager::CRITICAL_RATE, $this->actor);
+        $cr = StatManager::calculateCriticalRate($critical['value']);
+        if (
+            $this->fSkill !== null
+            && $this->fSkill->getSkill()->getFightingSkillInfo() !== null
+            && $this->fSkill->getSkill()->getFightingSkillInfo()->getIsCriticalRateUpgraded()
+        ) {
+            $cr += 30;
+        }
+        $criticalHit = StatManager::calculateCriticalRate($critical['value']) >= rand(0, 100);
+
+        //Check statuses
+        if ($this->checkStatus($actor, 'buff_atk')) {
+            $this->offensivePower *= 1.5;
+        }
+        if ($this->checkStatus($actor, 'break_atk')) {
+            $this->offensivePower *= 0.5;
+        }
+        if ($this->checkStatus($target, 'buff_def')) {
+            $this->defensivePower *= 1.5;
+        }
+        if ($this->checkStatus($target, 'break_def')) {
+            $this->defensivePower *= 0.5;
+        }
+
+        //Calculate damages
+        if (
+            $this->fSkill !== null
+            && $this->fSkill->getSkill()->getFightingSkillInfo() !== null
+            && $this->fSkill->getSkill()->getFightingSkillInfo()->getIsIgnoreDefense()
+        ) {
+            $this->defensivePower *= 0.1;
+        }
+        $this->currentDamages = $this->offensivePower - ($this->defensivePower * 0.8);
+
+        //Apply critical
+        if ($criticalHit) {
+            $this->addStringAtEnd .= "Coup critique sur " . $target['name'] . " ! ";
+            $criticalDamages = self::CRITICAL_BONUS;
+            if (
+                $this->fSkill !== null
+                && $this->fSkill->getSkill()->getFightingSkillInfo() !== null
+                && !empty($this->fSkill->getSkill()->getFightingSkillInfo()->getCriticalDamages())
+            ) {
+                $criticalDamages += $this->fSkill->getSkill()->getFightingSkillInfo()->getCriticalDamages();
+            }
+            $this->currentDamages *= (1 + ($criticalDamages / 100));
+        }
+    }
+
     private function checkIfDodged(): void
     {
         $dodgeStat = StatManager::returnMetaStat(StatManager::LABEL_DODGE, $this->currentTarget);
         $rand = rand(0, 2000);
-        if ($dodgeStat['value'] <= $rand) {
+        if ($dodgeStat['value'] >= $rand) {
             $this->itsADodge = true;
         }
     }
