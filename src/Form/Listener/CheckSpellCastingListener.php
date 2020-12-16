@@ -2,6 +2,8 @@
 
 namespace App\Form\Listener;
 
+use App\Entity\FighterItem;
+use App\Exception\ListenerException;
 use App\Repository\FighterInfosRepository;
 use App\Repository\FighterSkillRepository;
 use App\Scenario\Battle\ContinueBattleScenario;
@@ -9,7 +11,6 @@ use Symfony\Component\EventDispatcher\EventSubscriberInterface;
 use Symfony\Component\Form\FormError;
 use Symfony\Component\Form\FormEvent;
 use Symfony\Component\Form\FormEvents;
-use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 
 class CheckSpellCastingListener implements EventSubscriberInterface
 {
@@ -37,18 +38,17 @@ class CheckSpellCastingListener implements EventSubscriberInterface
 
     /**
      * @param FormEvent $event
+     * @throws ListenerException
      */
     public function onSubmit(FormEvent $event): void
     {
         $form = $event->getForm();
         $turnAction = $event->getData();
 
-        //TODO : vérifier type d'arme
-
         if ($turnAction["action"] !== null && $turnAction["action"] !== ContinueBattleScenario::ATTACK_WITH_WEAPON) {
             $fsSkill = $this->fighterSkillRepository->find($turnAction["action"]);
             if ($fsSkill === null) {
-                throw new NotFoundHttpException("Missing informations.");
+                throw new ListenerException("Missing informations.");
             }
             $skill = $fsSkill->getSkill();
 
@@ -64,6 +64,31 @@ class CheckSpellCastingListener implements EventSubscriberInterface
                 && $turnAction["target"] !== $this->actor["id"]
             ) {
                 $form->addError(new FormError("Ne peut s'utiliser que sur soi."));
+            }
+            if (
+                $skill->getFightingSkillInfo() !== null
+                && $skill->getFightingSkillInfo()->getNeedWeaponType() !== null
+            ) {
+                if (isset($this->actor['invokedWeapon'])) {
+                    //TODO : implement here when invokedWeapon are released
+                    throw new ListenerException("Not implemented yet.");
+                } else {
+                    $dbActor = $this->fighterRepository->find($this->actor['id']);
+                    if ($dbActor === null) {
+                        throw new ListenerException("Actor not found");
+                    }
+                    $stuff = $dbActor->getEquippedWeapons();
+                    $willProcError = true;
+                    /** @var FighterItem $weapon */
+                    foreach ($stuff as $weapon) {
+                        if ($weapon->getItem()->getBattleItemInfo()->getWeaponType() === $skill->getFightingSkillInfo()->getNeedWeaponType()) {
+                            $willProcError = false;
+                        }
+                    }
+                    if ($willProcError) {
+                        $form->addError(new FormError("Le type d'arme nécessaire n'est pas équipé."));
+                    }
+                }
             }
         }
     }

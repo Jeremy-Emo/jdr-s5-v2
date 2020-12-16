@@ -96,24 +96,29 @@ class CreateTurnScenario extends AbstractScenario
 
         //Gestion ATB
         $breakHundred = false;
-        while (!$breakHundred) {
+        $deadCounter = 0;
+        while (!$breakHundred && $deadCounter !== count($fighters)) {
             foreach ($fighters as &$fighter) {
                 if ($fighter['currentHP'] > 0) {
                     // Gestion debuff speed
-                    $reducSpeed = (
+                    $debuffSpeed = (
                         isset($fighter['statuses'])
                         && !empty($fighter['statuses']['slow'])
-                    ) ? 2 : 1;
+                    ) ? 0.5 : 1;
+                    $buffSpeed = (
+                        isset($fighter['statuses'])
+                        && !empty($fighter['statuses']['buff_speed'])
+                    ) ? 1.5 : 1;
                     // Add ATB
-                    $fighter['atb'] += floor($fighter['speed'] / $totalSpeed * 100 / $reducSpeed);
+                    $fighter['atb'] += floor($fighter['speed'] / $totalSpeed * 100 * $debuffSpeed * $buffSpeed);
                     if ($fighter['atb'] >= 100) {
                         $breakHundred = true;
                     }
                 } else {
                     $fighter['atb'] = 0;
+                    $deadCounter ++;
                 }
             }
-            //TODO : add security for infinite loop ?
         }
 
         //Gestion statuts

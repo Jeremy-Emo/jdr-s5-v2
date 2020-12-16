@@ -25,6 +25,35 @@ class FighterInfos
         return "Truc inconnu";
     }
 
+    public function getEquippedWeapons(): array
+    {
+        $return = [];
+        foreach ($this->getHeroItems() as $fItem) {
+            if (
+                $fItem->getIsEquipped()
+                && $fItem->getItem()->getBattleItemInfo() !== null
+                && $fItem->getItem()->getBattleItemInfo()->getWeaponType() !== null
+            ) {
+                $return[] = $fItem;
+            }
+        }
+        return $return;
+    }
+
+    public function getNonEquippedWeapons(): array
+    {
+        $return = [];
+        foreach ($this->getHeroItems() as $fItem) {
+            if (
+                $fItem->getIsEquipped()
+                && $fItem->getItem()->getItemSlot() !== null
+            ) {
+                $return[] = $fItem;
+            }
+        }
+        return $return;
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
