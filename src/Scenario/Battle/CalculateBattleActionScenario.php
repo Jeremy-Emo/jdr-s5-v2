@@ -5,6 +5,7 @@ namespace App\Scenario\Battle;
 use App\AbstractClass\AbstractScenario;
 use App\Entity\Battle;
 use App\Entity\BattleTurn;
+use App\Entity\CustomEffect;
 use App\Entity\Element;
 use App\Entity\ElementMultiplier;
 use App\Entity\FighterInfos;
@@ -134,6 +135,9 @@ class CalculateBattleActionScenario extends AbstractScenario
             }
 
             if (!$this->isHeal && !$this->isShield) {
+                //Check Pression
+                $actor['sp'] = $actor['sp'] + $this->getValueOfPassiveCustomEffect($this->currentTarget, 'pression');
+
                 $this->checkIfDodged();
                 if (!$this->itsADodge) {
                     $this->calculateDefensivePower();
@@ -167,6 +171,28 @@ class CalculateBattleActionScenario extends AbstractScenario
                 if ($this->isShield) {
                     $target['currentShieldValue'] += $this->offensivePower;
                 }
+            }
+
+            //Vérifications customEffect de l'attaquant
+            $ces = [];
+            if (
+                $this->fSkill !== null
+                && $this->fSkill->getSkill()->getFightingSkillInfo() !== null
+                && $this->fSkill->getSkill()->getFightingSkillInfo()->getCustomEffects() !== null
+            ) {
+                $ces[] = $this->fSkill->getSkill()->getFightingSkillInfo()->getCustomEffects();
+            } else {
+                $stuff = $this->actor->getEquipment();
+                /** @var FighterItem $item */
+                foreach ($stuff as $item) {
+                    if ($item->getItem()->getCustomEffect() !== null) {
+                        $ces[] = $item->getItem()->getCustomEffect();
+                    }
+                }
+            }
+            /** @var CustomEffect $ce */
+            foreach ($ces as $ce) {
+                $this->applyCustomEffectsOnTarget($target, $ce);
             }
 
             if (
@@ -216,11 +242,20 @@ class CalculateBattleActionScenario extends AbstractScenario
             $actor['currentHP'] = $actor['currentHP'] - (int)$this->fSkill->getSkill()->getHpCost();
             $actor['currentMP'] = $actor['currentMP'] - (int)$this->fSkill->getSkill()->getMpCost();
             $actor['currentSP'] = $actor['currentSP'] + (int)$this->fSkill->getSkill()->getSpCost();
-            foreach ($fighters as &$fighter) {
-                if ($fighter['id'] === $actor['id']) {
-                    $fighter = $actor;
-                }
+        }
+
+        //MAJ actor for several reasons
+        foreach ($fighters as &$fighter) {
+            if ($fighter['id'] === $actor['id']) {
+                $fighter = $actor;
             }
+        }
+    }
+
+    private function applyCustomEffectsOnTarget(array &$target, CustomEffect $ce): void
+    {
+        if ($ce->getNameId() === 'hit_sp') {
+            $target['currentSP'] += $ce->getValue();
         }
     }
 
@@ -458,6 +493,34 @@ class CalculateBattleActionScenario extends AbstractScenario
         if ($this->checkStatus($actor, 'immortal_king_barbarian')) {
             $this->offensivePower = $this->offensivePower * self::SECOND_IMMORTAL_KING_MULT;
         }
+    }
+
+    private function getValueOfPassiveCustomEffect(FighterInfos $fighter, string $nameId): int
+    {
+        $value = 0;
+        foreach ($fighter->getSkills() as $fSkill) {
+            if (
+                $fSkill->getSkill()->getIsPassive()
+                && $fSkill->getSkill()->getFightingSkillInfo() !== null
+            ) {
+                $customEffect = $fSkill->getSkill()->getFightingSkillInfo()->getCustomEffects();
+                if ($customEffect->getNameId() === $nameId) {
+                    $value += ($customEffect->getValue() ?? 1);
+                }
+            }
+        }
+
+        /** @var FighterItem $eItem */
+        foreach ($fighter->getEquipment() as $eItem) {
+            if (
+                $eItem->getItem()->getCustomEffect() !== null
+                && $eItem->getItem()->getCustomEffect()->getNameId() === $nameId
+            ) {
+                $value += ($eItem->getItem()->getCustomEffect()->getValue() ?? 1);
+            }
+        }
+
+        return $value;
     }
 
     /**
