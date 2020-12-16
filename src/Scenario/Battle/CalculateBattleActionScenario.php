@@ -36,9 +36,9 @@ class CalculateBattleActionScenario extends AbstractScenario
     private ?FighterInfos $target;
     private ?FighterInfos $currentTarget;
 
-    private bool $isDefenseIgnored = false;
-    private bool $isHeal = false;
-    private bool $isAoE = false;
+    private ?bool $isHeal = false;
+    private ?bool $isShield = false;
+    private ?bool $isAoE = false;
     private int $offensivePower = 0;
     private int $defensivePower = 0;
     private ?FighterSkill $fSkill = null;
@@ -132,7 +132,7 @@ class CalculateBattleActionScenario extends AbstractScenario
                 $this->currentTarget = $this->fighterRepository->find($target['id']);
             }
 
-            if (!$this->isHeal) {
+            if (!$this->isHeal && !$this->isShield) {
                 $this->checkIfDodged();
                 if (!$this->itsADodge) {
                     $this->calculateDefensivePower();
@@ -157,10 +157,14 @@ class CalculateBattleActionScenario extends AbstractScenario
                     $this->addStringAtEnd .= $target["name"] . " a esquivé. ";
                 }
             } else {
-                // It's a heal !
-                $target['currentHP'] += $this->offensivePower;
-                if ($target['currentHP'] > $target['maxHP']) {
-                    $target['currentHP'] = $target['maxHP'];
+                if ($this->isHeal) {
+                    $target['currentHP'] += $this->offensivePower;
+                    if ($target['currentHP'] > $target['maxHP']) {
+                        $target['currentHP'] = $target['maxHP'];
+                    }
+                }
+                if ($this->isShield) {
+                    $target['currentShieldValue'] += $this->offensivePower;
                 }
             }
 
@@ -180,6 +184,8 @@ class CalculateBattleActionScenario extends AbstractScenario
 
         if ($this->isHeal) {
             $this->actionString .= " " . $this->offensivePower . " de soin";
+        } elseif ($this->isShield) {
+            $this->actionString .= " " . $this->offensivePower . " de protection";
         } else {
             $displayDamages = floor($totalDamages / count($targets));
             $this->actionString .= " " . $displayDamages . " de dégâts";
@@ -191,6 +197,10 @@ class CalculateBattleActionScenario extends AbstractScenario
             $this->actionString .= " sur " . $this->target->getName() . ". ";
         }
         $this->actionString .= $this->addStringAtEnd;
+
+        if ($this->fSkill !== null) {
+            //TODO : update actor with skill costs
+        }
     }
 
     /**
@@ -210,7 +220,7 @@ class CalculateBattleActionScenario extends AbstractScenario
         ) {
             $cr += 30;
         }
-        $criticalHit = StatManager::calculateCriticalRate($critical['value']) >= rand(0, 100);
+        $criticalHit = StatManager::calculateCriticalRate($cr) >= rand(0, 100);
 
         //Check statuses
         if ($this->checkStatus($actor, 'buff_atk')) {
@@ -337,6 +347,13 @@ class CalculateBattleActionScenario extends AbstractScenario
             $this->fSkill = $this->fighterSkillRepository->find($action);
             if ($this->fSkill === null) {
                 throw new ScenarioException("Skill not found");
+            }
+
+            //Get skill usage
+            if ($this->fSkill->getSkill()->getFightingSkillInfo() !== null) {
+                $this->isHeal = $this->fSkill->getSkill()->getFightingSkillInfo()->getIsHeal();
+                $this->isAoE = $this->fSkill->getSkill()->getFightingSkillInfo()->getIsAoE();
+                $this->isShield = $this->fSkill->getSkill()->getFightingSkillInfo()->getIsShield();
             }
 
             $this->actionString .= " lance " . $this->fSkill->getSkill()->getName() . " pour ";
