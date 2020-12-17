@@ -49,6 +49,7 @@ class CalculateBattleActionScenario extends AbstractScenario
     private int $reducMPCost = 0;
     private int $speedCasting = 0;
     private array $customEffects = [];
+    private int $survivedCE = 0;
 
     public const UNIVERSAL_ELEMENT = 'all';
     public const CRITICAL_BONUS = 50;
@@ -159,6 +160,7 @@ class CalculateBattleActionScenario extends AbstractScenario
                     }
 
                     $target['currentHP'] -= $this->currentDamages;
+                    //TODO : statut survivre à la mort et ce resistance à la mort here
                     if ($target['currentHP'] < 0) {
                         $target['currentHP'] = 0;
                     }
@@ -167,14 +169,17 @@ class CalculateBattleActionScenario extends AbstractScenario
                     $this->addStringAtEnd .= $target["name"] . " a esquivé. ";
                 }
             } else {
-                if ($this->isHeal && !$this->checkStatus($target, 'anti_heal')) {
-                    $target['currentHP'] += $this->offensivePower;
-                    if ($target['currentHP'] > $target['maxHP']) {
-                        $target['currentHP'] = $target['maxHP'];
+                $this->checkIfDodged(false);
+                if (!$this->itsADodge) {
+                    if ($this->isHeal && !$this->checkStatus($target, 'anti_heal')) {
+                        $target['currentHP'] += $this->offensivePower;
+                        if ($target['currentHP'] > $target['maxHP']) {
+                            $target['currentHP'] = $target['maxHP'];
+                        }
                     }
-                }
-                if ($this->isShield) {
-                    $target['currentShieldValue'] += $this->offensivePower;
+                    if ($this->isShield) {
+                        $target['currentShieldValue'] += $this->offensivePower;
+                    }
                 }
             }
 
@@ -191,11 +196,15 @@ class CalculateBattleActionScenario extends AbstractScenario
                 //Application réactions élémentaires
                 $this->checkElementalReactions($target);
                 //Application statuts
+                $resStat = StatManager::returnTotalStat('resistance', $this->currentTarget);
+                $targetRes = StatManager::calculateResistance($resStat['value']);
                 foreach ($this->fSkill->getSkill()->getFightingSkillInfo()->getBattleStates() as $state) {
                     foreach ($state->getStates() as $status) {
-                        $target['statuses'][] = [
-                            $status->getNameId() => $state->getTurnsNumber()
-                        ];
+                        if ($targetRes < rand(1, 100)) {
+                            $target['statuses'][] = [
+                                $status->getNameId() => $state->getTurnsNumber()
+                            ];
+                        }
                     }
                 }
                 //Drain de vie
@@ -368,12 +377,14 @@ class CalculateBattleActionScenario extends AbstractScenario
         }
     }
 
-    private function checkIfDodged(): void
+    private function checkIfDodged(bool $checkDodgeStat = true): void
     {
-        $dodgeStat = StatManager::returnMetaStat(StatManager::LABEL_DODGE, $this->currentTarget);
-        $rand = rand(0, 2000);
-        if ($dodgeStat['value'] >= $rand) {
-            $this->itsADodge = true;
+        if ($checkDodgeStat) {
+            $dodgeStat = StatManager::returnMetaStat(StatManager::LABEL_DODGE, $this->currentTarget);
+            $rand = rand(0, 2000);
+            if ($dodgeStat['value'] >= $rand) {
+                $this->itsADodge = true;
+            }
         }
 
         if (
