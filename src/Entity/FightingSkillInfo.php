@@ -236,6 +236,16 @@ class FightingSkillInfo
      */
     private ?bool $isShield = false;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isResurrection;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private $isIgnoreShield;
+
     public function __construct()
     {
         $this->elementsMultipliers = new ArrayCollection();
@@ -540,6 +550,30 @@ class FightingSkillInfo
     public function setIsShield(bool $isShield): self
     {
         $this->isShield = $isShield;
+
+        return $this;
+    }
+
+    public function getIsResurrection(): ?bool
+    {
+        return $this->isResurrection;
+    }
+
+    public function setIsResurrection(bool $isResurrection): self
+    {
+        $this->isResurrection = $isResurrection;
+
+        return $this;
+    }
+
+    public function getIsIgnoreShield(): ?bool
+    {
+        return $this->isIgnoreShield;
+    }
+
+    public function setIsIgnoreShield(bool $isIgnoreShield): self
+    {
+        $this->isIgnoreShield = $isIgnoreShield;
 
         return $this;
     }

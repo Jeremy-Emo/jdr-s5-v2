@@ -65,6 +65,20 @@ class FightingSkillInfoType extends AbstractType
                 'label' => 'Compétence de bouclier',
                 'required' => false
             ])
+            ->add('isIgnoreShield', CheckboxType::class, [
+                'row_attr' => [
+                    'class' => 'pretty p-default d-block',
+                ],
+                'label' => 'Ignore bouclier',
+                'required' => false
+            ])
+            ->add('isResurrection', CheckboxType::class, [
+                'row_attr' => [
+                    'class' => 'pretty p-default d-block',
+                ],
+                'label' => 'Ressucite',
+                'required' => false
+            ])
             ->add('elementsMultipliers', CollectionType::class, [
                 'entry_type' => ElementMultiplierType::class,
                 'entry_options' => ['label' => false],
