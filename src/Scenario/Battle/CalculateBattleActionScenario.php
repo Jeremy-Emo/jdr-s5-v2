@@ -143,7 +143,7 @@ class CalculateBattleActionScenario extends AbstractScenario
 
             if (!$this->isHeal && !$this->isShield) {
                 //Check Pression
-                $actor['sp'] = $actor['sp'] + $this->getValueOfPassiveCustomEffect($this->currentTarget, 'pression');
+                $actor['currentSP'] = $actor['currentSP'] + $this->getValueOfPassiveCustomEffect($this->currentTarget, 'pression');
 
                 //Check esquive
                 $this->checkIfDodged();
@@ -309,7 +309,7 @@ class CalculateBattleActionScenario extends AbstractScenario
             return;
         }
 
-        foreach ($this->fSkill->getFightingSkillInfo()->getElement() as $element) {
+        foreach ($this->fSkill->getSkill()->getFightingSkillInfo()->getElement() as $element) {
             // Check waterized + ice
             if ($element->getNameId() === 'ice' && $this->checkStatus($fighter, 'waterized')) {
                 $fighter['statuses'][] = [
@@ -571,7 +571,7 @@ class CalculateBattleActionScenario extends AbstractScenario
                 && $fSkill->getSkill()->getFightingSkillInfo() !== null
             ) {
                 $customEffect = $fSkill->getSkill()->getFightingSkillInfo()->getCustomEffects();
-                if ($customEffect->getNameId() === $nameId) {
+                if ($customEffect !== null && $customEffect->getNameId() === $nameId) {
                     $value += ($customEffect->getValue() ?? 1);
                 }
             }
