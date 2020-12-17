@@ -46,6 +46,9 @@ class CalculateBattleActionScenario extends AbstractScenario
     private int $currentDamages = 0;
     private bool $itsADodge = false;
     private int $triggerAffinity = 0;
+    private int $reducMPCost = 0;
+    private int $speedCasting = 0;
+    private array $customEffects = [];
 
     public const UNIVERSAL_ELEMENT = 'all';
     public const CRITICAL_BONUS = 50;
@@ -111,6 +114,7 @@ class CalculateBattleActionScenario extends AbstractScenario
      */
     private function processBattle(array &$fighters, array &$actor, string $action): void
     {
+        $this->getCustomEffectsOnActor();
         $this->calculateOffensivePower($action, $actor);
 
         //Get targets in fighters array for direct modification and get additional information like shield
@@ -138,6 +142,7 @@ class CalculateBattleActionScenario extends AbstractScenario
                 //Check Pression
                 $actor['sp'] = $actor['sp'] + $this->getValueOfPassiveCustomEffect($this->currentTarget, 'pression');
 
+                //Check esquive
                 $this->checkIfDodged();
                 if (!$this->itsADodge) {
                     $this->calculateDefensivePower();
@@ -174,24 +179,8 @@ class CalculateBattleActionScenario extends AbstractScenario
             }
 
             //Vérifications customEffect de l'attaquant
-            $ces = [];
-            if (
-                $this->fSkill !== null
-                && $this->fSkill->getSkill()->getFightingSkillInfo() !== null
-                && $this->fSkill->getSkill()->getFightingSkillInfo()->getCustomEffects() !== null
-            ) {
-                $ces[] = $this->fSkill->getSkill()->getFightingSkillInfo()->getCustomEffects();
-            } else {
-                $stuff = $this->actor->getEquipment();
-                /** @var FighterItem $item */
-                foreach ($stuff as $item) {
-                    if ($item->getItem()->getCustomEffect() !== null) {
-                        $ces[] = $item->getItem()->getCustomEffect();
-                    }
-                }
-            }
             /** @var CustomEffect $ce */
-            foreach ($ces as $ce) {
+            foreach ($this->customEffects as $ce) {
                 $this->applyCustomEffectsOnTarget($target, $ce);
             }
 
@@ -222,6 +211,7 @@ class CalculateBattleActionScenario extends AbstractScenario
             }
         }
 
+        //MAJ Action
         if ($this->isHeal) {
             $this->actionString .= " " . $this->offensivePower . " de soin";
         } elseif ($this->isShield) {
@@ -230,7 +220,6 @@ class CalculateBattleActionScenario extends AbstractScenario
             $displayDamages = floor($totalDamages / count($targets));
             $this->actionString .= " " . $displayDamages . " de dégâts";
         }
-
         if ($this->isAoE) {
             $this->actionString .= " en zone !";
         } else {
@@ -238,9 +227,13 @@ class CalculateBattleActionScenario extends AbstractScenario
         }
         $this->actionString .= $this->addStringAtEnd;
 
+        // Mise à jour stats après coûts du sort
         if ($this->fSkill !== null) {
             $actor['currentHP'] = $actor['currentHP'] - (int)$this->fSkill->getSkill()->getHpCost();
-            $actor['currentMP'] = $actor['currentMP'] - (int)$this->fSkill->getSkill()->getMpCost();
+            if ($this->reducMPCost > 100) {
+                $this->reducMPCost = 100;
+            }
+            $actor['currentMP'] = $actor['currentMP'] - floor((int)$this->fSkill->getSkill()->getMpCost() * (100 - $this->reducMPCost) / 100);
             $actor['currentSP'] = $actor['currentSP'] + (int)$this->fSkill->getSkill()->getSpCost();
         }
 
@@ -252,10 +245,44 @@ class CalculateBattleActionScenario extends AbstractScenario
         }
     }
 
+    private function getCustomEffectsOnActor(): void
+    {
+        if (
+            $this->fSkill !== null
+            && $this->fSkill->getSkill()->getFightingSkillInfo() !== null
+            && $this->fSkill->getSkill()->getFightingSkillInfo()->getCustomEffects() !== null
+        ) {
+            $this->customEffects[] = $this->fSkill->getSkill()->getFightingSkillInfo()->getCustomEffects();
+        }
+        $stuff = $this->actor->getEquipment();
+        /** @var FighterItem $item */
+        foreach ($stuff as $item) {
+            if ($item->getItem()->getCustomEffect() !== null) {
+                $this->customEffects[] = $item->getItem()->getCustomEffect();
+            }
+        }
+        $passives = $this->actor->getSkills();
+        foreach ($passives as $skill) {
+            if (
+                $skill->getSkill()->getIsPassive()
+                && $skill->getSkill()->getFightingSkillInfo() !== null
+                && $skill->getSkill()->getFightingSkillInfo()->getCustomEffects() !== null
+            ) {
+                $this->customEffects[] = $skill->getSkill()->getFightingSkillInfo()->getCustomEffects();
+            }
+        }
+    }
+
     private function applyCustomEffectsOnTarget(array &$target, CustomEffect $ce): void
     {
         if ($ce->getNameId() === 'hit_sp') {
             $target['currentSP'] += $ce->getValue();
+        }
+        if ($ce->getNameId() === 'heal_sp') {
+            $target['currentSP'] = $target['currentSP'] + $ce->getValue();
+            if ($target['currentSP'] < 0) {
+                $target['currentSP'] = 0;
+            }
         }
     }
 
@@ -335,6 +362,10 @@ class CalculateBattleActionScenario extends AbstractScenario
             }
             $this->currentDamages *= (1 + ($criticalDamages / 100));
         }
+
+        if ($this->currentDamages < 0) {
+            $this->currentDamages = 0;
+        }
     }
 
     private function checkIfDodged(): void
@@ -343,6 +374,15 @@ class CalculateBattleActionScenario extends AbstractScenario
         $rand = rand(0, 2000);
         if ($dodgeStat['value'] >= $rand) {
             $this->itsADodge = true;
+        }
+
+        if (
+            !$this->itsADodge
+            && $this->fSkill !== null
+            && $this->fSkill->getSkill()->getFightingSkillInfo() !== null
+            && !empty($this->fSkill->getSkill()->getFightingSkillInfo()->getAccuracy())
+        ) {
+            $this->itsADodge = rand(0, 99) < $this->fSkill->getSkill()->getFightingSkillInfo()->getAccuracy();
         }
     }
 
@@ -430,6 +470,15 @@ class CalculateBattleActionScenario extends AbstractScenario
                 $this->isHeal = $this->fSkill->getSkill()->getFightingSkillInfo()->getIsHeal();
                 $this->isAoE = $this->fSkill->getSkill()->getFightingSkillInfo()->getIsAoE();
                 $this->isShield = $this->fSkill->getSkill()->getFightingSkillInfo()->getIsShield();
+                /** @var CustomEffect $ce */
+                foreach ($this->customEffects as $ce) {
+                    if ($ce->getNameId() === 'mana_reduction') {
+                        $this->reducMPCost += $ce->getValue();
+                    }
+                    if ($ce->getNameId() === 'speed_casting') {
+                        $this->speedCasting += 1;
+                    }
+                }
             }
 
             $this->actionString .= " lance " . $this->fSkill->getSkill()->getName() . " pour ";
