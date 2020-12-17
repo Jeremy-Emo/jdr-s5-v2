@@ -8,7 +8,7 @@
     <div class="row">
         <div class="col-md-6 ma-25-top">
             <div class="pa-20 bg-white full-height">
-                <p class="bold">Combattant actif : {{ actor.name }}</p>
+                <p class="bold">Combattant actif : {{ actor.name }}{% if actor.spellUsed is defined and actor.spellUsed %} (doit lancer {{ actor.spellUsed }}){% endif %}</p>
                 {{ form_start(form) }}
                 {{ form_widget(form) }}
                 <input type="submit" value="Suivant">

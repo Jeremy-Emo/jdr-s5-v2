@@ -51,7 +51,8 @@ class CalculateBattleActionScenario extends AbstractScenario
     private int $reducMPCost = 0;
     private int $speedCasting = 0;
     private array $customEffects = [];
-    private int $survivedCE = 0;
+    private array $targetCustomEffects = [];
+    private bool $isCasting = false;
 
     public const UNIVERSAL_ELEMENT = 'all';
     public const CRITICAL_BONUS = 50;
@@ -98,6 +99,9 @@ class CalculateBattleActionScenario extends AbstractScenario
                 $this->actionString .= " est gelé !";
             } else {
                 $this->processBattle($fighters, $actor, $action);
+                if ($this->isCasting) {
+                    $this->actionString .= " prépare le sort " . $this->fSkill->getSkill()->getName() . " pour les prochains tours !";
+                }
             }
         } else {
             $this->actionString .= $this->actor->getName() . " ne fait rien.";
@@ -119,127 +123,157 @@ class CalculateBattleActionScenario extends AbstractScenario
     {
         $this->getCustomEffectsOnActor();
         $this->calculateOffensivePower($action, $actor);
-
-        //Get targets in fighters array for direct modification and get additional information like shield
-        $targets = [];
-        foreach ($fighters as &$fighter) {
-            if (
-                ($fighter['id'] === $this->target->getId() && !$this->isAoE)
-                || ($fighter['ennemy'] === ($this->target->getMonster() !== null) && $this->isAoE)
-                || (!$fighter['ennemy'] === ($this->target->getMonster() !== null) && $this->isAoE)
-            ) {
-
-                $targets[] = &$fighter;
-            }
-        }
-
-        $totalDamages = 0;
-        foreach ($targets as &$target) {
-            if (!$this->isAoE) {
-                $this->currentTarget = $this->target;
-            } else {
-                $this->currentTarget = $this->fighterRepository->find($target['id']);
+        if (!$this->isCasting) {
+            //Get targets in fighters array for direct modification and get additional information like shield
+            $targets = [];
+            foreach ($fighters as &$fighter) {
+                if (
+                    ($fighter['id'] === $this->target->getId() && !$this->isAoE)
+                    || ($fighter['ennemy'] === ($this->target->getMonster() !== null) && $this->isAoE)
+                    || (!$fighter['ennemy'] === ($this->target->getMonster() !== null) && $this->isAoE)
+                ) {
+                    $targets[] = &$fighter;
+                }
             }
 
-            if (!$this->isHeal && !$this->isShield) {
-                //Check Pression
-                $actor['currentSP'] = $actor['currentSP'] + $this->getValueOfPassiveCustomEffect($this->currentTarget, 'pression');
+            $totalDamages = 0;
+            foreach ($targets as &$target) {
+                if (!$this->isAoE) {
+                    $this->currentTarget = $this->target;
+                } else {
+                    $this->currentTarget = $this->fighterRepository->find($target['id']);
+                }
+                $this->getCustomEffectsOnTarget();
 
-                //Check esquive
-                $this->checkIfDodged();
-                if (!$this->itsADodge) {
-                    $this->calculateDefensivePower();
-                    $this->calculateDamages($actor, $target);
+                if (!$this->isHeal && !$this->isShield) {
+                    //Check Pression
+                    $actor['currentSP'] = $actor['currentSP'] + $this->getValueOfPassiveCustomEffect($this->currentTarget, 'pression');
 
-                    if ($target['currentShieldValue'] > 0 && !$this->isIgnoreShield) {
-                        if ($target['currentShieldValue'] < $this->currentDamages) {
-                            $this->currentDamages -= $target['currentShieldValue'];
-                            $target['currentShieldValue'] = 0;
+                    //Check esquive
+                    $this->checkIfDodged();
+                    if (!$this->itsADodge) {
+                        $this->calculateDefensivePower();
+                        $this->calculateDamages($actor, $target);
+
+                        if ($target['currentShieldValue'] > 0 && !$this->isIgnoreShield) {
+                            if ($target['currentShieldValue'] < $this->currentDamages) {
+                                $this->currentDamages -= $target['currentShieldValue'];
+                                $target['currentShieldValue'] = 0;
+                            } else {
+                                $target['currentShieldValue'] -= $this->currentDamages;
+                                $this->currentDamages = 0;
+                            }
+                        }
+
+                        $target['currentHP'] -= $this->currentDamages;
+
+                        //Test effets de survie
+                        //Statut de survie
+                        if ($this->checkStatus($target, 'survive')) {
+                            foreach ($target['statuses'] as $key => &$status) {
+                                if ($key === 'survive') {
+                                    $status = 0;
+                                    break;
+                                }
+                            }
+                            $target['currentHP'] += $this->currentDamages;
                         } else {
-                            $target['currentShieldValue'] -= $this->currentDamages;
-                            $this->currentDamages = 0;
+                            //Custom effect
+                            $canIgnoreDeath = 0;
+                            /** @var CustomEffect $ce */
+                            foreach ($this->targetCustomEffects as $ce) {
+                                if ($ce->getNameId() === "survive") {
+                                    if (!isset($target['surviveDeathCounter'])) {
+                                        $target['surviveDeathCounter'] = 0;
+                                    }
+                                    $canIgnoreDeath ++;
+                                }
+                            }
+                            if (isset($target['surviveDeathCounter']) && $target['surviveDeathCounter'] < $canIgnoreDeath ) {
+                                $target['surviveDeathCounter'] += 1;
+                                $target['currentHP'] += $this->currentDamages;
+                            } else {
+                                //Bon bah il a pas survécu
+                                if ($target['currentHP'] <= 0) {
+                                    $target['currentHP'] = 0;
+                                    $target['currentShieldValue'] = 0;
+                                }
+                                $totalDamages += $this->currentDamages;
+                            }
+                        }
+                    } else {
+                        $this->addStringAtEnd .= $target["name"] . " a esquivé. ";
+                    }
+                } else {
+                    $this->checkIfDodged(false);
+                    if (!$this->itsADodge) {
+                        if ($this->isHeal && !$this->checkStatus($target, 'anti_heal')) {
+                            if ($target['currentHP'] > 0 || $this->isRez) {
+                                $target['currentHP'] += $this->offensivePower;
+                                if ($target['currentHP'] > $target['maxHP']) {
+                                    $target['currentHP'] = $target['maxHP'];
+                                }
+                            }
+                        }
+                        if ($this->isShield) {
+                            $target['currentShieldValue'] += $this->offensivePower;
                         }
                     }
-
-                    $target['currentHP'] -= $this->currentDamages;
-                    //TODO : statut survivre à la mort et ce resistance à la mort here
-                    if ($target['currentHP'] <= 0) {
-                        $target['currentHP'] = 0;
-                        $target['currentShieldValue'] = 0;
-                    }
-                    $totalDamages += $this->currentDamages;
-                } else {
-                    $this->addStringAtEnd .= $target["name"] . " a esquivé. ";
                 }
-            } else {
-                $this->checkIfDodged(false);
-                if (!$this->itsADodge) {
-                    if ($this->isHeal && !$this->checkStatus($target, 'anti_heal')) {
-                        if ($target['currentHP'] > 0 || $this->isRez) {
-                            $target['currentHP'] += $this->offensivePower;
-                            if ($target['currentHP'] > $target['maxHP']) {
-                                $target['currentHP'] = $target['maxHP'];
+
+                //Vérifications customEffect de l'attaquant
+                /** @var CustomEffect $ce */
+                foreach ($this->customEffects as $ce) {
+                    $this->applyCustomEffectsOnTarget($target, $ce);
+                }
+
+                if (
+                    $this->fSkill !== null
+                    && $this->fSkill->getSkill()->getFightingSkillInfo() !== null
+                ) {
+                    //Application réactions élémentaires
+                    $this->checkElementalReactions($target);
+                    //Application statuts
+                    $resStat = StatManager::returnTotalStat('resistance', $this->currentTarget);
+                    $targetRes = StatManager::calculateResistance($resStat['value']);
+                    foreach ($this->fSkill->getSkill()->getFightingSkillInfo()->getBattleStates() as $state) {
+                        foreach ($state->getStates() as $status) {
+                            if ($targetRes < rand(1, 100)) {
+                                $target['statuses'][] = [
+                                    $status->getNameId() => $state->getTurnsNumber()
+                                ];
                             }
                         }
                     }
-                    if ($this->isShield) {
-                        $target['currentShieldValue'] += $this->offensivePower;
-                    }
-                }
-            }
-
-            //Vérifications customEffect de l'attaquant
-            /** @var CustomEffect $ce */
-            foreach ($this->customEffects as $ce) {
-                $this->applyCustomEffectsOnTarget($target, $ce);
-            }
-
-            if (
-                $this->fSkill !== null
-                && $this->fSkill->getSkill()->getFightingSkillInfo() !== null
-            ) {
-                //Application réactions élémentaires
-                $this->checkElementalReactions($target);
-                //Application statuts
-                $resStat = StatManager::returnTotalStat('resistance', $this->currentTarget);
-                $targetRes = StatManager::calculateResistance($resStat['value']);
-                foreach ($this->fSkill->getSkill()->getFightingSkillInfo()->getBattleStates() as $state) {
-                    foreach ($state->getStates() as $status) {
-                        if ($targetRes < rand(1, 100)) {
-                            $target['statuses'][] = [
-                                $status->getNameId() => $state->getTurnsNumber()
-                            ];
+                    //Drain de vie
+                    if (
+                        !empty($this->fSkill->getSkill()->getFightingSkillInfo()->getDrainLife())
+                        && !$this->checkStatus($actor, 'anti_heal')
+                    ) {
+                        $actor['currentHP'] += floor($this->currentDamages * $this->fSkill->getSkill()->getFightingSkillInfo()->getDrainLife() / 100);
+                        if ($actor['currentHP'] > $actor['maxHP']) {
+                            $actor['currentHP'] = $actor['maxHP'];
                         }
                     }
                 }
-                //Drain de vie
-                if (
-                    !empty($this->fSkill->getSkill()->getFightingSkillInfo()->getDrainLife())
-                    && !$this->checkStatus($actor, 'anti_heal')
-                ) {
-                    $actor['currentHP'] += floor($this->currentDamages * $this->fSkill->getSkill()->getFightingSkillInfo()->getDrainLife() / 100);
-                    if ($actor['currentHP'] > $actor['maxHP']) {
-                        $actor['currentHP'] = $actor['maxHP'];
-                    }
-                }
             }
-        }
 
-        //MAJ Action
-        if ($this->isHeal) {
-            $this->actionString .= " " . $this->offensivePower . " de soin";
-        } elseif ($this->isShield) {
-            $this->actionString .= " " . $this->offensivePower . " de protection";
-        } else {
-            $displayDamages = floor($totalDamages / count($targets));
-            $this->actionString .= " " . $displayDamages . " de dégâts";
+            //MAJ Action
+            if ($this->isHeal) {
+                $this->actionString .= " " . $this->offensivePower . " de soin";
+            } elseif ($this->isShield) {
+                $this->actionString .= " " . $this->offensivePower . " de protection";
+            } else {
+                $displayDamages = floor($totalDamages / count($targets));
+                $this->actionString .= " " . $displayDamages . " de dégâts";
+            }
+            if ($this->isAoE) {
+                $this->actionString .= " en zone !";
+            } else {
+                $this->actionString .= " sur " . $this->target->getName() . ". ";
+            }
+            $this->actionString .= $this->addStringAtEnd;
         }
-        if ($this->isAoE) {
-            $this->actionString .= " en zone !";
-        } else {
-            $this->actionString .= " sur " . $this->target->getName() . ". ";
-        }
-        $this->actionString .= $this->addStringAtEnd;
 
         // Mise à jour stats après coûts du sort
         if ($this->fSkill !== null) {
@@ -255,6 +289,27 @@ class CalculateBattleActionScenario extends AbstractScenario
         foreach ($fighters as &$fighter) {
             if ($fighter['id'] === $actor['id']) {
                 $fighter = $actor;
+            }
+        }
+    }
+
+    private function getCustomEffectsOnTarget(): void
+    {
+        $stuff = $this->currentTarget->getEquipment();
+        /** @var FighterItem $item */
+        foreach ($stuff as $item) {
+            if ($item->getItem()->getCustomEffect() !== null) {
+                $this->targetCustomEffects[] = $item->getItem()->getCustomEffect();
+            }
+        }
+        $passives = $this->currentTarget->getSkills();
+        foreach ($passives as $skill) {
+            if (
+                $skill->getSkill()->getIsPassive()
+                && $skill->getSkill()->getFightingSkillInfo() !== null
+                && $skill->getSkill()->getFightingSkillInfo()->getCustomEffects() !== null
+            ) {
+                $this->targetCustomEffects[] = $skill->getSkill()->getFightingSkillInfo()->getCustomEffects();
             }
         }
     }
@@ -454,7 +509,7 @@ class CalculateBattleActionScenario extends AbstractScenario
      * @throws ScenarioException
      * @throws \Exception
      */
-    private function calculateOffensivePower($action, array $actor): void
+    private function calculateOffensivePower($action, array &$actor): void
     {
         if ($action === ContinueBattleScenario::ATTACK_WITH_WEAPON) {
             $this->actionString .= " attaque avec son arme pour ";
@@ -483,6 +538,21 @@ class CalculateBattleActionScenario extends AbstractScenario
 
             //Get skill usage
             if ($this->fSkill->getSkill()->getFightingSkillInfo() !== null) {
+                if ($this->fSkill->getSkill()->getFightingSkillInfo()->getCastingTime()) {
+                    if (isset($actor['spellUsed']) && $actor['spellUsed'] === $this->fSkill->getSkill()->getName()) {
+                        $actor['spellUsed'] = null;
+                    } else {
+                        $reduction = $this->getValueOfPassiveCustomEffect($this->actor, 'speed_casting');
+                        $actor['isCasting'] = $this->fSkill->getSkill()->getFightingSkillInfo()->getCastingTime() - $reduction;
+                        if ($actor['isCasting'] < 0) {
+                            $actor['isCasting'] = 0;
+                        }
+                        if ($actor['isCasting'] > 0) {
+                            $actor['spellUsed'] = $this->fSkill->getSkill()->getName();
+                            $this->isCasting = true;
+                        }
+                    }
+                }
                 $this->isHeal = $this->fSkill->getSkill()->getFightingSkillInfo()->getIsHeal();
                 $this->isRez = $this->fSkill->getSkill()->getFightingSkillInfo()->getIsResurrection();
                 $this->isAoE = $this->fSkill->getSkill()->getFightingSkillInfo()->getIsAoE();
@@ -499,60 +569,62 @@ class CalculateBattleActionScenario extends AbstractScenario
                 }
             }
 
-            $this->actionString .= " lance " . $this->fSkill->getSkill()->getName() . " pour ";
+            if (!$this->isCasting) {
+                $this->actionString .= " lance " . $this->fSkill->getSkill()->getName() . " pour ";
 
-            $multipliers = 0;
-            $elements = $this->fSkill->getSkill()->getFightingSkillInfo()->getElement();
-            foreach ($elements as $element) {
-                // Get stuff multipliers
-                foreach ($this->actor->getHeroItems() as $actorItem) {
-                    if (
-                        $actorItem->getIsEquipped() && $actorItem->getItem()->getBattleItemInfo() !== null
-                        && $actorItem->getItem()->getBattleItemInfo()->getElementMultipliers() !== null
-                    ) {
-                        foreach ($actorItem->getItem()->getBattleItemInfo()->getElementMultipliers() as $em) {
-                            if ($this->checkElement($element, $em)) {
-                                $multipliers += $em->getValue();
+                $multipliers = 0;
+                $elements = $this->fSkill->getSkill()->getFightingSkillInfo()->getElement();
+                foreach ($elements as $element) {
+                    // Get stuff multipliers
+                    foreach ($this->actor->getHeroItems() as $actorItem) {
+                        if (
+                            $actorItem->getIsEquipped() && $actorItem->getItem()->getBattleItemInfo() !== null
+                            && $actorItem->getItem()->getBattleItemInfo()->getElementMultipliers() !== null
+                        ) {
+                            foreach ($actorItem->getItem()->getBattleItemInfo()->getElementMultipliers() as $em) {
+                                if ($this->checkElement($element, $em)) {
+                                    $multipliers += $em->getValue();
+                                }
+                            }
+                        }
+                    }
+
+                    // Get passives multipliers
+                    foreach ($this->actor->getSkills() as $fighterSkill) {
+                        if (
+                            $fighterSkill->getSkill()->getIsPassive()
+                            && $fighterSkill->getSkill()->getFightingSkillInfo() !== null
+                            && $fighterSkill->getSkill()->getFightingSkillInfo()->getElementsMultipliers() !== null
+                        ) {
+                            foreach ($fighterSkill->getSkill()->getFightingSkillInfo()->getElementsMultipliers() as $em) {
+                                if ($this->checkElement($element, $em)) {
+                                    $multipliers += ($em->getValue() * $fighterSkill->getLevel());
+                                }
                             }
                         }
                     }
                 }
 
-                // Get passives multipliers
-                foreach ($this->actor->getSkills() as $fighterSkill) {
-                    if (
-                        $fighterSkill->getSkill()->getIsPassive()
-                        && $fighterSkill->getSkill()->getFightingSkillInfo() !== null
-                        && $fighterSkill->getSkill()->getFightingSkillInfo()->getElementsMultipliers() !== null
-                    ) {
-                        foreach ($fighterSkill->getSkill()->getFightingSkillInfo()->getElementsMultipliers() as $em) {
-                            if ($this->checkElement($element, $em)) {
-                                $multipliers += ($em->getValue() * $fighterSkill->getLevel());
-                            }
+                // Calculate stats multipliers
+                $totalStats = StatManager::returnTotalStats($this->actor);
+                $baseOffensivePower = 0;
+                foreach ($totalStats as $stat) {
+                    foreach ($this->fSkill->getSkill()->getFightingSkillInfo()->getStatMultipliers() as $skillStat) {
+                        if ($stat['id'] === $skillStat->getStat()->getId()) {
+                            $baseOffensivePower += floor($skillStat->getValue() * $this->fSkill->getLevel() * $stat['value'] / 100);
                         }
                     }
                 }
-            }
 
-            // Calculate stats multipliers
-            $totalStats = StatManager::returnTotalStats($this->actor);
-            $baseOffensivePower = 0;
-            foreach ($totalStats as $stat) {
-                foreach ($this->fSkill->getSkill()->getFightingSkillInfo()->getStatMultipliers() as $skillStat) {
-                    if ($stat['id'] === $skillStat->getStat()->getId()) {
-                        $baseOffensivePower += floor($skillStat->getValue() * $this->fSkill->getLevel() * $stat['value'] / 100);
+                foreach ($elements as $element) {
+                    if ($this->actor->getAffinity() === $element) {
+                        $this->triggerAffinity = 100;
                     }
                 }
-            }
 
-            foreach ($elements as $element) {
-                if ($this->actor->getAffinity() === $element) {
-                    $this->triggerAffinity = 100;
-                }
+                //Calculate total
+                $this->offensivePower += floor($baseOffensivePower * (100 + $multipliers + $this->triggerAffinity) / 100);
             }
-
-            //Calculate total
-            $this->offensivePower += floor($baseOffensivePower * (100 + $multipliers + $this->triggerAffinity) / 100);
 
             //END
         }
@@ -620,12 +692,12 @@ class CalculateBattleActionScenario extends AbstractScenario
 
     /**
      * @param array $fighters
-     * @param string $actorId
+     * @param int $actorId
      */
-    private function resetActorAtb(array &$fighters, string $actorId): void
+    private function resetActorAtb(array &$fighters, int $actorId): void
     {
         foreach ($fighters as &$fighter) {
-            if ((string)$fighter['id'] === $actorId) {
+            if ((int)$fighter['id'] === $actorId) {
                 $fighter['atb'] = 0;
             }
         }
