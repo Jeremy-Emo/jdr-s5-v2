@@ -38,8 +38,10 @@ class CalculateBattleActionScenario extends AbstractScenario
     private ?FighterInfos $currentTarget;
 
     private ?bool $isHeal = false;
+    private ?bool $isRez = false;
     private ?bool $isShield = false;
     private ?bool $isAoE = false;
+    private ?bool $isIgnoreShield = false;
     private int $offensivePower = 0;
     private int $defensivePower = 0;
     private ?FighterSkill $fSkill = null;
@@ -149,7 +151,7 @@ class CalculateBattleActionScenario extends AbstractScenario
                     $this->calculateDefensivePower();
                     $this->calculateDamages($actor, $target);
 
-                    if ($target['currentShieldValue'] > 0) {
+                    if ($target['currentShieldValue'] > 0 && !$this->isIgnoreShield) {
                         if ($target['currentShieldValue'] < $this->currentDamages) {
                             $this->currentDamages -= $target['currentShieldValue'];
                             $target['currentShieldValue'] = 0;
@@ -161,8 +163,9 @@ class CalculateBattleActionScenario extends AbstractScenario
 
                     $target['currentHP'] -= $this->currentDamages;
                     //TODO : statut survivre à la mort et ce resistance à la mort here
-                    if ($target['currentHP'] < 0) {
+                    if ($target['currentHP'] <= 0) {
                         $target['currentHP'] = 0;
+                        $target['currentShieldValue'] = 0;
                     }
                     $totalDamages += $this->currentDamages;
                 } else {
@@ -172,9 +175,11 @@ class CalculateBattleActionScenario extends AbstractScenario
                 $this->checkIfDodged(false);
                 if (!$this->itsADodge) {
                     if ($this->isHeal && !$this->checkStatus($target, 'anti_heal')) {
-                        $target['currentHP'] += $this->offensivePower;
-                        if ($target['currentHP'] > $target['maxHP']) {
-                            $target['currentHP'] = $target['maxHP'];
+                        if ($target['currentHP'] > 0 || $this->isRez) {
+                            $target['currentHP'] += $this->offensivePower;
+                            if ($target['currentHP'] > $target['maxHP']) {
+                                $target['currentHP'] = $target['maxHP'];
+                            }
                         }
                     }
                     if ($this->isShield) {
@@ -479,8 +484,10 @@ class CalculateBattleActionScenario extends AbstractScenario
             //Get skill usage
             if ($this->fSkill->getSkill()->getFightingSkillInfo() !== null) {
                 $this->isHeal = $this->fSkill->getSkill()->getFightingSkillInfo()->getIsHeal();
+                $this->isRez = $this->fSkill->getSkill()->getFightingSkillInfo()->getIsResurrection();
                 $this->isAoE = $this->fSkill->getSkill()->getFightingSkillInfo()->getIsAoE();
                 $this->isShield = $this->fSkill->getSkill()->getFightingSkillInfo()->getIsShield();
+                $this->isIgnoreShield = $this->fSkill->getSkill()->getFightingSkillInfo()->getIsIgnoreShield();
                 /** @var CustomEffect $ce */
                 foreach ($this->customEffects as $ce) {
                     if ($ce->getNameId() === 'mana_reduction') {

@@ -65,6 +65,14 @@ class FightingSkillInfo
             $full .= "<p>Crée un bouclier.</p>";
         }
 
+        if ($this->isIgnoreShield) {
+            $full .= "<p>Ignore les boucliers.</p>";
+        }
+
+        if ($this->isResurrection) {
+            $full .= "<p>Ramène à la vie.</p>";
+        }
+
         if ($this->getElementsMultipliers()->count() > 0) {
             $damages = "";
             $res = "";
@@ -239,12 +247,12 @@ class FightingSkillInfo
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isResurrection;
+    private ?bool $isResurrection;
 
     /**
      * @ORM\Column(type="boolean")
      */
-    private $isIgnoreShield;
+    private ?bool $isIgnoreShield;
 
     public function __construct()
     {
