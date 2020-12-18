@@ -36,12 +36,12 @@
                             <p>Bouclier : {{ fighter.currentShieldValue }}</p>
                             <p>Points de mana : {{ fighter.currentMP }} / {{ fighter.maxMP }}</p>
                             <p>Fatigue : {{ fighter.currentSP }} / {{ fighter.maxSP }}</p>
-                            <p>Barre d'attaque : {{ fighter.atb }} / 100</p>
+                            <p>Barre d'attaque : {{ fighter.atb }} %</p>
                             {% if fighter.statuses is defined %}
                                 {% for key, status in fighter.statuses %}
                                     {% for dbStatus in statuses %}
                                         {% if key == dbStatus.nameId %}
-                                            <p><img src="{{ dbStatus.getWebPath() }}">{{ dbStatus.name }} : {{ status }} tours</p>
+                                            <p><img class="hf_box" src="{{ dbStatus.getWebPath() }}">{{ dbStatus.name }} : {{ status }} tours</p>
                                         {% endif %}
                                     {% endfor %}
                                 {% endfor %}
@@ -62,7 +62,7 @@
                             <p>Bouclier : {{ fighter.currentShieldValue }}</p>
                             <p>Points de mana : {{ fighter.currentMP }} / {{ fighter.maxMP }}</p>
                             <p>Fatigue : {{ fighter.currentSP }} / {{ fighter.maxSP }}</p>
-                            <p>Barre d'attaque : {{ fighter.atb }} / 100</p>
+                            <p>Barre d'attaque : {{ fighter.atb }} %</p>
                             {% if fighter.statuses is defined %}
                                 {% for key, status in fighter.statuses %}
                                     {% for dbStatus in statuses %}
