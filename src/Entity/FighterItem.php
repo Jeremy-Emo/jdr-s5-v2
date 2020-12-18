@@ -70,7 +70,7 @@ class FighterItem
     /**
      * @ORM\Column(type="integer", nullable=true)
      */
-    private ?int $durability;
+    private ?int $durability = null;
 
     public function getId(): ?int
     {
