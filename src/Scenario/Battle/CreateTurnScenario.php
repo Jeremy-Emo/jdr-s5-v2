@@ -122,6 +122,7 @@ class CreateTurnScenario extends AbstractScenario
                     }
                 } else {
                     $fighter['atb'] = 0;
+                    $fighter['statuses'] = [];
                     $deadCounter ++;
                 }
             }

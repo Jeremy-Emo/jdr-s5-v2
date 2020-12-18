@@ -44,7 +44,7 @@ abstract class AbstractBattleScenario extends AbstractScenario
     public const CRITICAL_BONUS = 50;
 
     //BUFFS BONUSES
-    public const FIRST_IMMORTAL_KING_MULT = 1;
+    public const FIRST_IMMORTAL_KING_MULT = 0.5;
     public const SECOND_IMMORTAL_KING_MULT = 1.5;
 
     public function __construct(

@@ -5,11 +5,7 @@ namespace App\Scenario\Battle;
 use App\Entity\Battle;
 use App\Entity\BattleTurn;
 use App\Entity\CustomEffect;
-use App\Entity\Element;
-use App\Entity\ElementMultiplier;
-use App\Entity\FighterInfos;
 use App\Entity\FighterItem;
-use App\Entity\FighterSkill;
 use App\Exception\ScenarioException;
 use App\Manager\StatManager;
 use App\Repository\FighterInfosRepository;
@@ -286,6 +282,20 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
 
         if ($this->currentDamages < 0) {
             $this->currentDamages = 0;
+        }
+
+        // Check counter_attack
+        if (
+            $this->fSkill !== null
+            && $this->fSkill->getSkill()->getFightingSkillInfo() !== null
+            && $this->fSkill->getSkill()->getFightingSkillInfo()->getCustomEffects() !== null
+            && $this->fSkill->getSkill()->getFightingSkillInfo()->getCustomEffects()->getNameId() === "counter_attack"
+        ) {
+            $this->currentDamages += (2 * ($actor['maxHP'] - $actor['currentHP']));
+        }
+
+        if ($this->checkStatus($actor, 'immortal_king_undead')) {
+            $this->currentDamages *= self::FIRST_IMMORTAL_KING_MULT;
         }
     }
 

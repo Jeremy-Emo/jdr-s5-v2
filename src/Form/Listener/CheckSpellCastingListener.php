@@ -103,6 +103,55 @@ class CheckSpellCastingListener implements EventSubscriberInterface
                     }
                 }
             }
+
+            //Check if valid status for use
+            if (
+                $skill->getFightingSkillInfo() !== null
+                && $skill->getFightingSkillInfo()->getNeedStatusToCast()->count() > 0
+            ) {
+                $isGood = true;
+                if (isset($this->actor['statuses'])) {
+                    foreach ($skill->getFightingSkillInfo()->getNeedStatusToCast() as $neededStatus) {
+                        $thisStatusIsOk = false;
+                        foreach ($this->actor['statuses'] as $key => $status) {
+                            if ($key === $neededStatus->getNameId()) {
+                                $thisStatusIsOk = true;
+                            }
+                        }
+                        if (!$thisStatusIsOk) {
+                            $isGood = false;
+                        }
+                    }
+                } else {
+                    $isGood = false;
+                }
+                if (!$isGood) {
+                    $form->addError(new FormError("Les statuts nécessaires au lancement ne sont pas présents."));
+                }
+            }
+
+            //Check if prerequites are ok
+            if (
+                $skill->getNeedSkill() !== null
+                && !empty($skill->getNeededSkillLevel())
+            ) {
+                $dbActor = $this->fighterRepository->find($this->actor['id']);
+                if ($dbActor === null) {
+                    throw new ListenerException("Actor not found");
+                }
+                $isGood = false;
+                foreach ($dbActor->getSkills() as $dbSkill) {
+                    if (
+                        $dbSkill->getSkill() === $skill->getNeedSkill()
+                        && $dbSkill->getLevel() >= $skill->getNeededSkillLevel()
+                    ) {
+                        $isGood = true;
+                    }
+                }
+                if (!$isGood) {
+                    $form->addError(new FormError("Les prérequis ne sont pas remplis."));
+                }
+            }
         }
     }
 }
