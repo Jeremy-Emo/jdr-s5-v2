@@ -34,7 +34,7 @@
                                 {% endif %}
                             </td>
                             <td>
-                                <a href="{{ path('admin_editBS', {'id': state.id}) }}">Modifier</a>
+                                <a href="{{ path('admin_editBS', {'id': state.id}) }}">Modifier</a><br>
                                 {% if state.fightingSkills|length == 0 %}
                                 <a href="{{ path('admin_deleteBS', {'id': state.id}) }}">Supprimer</a>
                                 {% endif %}

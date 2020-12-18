@@ -41,7 +41,9 @@ class EditBSController extends AbstractController implements ControllerInterface
             throw new NotFoundHttpException("Status not found");
         }
 
-        $form = $this->createForm(SaveBattleStateType::class, $bs);
+        $form = $this->createForm(SaveBattleStateType::class, $bs, [
+            'isEdit' => true,
+        ]);
         $form->handleRequest($request);
 
         return $this->scenario->handle($form, 'create_bs', 'admin_listBS');

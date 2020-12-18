@@ -58,7 +58,7 @@ class SaveBattleStateType extends AbstractType
                         'mimeTypesMessage' => 'Merci de téléverser une image correspondant aux critères.',
                     ])
                 ],
-                'required' => true,
+                'required' => !$options['isEdit'],
                 'label' => 'Image',
                 'attr' => [
                     'class' => 'dropify',
@@ -73,6 +73,7 @@ class SaveBattleStateType extends AbstractType
     {
         $resolver->setDefaults([
             'data_class' => BattleState::class,
+            'isEdit' => false,
         ]);
     }
 }
