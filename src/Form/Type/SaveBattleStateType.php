@@ -40,6 +40,13 @@ class SaveBattleStateType extends AbstractType
                 'label' => 'Transformation',
                 'required' => false
             ])
+            ->add('isBuff', CheckboxType::class, [
+                'row_attr' => [
+                    'class' => 'pretty p-default d-block',
+                ],
+                'label' => 'Buff',
+                'required' => false
+            ])
             ->add('file', FileType::class, [
                 'constraints' => [
                     new File([
