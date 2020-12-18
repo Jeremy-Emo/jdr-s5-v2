@@ -79,6 +79,13 @@ class FightingSkillInfoType extends AbstractType
                 'label' => 'Ressucite',
                 'required' => false
             ])
+            ->add('isCleanse', CheckboxType::class, [
+                'row_attr' => [
+                    'class' => 'pretty p-default d-block',
+                ],
+                'label' => 'Retire les statuts',
+                'required' => false
+            ])
             ->add('elementsMultipliers', CollectionType::class, [
                 'entry_type' => ElementMultiplierType::class,
                 'entry_options' => ['label' => false],

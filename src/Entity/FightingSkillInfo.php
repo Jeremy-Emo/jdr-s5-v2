@@ -73,6 +73,10 @@ class FightingSkillInfo
             $full .= "<p>Ramène à la vie.</p>";
         }
 
+        if ($this->isCleanse) {
+            $full .= "<p>Retire tous les statuts.</p>";
+        }
+
         if ($this->getElementsMultipliers()->count() > 0) {
             $damages = "";
             $res = "";
@@ -253,6 +257,11 @@ class FightingSkillInfo
      * @ORM\Column(type="boolean")
      */
     private ?bool $isIgnoreShield;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $isCleanse = false;
 
     public function __construct()
     {
@@ -582,6 +591,18 @@ class FightingSkillInfo
     public function setIsIgnoreShield(bool $isIgnoreShield): self
     {
         $this->isIgnoreShield = $isIgnoreShield;
+
+        return $this;
+    }
+
+    public function getIsCleanse(): ?bool
+    {
+        return $this->isCleanse;
+    }
+
+    public function setIsCleanse(bool $isCleanse): self
+    {
+        $this->isCleanse = $isCleanse;
 
         return $this;
     }

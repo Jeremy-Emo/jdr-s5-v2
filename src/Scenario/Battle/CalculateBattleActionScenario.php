@@ -183,6 +183,10 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                             $actor['currentHP'] = $actor['maxHP'];
                         }
                     }
+                    //Cleanse
+                    if ($this->fSkill->getSkill()->getFightingSkillInfo()->getIsCleanse()) {
+                        $target['statuses'] = [];
+                    }
                 }
             }
 
