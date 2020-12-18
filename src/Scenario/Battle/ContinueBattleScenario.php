@@ -7,6 +7,7 @@ use App\Entity\Battle;
 use App\Entity\BattleTurn;
 use App\Exception\ScenarioException;
 use App\Form\Listener\CheckSpellCastingListener;
+use App\Repository\BattleStateRepository;
 use App\Repository\FighterInfosRepository;
 use App\Repository\FighterSkillRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -34,6 +35,9 @@ class ContinueBattleScenario extends AbstractScenario
 
     /** @required  */
     public CalculateBattleActionScenario $calculateBattleScenario;
+
+    /** @required  */
+    public BattleStateRepository $bsRepository;
 
     private ?Battle $battle = null;
 
@@ -96,6 +100,7 @@ class ContinueBattleScenario extends AbstractScenario
             'battle' => $this->battle,
             'fighters' => $fighters,
             'actor' => $actor,
+            'statuses' => $this->bsRepository->findAll(),
         ]);
     }
 

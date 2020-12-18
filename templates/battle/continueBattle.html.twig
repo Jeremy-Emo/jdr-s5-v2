@@ -13,6 +13,7 @@
                 {{ form_widget(form) }}
                 <input type="submit" value="Suivant">
                 {{ form_end(form) }}
+                <p class="ma-20-top"><a href="{{ path('mj_endBattle', {'id': battle.id}) }}">Terminer le combat</a></p>
             </div>
         </div>
         <div class="col-md-6 ma-25-top">
@@ -36,6 +37,15 @@
                             <p>Points de mana : {{ fighter.currentMP }} / {{ fighter.maxMP }}</p>
                             <p>Fatigue : {{ fighter.currentSP }} / {{ fighter.maxSP }}</p>
                             <p>Barre d'attaque : {{ fighter.atb }} / 100</p>
+                            {% if fighter.statuses is defined %}
+                                {% for key, status in fighter.statuses %}
+                                    {% for dbStatus in statuses %}
+                                        {% if key == dbStatus.nameId %}
+                                            <p><img src="{{ dbStatus.getWebPath() }}">{{ dbStatus.name }} : {{ status }} tours</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     {% endif %}
                 {% endfor %}
@@ -53,6 +63,15 @@
                             <p>Points de mana : {{ fighter.currentMP }} / {{ fighter.maxMP }}</p>
                             <p>Fatigue : {{ fighter.currentSP }} / {{ fighter.maxSP }}</p>
                             <p>Barre d'attaque : {{ fighter.atb }} / 100</p>
+                            {% if fighter.statuses is defined %}
+                                {% for key, status in fighter.statuses %}
+                                    {% for dbStatus in statuses %}
+                                        {% if key == dbStatus.nameId and status > 0 %}
+                                            <p><img class="hf_box" src="{{ dbStatus.getWebPath() }}">{{ dbStatus.name }} : {{ status }} tours</p>
+                                        {% endif %}
+                                    {% endfor %}
+                                {% endfor %}
+                            {% endif %}
                         </div>
                     {% endif %}
                 {% endfor %}

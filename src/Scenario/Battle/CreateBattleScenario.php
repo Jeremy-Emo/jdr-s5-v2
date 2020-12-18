@@ -6,6 +6,7 @@ use App\AbstractClass\AbstractScenario;
 use App\Entity\Battle;
 use App\Entity\Party;
 use App\Exception\ScenarioException;
+use App\Manager\StatManager;
 use App\Repository\FighterInfosRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -78,6 +79,30 @@ class CreateBattleScenario extends AbstractScenario
     {
         foreach ($fighters as &$fighter) {
             $fighter['atb'] = 0;
+            $dbFighter = $this->fighterRepository->find($fighter['id']);
+            $stats = StatManager::returnMetaStats($dbFighter);
+            foreach ($stats as $stat) {
+                if ($stat['name'] === StatManager::LABEL_SPEED) {
+                    $speed = $stat['value'];
+                    $fighter['speed'] = $speed;
+                }
+                if ($stat['name'] === StatManager::LABEL_HP) {
+                    $fighter['maxHP'] = explode(" / ", $stat['value'])[1];
+                }
+                if ($stat['name'] === StatManager::LABEL_MP) {
+                    $fighter['maxMP'] = explode(" / ", $stat['value'])[1];
+                }
+                if ($stat['name'] === StatManager::LABEL_SP) {
+                    $fighter['maxSP'] = explode(" / ", $stat['value'])[1];
+                }
+            }
+            if ($dbFighter->getHero() !== null) {
+                $fighter['ennemy'] = false;
+                $fighter['name'] = $dbFighter->getHero()->getName();
+            } else {
+                $fighter['ennemy'] = true;
+                $fighter['name'] = $dbFighter->getMonster()->getName();
+            }
         }
         return $fighters;
     }

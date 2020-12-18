@@ -169,9 +169,7 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                     foreach ($this->fSkill->getSkill()->getFightingSkillInfo()->getBattleStates() as $state) {
                         foreach ($state->getStates() as $status) {
                             if ($targetRes < rand(1, 100)) {
-                                $target['statuses'][] = [
-                                    $status->getNameId() => $state->getTurnsNumber()
-                                ];
+                                $target['statuses'][$status->getNameId()] = $state->getTurnsNumber();
                             }
                         }
                     }
