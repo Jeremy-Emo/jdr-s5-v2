@@ -95,7 +95,7 @@ class CreateHeroScenario extends AbstractScenario
             return $this->redirectToRoute('listHeroes');
         }
 
-        return $this->renderNewResponse('heroes/create.html.twig', [
+        return $this->renderNewResponse('heroes/save.twig', [
             'form' => $form->createView()
         ]);
     }

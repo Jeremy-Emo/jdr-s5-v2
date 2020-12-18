@@ -6,6 +6,7 @@ use App\AbstractClass\AbstractScenario;
 use App\Entity\Account;
 use App\Entity\Party;
 use App\Exception\ScenarioException;
+use App\Repository\HeroRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\Form\FormInterface;
@@ -13,8 +14,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
-class CreatePartyScenario extends AbstractScenario
+class SavePartyScenario extends AbstractScenario
 {
+    /** @required  */
+    public HeroRepository $heroRepository;
+
     public function __construct(
         EntityManagerInterface $entityManager,
         UrlGeneratorInterface $urlGenerator,
@@ -27,10 +31,11 @@ class CreatePartyScenario extends AbstractScenario
     /**
      * @param FormInterface $form
      * @param Account $account
+     * @param bool $isEdit
      * @return Response
      * @throws ScenarioException
      */
-    public function handle(FormInterface $form, Account $account): Response
+    public function handle(FormInterface $form, Account $account, bool $isEdit = false): Response
     {
         if($form->isSubmitted() && $form->isValid()) {
             /** @var Party $party */
@@ -47,8 +52,9 @@ class CreatePartyScenario extends AbstractScenario
             return $this->redirectToRoute('listParties');
         }
 
-        return $this->renderNewResponse('party/create.html.twig', [
-            'form' => $form->createView()
+        return $this->renderNewResponse('party/save.twig', [
+            'form' => $form->createView(),
+            'title' => $isEdit ? 'edit' : 'create',
         ]);
     }
 }

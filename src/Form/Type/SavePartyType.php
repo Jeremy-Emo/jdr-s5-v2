@@ -27,6 +27,7 @@ class SavePartyType extends AbstractType
                         ->setParameter('idAccount', $options['id'])
                         ->orderBy('h.name', 'ASC');
                 },
+                'by_reference' => false,
             ])
         ;
     }

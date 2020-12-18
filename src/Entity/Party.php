@@ -25,7 +25,7 @@ class Party
     private ?int $id;
 
     /**
-     * @ORM\OneToMany(targetEntity=Hero::class, mappedBy="party")
+     * @ORM\OneToMany(targetEntity=Hero::class, mappedBy="party", cascade={"all"})
      */
     private Collection $heroes;
 
