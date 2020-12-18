@@ -27,10 +27,17 @@ class ListSkillController extends AbstractController implements ControllerInterf
 
     public function __invoke(int $id): Response
     {
-        $hero = $this->heroRepository->findOneBy([
-            'account' => $this->getUser(),
-            'id' => $id
-        ]);
+        if (!empty(array_intersect(
+            ['ROLE_MJ', 'ROLE_ADMIN'],
+            $this->getUser()->getRoles())
+        )) {
+            $hero = $this->heroRepository->find($id);
+        } else {
+            $hero = $this->heroRepository->findOneBy([
+                'account' => $this->getUser(),
+                'id' => $id,
+            ]);
+        }
 
         if ($hero === null) {
             throw new NotFoundHttpException("Hero not found");
