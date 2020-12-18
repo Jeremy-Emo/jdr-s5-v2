@@ -179,7 +179,7 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                     $targetRes = StatManager::calculateResistance($resStat['value']);
                     foreach ($this->fSkill->getSkill()->getFightingSkillInfo()->getBattleStates() as $state) {
                         foreach ($state->getStates() as $status) {
-                            if ($targetRes < rand(1, 100) || $status->getIsTransformation()) {
+                            if ($targetRes < rand(1, 100) || $status->getIsTransformation() || $status->getIsBuff()) {
                                 $target['statuses'][$status->getNameId()] = $state->getTurnsNumber();
                             }
                         }
