@@ -4,11 +4,9 @@ namespace App\Scenario\Skill;
 
 use App\AbstractClass\AbstractScenario;
 use App\Entity\Account;
-use App\Entity\AccountSkills;
 use App\Entity\FighterInfos;
 use App\Entity\FighterSkill;
 use App\Entity\Skill;
-use App\Repository\AccountSkillsRepository;
 use App\Repository\FighterInfosRepository;
 use App\Repository\FighterSkillRepository;
 use App\Repository\HeroRepository;
@@ -27,7 +25,10 @@ class BuySkillScenario extends AbstractScenario
     public HeroRepository $heroRepository;
 
     /** @required */
-    public FighterInfosRepository $skillRepository;
+    public SkillRepository $skillRepository;
+
+    /** @required */
+    public FighterInfosRepository $fighterRepository;
 
     /** @required */
     public FighterSkillRepository $fsRepository;
@@ -124,7 +125,7 @@ class BuySkillScenario extends AbstractScenario
 
     private function pickRandomSkill(FighterInfos $fighter): ?Skill
     {
-        $availableSkills = $this->skillRepository->findAllSkillsAvailable($fighter);
+        $availableSkills = $this->fighterRepository->findAllSkillsAvailable($fighter);
         $skills = [];
         /** @var Skill $potentialSkill */
         foreach ($availableSkills as $potentialSkill) {
