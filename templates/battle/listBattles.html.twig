@@ -36,8 +36,10 @@
                             {% endif %}
                             </td>
                             <td>
+                                {% if not battle.isFinished %}
                                 <a href="{{ path('mj_continueBattle', {'id': battle.id}) }}">Poursuivre</a><br>
-                                <a href="{{ path('notImplemented') }}">Terminer</a><br>
+                                <a href="{{ path('mj_endBattle', {'id': battle.id}) }}">Terminer</a><br>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}

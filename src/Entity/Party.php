@@ -51,14 +51,14 @@ class Party
     private Collection $quests;
 
     /**
-     * @ORM\OneToMany(targetEntity=PartyItem::class, mappedBy="party", orphanRemoval=true)
+     * @ORM\OneToMany(targetEntity=PartyItem::class, mappedBy="party", orphanRemoval=true, cascade={"all"})
      */
-    private $partyItems;
+    private Collection $partyItems;
 
     /**
      * @ORM\OneToMany(targetEntity=Battle::class, mappedBy="party", orphanRemoval=true)
      */
-    private $battles;
+    private Collection $battles;
 
     public function __construct()
     {

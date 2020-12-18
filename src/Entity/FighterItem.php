@@ -38,7 +38,7 @@ class FighterItem
      */
     public function setDefaults(): void
     {
-        if ($this->getItem()->getMaxDurability() !== null) {
+        if ($this->getItem()->getMaxDurability() !== null && $this->getDurability() === null) {
             $this->setDurability($this->getItem()->getMaxDurability());
         }
     }

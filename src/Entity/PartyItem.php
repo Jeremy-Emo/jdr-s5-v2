@@ -19,6 +19,9 @@ class PartyItem
         if (empty($this->addedAt)) {
             $this->addedAt = new \DateTime();
         }
+        if ($this->getItem()->getMaxDurability() !== null && $this->getDurability() === null) {
+            $this->setDurability($this->getItem()->getMaxDurability());
+        }
     }
 
     /**
@@ -44,6 +47,11 @@ class PartyItem
      * @ORM\Column(type="datetime")
      */
     private ?\DateTimeInterface $addedAt;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $durability;
 
     public function getId(): ?int
     {
@@ -82,6 +90,18 @@ class PartyItem
     public function setAddedAt(\DateTimeInterface $addedAt): self
     {
         $this->addedAt = $addedAt;
+
+        return $this;
+    }
+
+    public function getDurability(): ?int
+    {
+        return $this->durability;
+    }
+
+    public function setDurability(?int $durability): self
+    {
+        $this->durability = $durability;
 
         return $this;
     }
