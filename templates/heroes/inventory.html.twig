@@ -126,7 +126,9 @@
                                     {% elseif item.isEquipped %}
                                         <a href="{{ path('heroToggleStuff', {'heroId': hero.id, 'stuffId': item.id}) }}">Enlever</a><br>
                                     {% endif %}
-                                    <a href="{{ path('notImplemented') }}">Mettre en commun</a>
+                                    {% if hero.party %}
+                                        <a href="{{ path('notImplemented') }}">Mettre en commun</a>
+                                    {% endif %}
                                 </td>
                             </tr>
                         {% endfor %}

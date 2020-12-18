@@ -11,6 +11,17 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class PartyItem
 {
+    public function getFullDescription(): string
+    {
+        $full = $this->getItem()->getFullDescription();
+
+        if ($this->getItem()->getMaxDurability() !== null) {
+            $full .= "<p>Durabilité : " . ($this->durability ?? 0) . " / " . $this->getItem()->getMaxDurability() . "</p>";
+        }
+
+        return $full;
+    }
+
     /**
      * @ORM\PrePersist
      */

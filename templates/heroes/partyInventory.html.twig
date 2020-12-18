@@ -1,0 +1,56 @@
+{% extends 'main/layout.html.twig' %}
+
+{% block page_title %}Inventaire{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col ma-25-top">
+            <div class="pa-20 bg-white">
+                <h1 class="ma-20-bottom d-flex align-items-center">
+                    <a class="toggle-angle no-hover" data-toggle="collapse" href="#groupInventory" aria-expanded="true" aria-controls="groupInventory">
+                        <i class="fas fa-angle-up icon-toggler"></i>
+                    </a>
+                    <span>Inventaire du groupe</span>
+                </h1>
+                <div class="collapse show border-top pa-20-top" id="groupInventory">
+                    <p class="ma-10-bottom">
+                        <span>Nombre d'objets : {{ partyItems|length }}</span>
+                        <span class="f-right"><input type="text" id="searchBar"></span>
+                    </p>
+                    <table class="table" id="stupidTable">
+                        <thead>
+                        <tr>
+                            <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
+                            <th scope="col">Actions</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        {% for item in partyItems %}
+                            <tr class="searchedItem" data-search="{{ item.item.name|lower }}">
+                                <td
+                                        class="cursor-click"
+                                        title="{{ item.item.name }}"
+                                        data-content="{{ item.getFullDescription() }}"
+                                        data-html=true
+                                        data-toggle="popover"
+                                >
+                                    <img class="hf_box" src="{{ item.item.getWebPath() }}">
+                                    <span>{{ item.item.name }}</span>
+                                </td>
+                                <td>
+                                    <a href="{{ path('notImplemented') }}">Prendre</a>
+                                </td>
+                            </tr>
+                        {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block moreJS %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('searchBar') }}
+{% endblock %}
