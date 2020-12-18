@@ -103,6 +103,7 @@ class CreateBattleScenario extends AbstractScenario
                 $fighter['ennemy'] = true;
                 $fighter['name'] = $dbFighter->getMonster()->getName();
             }
+            unset($fighter);
         }
         return $fighters;
     }

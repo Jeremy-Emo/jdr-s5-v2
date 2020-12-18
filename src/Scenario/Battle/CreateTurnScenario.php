@@ -40,12 +40,7 @@ class CreateTurnScenario extends AbstractScenario
     public function handle(array $fighters, ?int $actualTurn = null, ?string $action = '', ?array $actor = null): BattleTurn
     {
         $fighters = $this->prepareFighters($fighters, $actor);
-        $actor = $this->getNextActor($fighters);
-        $battleState = [
-            'fighters' => $fighters,
-            'nextActor' => $actor,
-        ];
-        $battleTurn = (new BattleTurn())->setBattleState($battleState);
+        $battleTurn = (new BattleTurn())->setBattleState($this->getNextActor($fighters));
 
         if ($actualTurn === null) {
             $battleTurn->setTurnNumber(0);
@@ -74,6 +69,7 @@ class CreateTurnScenario extends AbstractScenario
                 }
                 $totalSpeed += $fighter['speed'];
             }
+            unset($fighter);
         }
 
         //Gestion ATB
@@ -101,6 +97,7 @@ class CreateTurnScenario extends AbstractScenario
                     $fighter['statuses'] = [];
                     $deadCounter ++;
                 }
+                unset($fighter);
             }
         }
 
@@ -152,6 +149,7 @@ class CreateTurnScenario extends AbstractScenario
                         }
                     }
                 }
+                unset($fighter);
             }
         }
 
@@ -162,27 +160,32 @@ class CreateTurnScenario extends AbstractScenario
      * @param $fighters
      * @return array|null
      */
-    private function getNextActor(&$fighters): array
+    private function getNextActor($fighters): array
     {
         $actor = null;
         foreach ($fighters as &$fighter) {
             if ($actor === null || $fighter['atb'] >= $actor['atb']) {
                 if ($actor !== null && $actor['atb'] === $fighter['atb']) {
                     $rand = [$actor, $fighter];
-                    $actor = $rand[array_rand($rand)];
+                    $actor = &$rand[array_rand($rand)];
                 } else {
                     $actor = &$fighter;
                 }
             }
+            unset($fighter);
         }
 
         if (!empty($actor['isCasting']) && !empty($actor['spellUsed'])) {
             $actor['isCasting'] = $actor['isCasting'] - 1;
             $actor['atb'] = 0;
+            unset($actor);
             return $this->getNextActor($fighters);
         }
 
-        return $actor;
+        return [
+            'nextActor' => $actor,
+            'fighters' => $fighters,
+        ];
     }
 
     /**

@@ -224,6 +224,7 @@ abstract class AbstractBattleScenario extends AbstractScenario
             if ((int)$fighter['id'] === $actorId) {
                 $fighter['atb'] = 0;
             }
+            unset($fighter);
         }
     }
 

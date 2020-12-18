@@ -63,7 +63,7 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
             } elseif ($this->checkStatus($actor, 'frozen')) {
                 $this->actionString .= " est gelé !";
             } else {
-                $this->processBattle($fighters, $actor, $action);
+                $fighters = $this->processBattle($fighters, $actor, $action);
                 if ($this->isCasting) {
                     $this->actionString .= " prépare le sort " . $this->fSkill->getSkill()->getName() . " pour les prochains tours !";
                 }
@@ -81,13 +81,14 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
      * @param array $fighters
      * @param array $actor
      * @param string $action
+     * @return array
      * @throws ScenarioException
      * @throws \Exception
      */
-    private function processBattle(array &$fighters, array &$actor, string $action): void
+    private function processBattle(array $fighters, array &$actor, string $action): array
     {
         $this->getCustomEffectsOnActor();
-        $this->calculateOffensivePower($action, $actor);
+        $actor = $this->calculateOffensivePower($action, $actor);
         if (!$this->isCasting) {
             //Get targets in fighters array for direct modification and get additional information like shield
             $targets = [];
@@ -99,6 +100,7 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                 ) {
                     $targets[] = &$fighter;
                 }
+                unset($fighter);
             }
 
             $totalDamages = 0;
@@ -107,6 +109,9 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                     $this->currentTarget = $this->target;
                 } else {
                     $this->currentTarget = $this->fighterRepository->find($target['id']);
+                }
+                if ($actor['id'] === $target['id']) {
+                    $target = &$actor;
                 }
                 $this->getCustomEffectsOnTarget();
 
@@ -188,6 +193,7 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                         $target['statuses'] = [];
                     }
                 }
+                unset($target);
             }
 
             //MAJ Action
@@ -222,7 +228,10 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
             if ($fighter['id'] === $actor['id']) {
                 $fighter = $actor;
             }
+            unset($fighter);
         }
+
+        return $fighters;
     }
 
     /**
@@ -350,10 +359,11 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
     /**
      * @param $action
      * @param $actor
+     * @return array
      * @throws ScenarioException
      * @throws \Exception
      */
-    private function calculateOffensivePower($action, array &$actor): void
+    private function calculateOffensivePower($action, array $actor): array
     {
         if ($action === ContinueBattleScenario::ATTACK_WITH_WEAPON) {
             $this->actionString .= " attaque avec son arme pour ";
@@ -476,5 +486,7 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
         if ($this->checkStatus($actor, 'immortal_king_barbarian')) {
             $this->offensivePower = $this->offensivePower * self::SECOND_IMMORTAL_KING_MULT;
         }
+
+        return $actor;
     }
 }
