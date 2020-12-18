@@ -2,7 +2,6 @@
 
 namespace App\Scenario\Battle;
 
-use App\AbstractClass\AbstractScenario;
 use App\Entity\Battle;
 use App\Entity\BattleTurn;
 use App\Entity\CustomEffect;
@@ -20,7 +19,7 @@ use Psr\Log\LoggerInterface;
 use Symfony\Component\Routing\Generator\UrlGeneratorInterface;
 use Twig\Environment;
 
-class CalculateBattleActionScenario extends AbstractScenario
+class CalculateBattleActionScenario extends AbstractBattleScenario
 {
     /** @required  */
     public CreateTurnScenario $createTurnScenario;
@@ -30,36 +29,6 @@ class CalculateBattleActionScenario extends AbstractScenario
 
     /** @required  */
     public FighterSkillRepository $fighterSkillRepository;
-
-    private string $actionString = "";
-    private string $addStringAtEnd = "";
-    private ?FighterInfos $actor;
-    private ?FighterInfos $target;
-    private ?FighterInfos $currentTarget;
-
-    private ?bool $isHeal = false;
-    private ?bool $isRez = false;
-    private ?bool $isShield = false;
-    private ?bool $isAoE = false;
-    private ?bool $isIgnoreShield = false;
-    private int $offensivePower = 0;
-    private int $defensivePower = 0;
-    private ?FighterSkill $fSkill = null;
-    private int $currentDamages = 0;
-    private bool $itsADodge = false;
-    private int $triggerAffinity = 0;
-    private int $reducMPCost = 0;
-    private int $speedCasting = 0;
-    private array $customEffects = [];
-    private array $targetCustomEffects = [];
-    private bool $isCasting = false;
-
-    public const UNIVERSAL_ELEMENT = 'all';
-    public const CRITICAL_BONUS = 50;
-
-    //BUFFS BONUSES
-    public const FIRST_IMMORTAL_KING_MULT = 1;
-    public const SECOND_IMMORTAL_KING_MULT = 1.5;
 
 
     public function __construct(
@@ -155,51 +124,16 @@ class CalculateBattleActionScenario extends AbstractScenario
                         $this->calculateDefensivePower();
                         $this->calculateDamages($actor, $target);
 
-                        if ($target['currentShieldValue'] > 0 && !$this->isIgnoreShield) {
-                            if ($target['currentShieldValue'] < $this->currentDamages) {
-                                $this->currentDamages -= $target['currentShieldValue'];
-                                $target['currentShieldValue'] = 0;
-                            } else {
-                                $target['currentShieldValue'] -= $this->currentDamages;
-                                $this->currentDamages = 0;
-                            }
-                        }
+                        $this->checkShield($target);
 
                         $target['currentHP'] -= $this->currentDamages;
 
-                        //Test effets de survie
-                        //Statut de survie
-                        if ($this->checkStatus($target, 'survive')) {
-                            foreach ($target['statuses'] as $key => &$status) {
-                                if ($key === 'survive') {
-                                    $status = 0;
-                                    break;
-                                }
+                        if (!$this->checkSurvivalSkills($target)) {
+                            if ($target['currentHP'] <= 0) {
+                                $target['currentHP'] = 0;
+                                $target['currentShieldValue'] = 0;
                             }
-                            $target['currentHP'] += $this->currentDamages;
-                        } else {
-                            //Custom effect
-                            $canIgnoreDeath = 0;
-                            /** @var CustomEffect $ce */
-                            foreach ($this->targetCustomEffects as $ce) {
-                                if ($ce->getNameId() === "survive") {
-                                    if (!isset($target['surviveDeathCounter'])) {
-                                        $target['surviveDeathCounter'] = 0;
-                                    }
-                                    $canIgnoreDeath ++;
-                                }
-                            }
-                            if (isset($target['surviveDeathCounter']) && $target['surviveDeathCounter'] < $canIgnoreDeath ) {
-                                $target['surviveDeathCounter'] += 1;
-                                $target['currentHP'] += $this->currentDamages;
-                            } else {
-                                //Bon bah il a pas survécu
-                                if ($target['currentHP'] <= 0) {
-                                    $target['currentHP'] = 0;
-                                    $target['currentShieldValue'] = 0;
-                                }
-                                $totalDamages += $this->currentDamages;
-                            }
+                            $totalDamages += $this->currentDamages;
                         }
                     } else {
                         $this->addStringAtEnd .= $target["name"] . " a esquivé. ";
@@ -293,88 +227,6 @@ class CalculateBattleActionScenario extends AbstractScenario
         }
     }
 
-    private function getCustomEffectsOnTarget(): void
-    {
-        $stuff = $this->currentTarget->getEquipment();
-        /** @var FighterItem $item */
-        foreach ($stuff as $item) {
-            if ($item->getItem()->getCustomEffect() !== null) {
-                $this->targetCustomEffects[] = $item->getItem()->getCustomEffect();
-            }
-        }
-        $passives = $this->currentTarget->getSkills();
-        foreach ($passives as $skill) {
-            if (
-                $skill->getSkill()->getIsPassive()
-                && $skill->getSkill()->getFightingSkillInfo() !== null
-                && $skill->getSkill()->getFightingSkillInfo()->getCustomEffects() !== null
-            ) {
-                $this->targetCustomEffects[] = $skill->getSkill()->getFightingSkillInfo()->getCustomEffects();
-            }
-        }
-    }
-
-    private function getCustomEffectsOnActor(): void
-    {
-        if (
-            $this->fSkill !== null
-            && $this->fSkill->getSkill()->getFightingSkillInfo() !== null
-            && $this->fSkill->getSkill()->getFightingSkillInfo()->getCustomEffects() !== null
-        ) {
-            $this->customEffects[] = $this->fSkill->getSkill()->getFightingSkillInfo()->getCustomEffects();
-        }
-        $stuff = $this->actor->getEquipment();
-        /** @var FighterItem $item */
-        foreach ($stuff as $item) {
-            if ($item->getItem()->getCustomEffect() !== null) {
-                $this->customEffects[] = $item->getItem()->getCustomEffect();
-            }
-        }
-        $passives = $this->actor->getSkills();
-        foreach ($passives as $skill) {
-            if (
-                $skill->getSkill()->getIsPassive()
-                && $skill->getSkill()->getFightingSkillInfo() !== null
-                && $skill->getSkill()->getFightingSkillInfo()->getCustomEffects() !== null
-            ) {
-                $this->customEffects[] = $skill->getSkill()->getFightingSkillInfo()->getCustomEffects();
-            }
-        }
-    }
-
-    private function applyCustomEffectsOnTarget(array &$target, CustomEffect $ce): void
-    {
-        if ($ce->getNameId() === 'hit_sp') {
-            $target['currentSP'] += $ce->getValue();
-        }
-        if ($ce->getNameId() === 'heal_sp') {
-            $target['currentSP'] = $target['currentSP'] + $ce->getValue();
-            if ($target['currentSP'] < 0) {
-                $target['currentSP'] = 0;
-            }
-        }
-    }
-
-    /**
-     * @param $fighter
-     */
-    private function checkElementalReactions(&$fighter): void
-    {
-        if ($this->fSkill === null || $this->fSkill->getSkill()->getFightingSkillInfo() === null) {
-            return;
-        }
-
-        foreach ($this->fSkill->getSkill()->getFightingSkillInfo()->getElement() as $element) {
-            // Check waterized + ice
-            if ($element->getNameId() === 'ice' && $this->checkStatus($fighter, 'waterized')) {
-                $fighter['statuses'][] = [
-                    'frozen' => 1,
-                    'slow' => 2,
-                ];
-            }
-        }
-    }
-
     /**
      * @param array $actor
      * @param array $target
@@ -434,26 +286,6 @@ class CalculateBattleActionScenario extends AbstractScenario
 
         if ($this->currentDamages < 0) {
             $this->currentDamages = 0;
-        }
-    }
-
-    private function checkIfDodged(bool $checkDodgeStat = true): void
-    {
-        if ($checkDodgeStat) {
-            $dodgeStat = StatManager::returnMetaStat(StatManager::LABEL_DODGE, $this->currentTarget);
-            $rand = rand(0, 2000);
-            if ($dodgeStat['value'] >= $rand) {
-                $this->itsADodge = true;
-            }
-        }
-
-        if (
-            !$this->itsADodge
-            && $this->fSkill !== null
-            && $this->fSkill->getSkill()->getFightingSkillInfo() !== null
-            && !empty($this->fSkill->getSkill()->getFightingSkillInfo()->getAccuracy())
-        ) {
-            $this->itsADodge = rand(0, 99) < $this->fSkill->getSkill()->getFightingSkillInfo()->getAccuracy();
         }
     }
 
@@ -631,75 +463,6 @@ class CalculateBattleActionScenario extends AbstractScenario
 
         if ($this->checkStatus($actor, 'immortal_king_barbarian')) {
             $this->offensivePower = $this->offensivePower * self::SECOND_IMMORTAL_KING_MULT;
-        }
-    }
-
-    private function getValueOfPassiveCustomEffect(FighterInfos $fighter, string $nameId): int
-    {
-        $value = 0;
-        foreach ($fighter->getSkills() as $fSkill) {
-            if (
-                $fSkill->getSkill()->getIsPassive()
-                && $fSkill->getSkill()->getFightingSkillInfo() !== null
-            ) {
-                $customEffect = $fSkill->getSkill()->getFightingSkillInfo()->getCustomEffects();
-                if ($customEffect !== null && $customEffect->getNameId() === $nameId) {
-                    $value += ($customEffect->getValue() ?? 1);
-                }
-            }
-        }
-
-        /** @var FighterItem $eItem */
-        foreach ($fighter->getEquipment() as $eItem) {
-            if (
-                $eItem->getItem()->getCustomEffect() !== null
-                && $eItem->getItem()->getCustomEffect()->getNameId() === $nameId
-            ) {
-                $value += ($eItem->getItem()->getCustomEffect()->getValue() ?? 1);
-            }
-        }
-
-        return $value;
-    }
-
-    /**
-     * @param array $fighter
-     * @param string $statusName
-     * @return bool
-     */
-    private function checkStatus(array $fighter, string $statusName): bool
-    {
-        return (
-            isset($fighter['statuses'])
-            && !empty($fighter['statuses'][$statusName])
-        );
-    }
-
-    /**
-     * @param Element $element
-     * @param ElementMultiplier $em
-     * @param bool $isResistance
-     * @return bool
-     */
-    private function checkElement(Element $element, ElementMultiplier $em, $isResistance = false): bool
-    {
-        return (
-            $em->getElement() === $element
-            || $element->getNameId() === self::UNIVERSAL_ELEMENT
-            || $em->getElement()->getNameId() === self::UNIVERSAL_ELEMENT
-        ) && $em->getIsResistance() === $isResistance;
-    }
-
-    /**
-     * @param array $fighters
-     * @param int $actorId
-     */
-    private function resetActorAtb(array &$fighters, int $actorId): void
-    {
-        foreach ($fighters as &$fighter) {
-            if ((int)$fighter['id'] === $actorId) {
-                $fighter['atb'] = 0;
-            }
         }
     }
 }
