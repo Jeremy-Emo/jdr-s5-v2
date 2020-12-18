@@ -115,6 +115,11 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                 }
                 $this->getCustomEffectsOnTarget();
 
+                //Cleanse
+                if ($this->fSkill->getSkill()->getFightingSkillInfo()->getIsCleanse()) {
+                    $target['statuses'] = [];
+                }
+
                 if (!$this->isHeal && !$this->isShield) {
                     //Check Pression
                     $actor['currentSP'] = $actor['currentSP'] + $this->getValueOfPassiveCustomEffect($this->currentTarget, 'pression');
@@ -187,10 +192,6 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                         if ($actor['currentHP'] > $actor['maxHP']) {
                             $actor['currentHP'] = $actor['maxHP'];
                         }
-                    }
-                    //Cleanse
-                    if ($this->fSkill->getSkill()->getFightingSkillInfo()->getIsCleanse()) {
-                        $target['statuses'] = [];
                     }
                 }
                 unset($target);
