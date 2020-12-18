@@ -61,7 +61,6 @@ class EndBattleScenario extends AbstractScenario
                 ;
                 $party->addPartyItem($pItem);
                 $this->manager->persist($pItem);
-                $this->manager->remove($item);
             }
         }
 
