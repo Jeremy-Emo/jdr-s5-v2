@@ -46,7 +46,9 @@ class EquipMonsterController extends AbstractController implements ControllerInt
         }
 
         $form = $this->createForm(StuffType::class, null, [
-            'itemSlots' => $this->itemSlotRepository->findAll(),
+            'itemSlots' => $this->itemSlotRepository->findBy([
+                'isForFamiliar' => false,
+            ]),
             'existingStuff' => $monster->getFighterInfos()->getHeroItems(),
         ]);
         $form->handleRequest($request);
