@@ -225,7 +225,7 @@ class BattleItemInfo
         return $this->drainLife;
     }
 
-    public function setDrainLife(int $drainLife): self
+    public function setDrainLife(?int $drainLife): self
     {
         $this->drainLife = $drainLife;
 
