@@ -48,7 +48,9 @@ class InventoryController extends AbstractController implements ControllerInterf
             throw new NotFoundHttpException("Hero not found");
         }
 
-        $slots = $this->itemSlotRepository->findAll();
+        $slots = $this->itemSlotRepository->findBy([
+            'isForFamiliar' => false,
+        ]);
 
         return $this->render('heroes/inventory.html.twig', [
             'hero' => $hero,
