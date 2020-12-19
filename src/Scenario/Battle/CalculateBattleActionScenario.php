@@ -116,7 +116,10 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                 $this->getCustomEffectsOnTarget();
 
                 //Cleanse
-                if ($this->fSkill->getSkill()->getFightingSkillInfo()->getIsCleanse()) {
+                if (
+                    $this->fSkill !== null
+                    && $this->fSkill->getSkill()->getFightingSkillInfo()->getIsCleanse()
+                ) {
                     $target['statuses'] = [];
                 }
 
