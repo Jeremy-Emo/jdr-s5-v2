@@ -28,3 +28,4 @@ complete_quest : Terminer une quête
 create_battle : Créer un combat
 create_itemSlot : Créer un slot d'équipement
 edit_itemSlot : Modifier un slot d'équipement
+edit_hero_mj : Modifier Héros
