@@ -39,6 +39,11 @@ class ItemSlot
      */
     private Collection $items;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $isForFamiliar = false;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
@@ -106,6 +111,18 @@ class ItemSlot
                 $item->setItemSlot(null);
             }
         }
+
+        return $this;
+    }
+
+    public function getIsForFamiliar(): ?bool
+    {
+        return $this->isForFamiliar;
+    }
+
+    public function setIsForFamiliar(bool $isForFamiliar): self
+    {
+        $this->isForFamiliar = $isForFamiliar;
 
         return $this;
     }
