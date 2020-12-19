@@ -25,7 +25,14 @@ class FighterItem
     public function canBeEquipped(): bool
     {
         return (
-            $this->getItem()->getItemSlot() !== null
+            (
+                $this->getItem()->getItemSlot() !== null
+                && !$this->getItem()->getItemSlot()->getIsForFamiliar()
+                && (
+                    $this->getHero()->getHero() !== null
+                    || $this->getHero()->getMonster() !== null
+                )
+            )
             || (
                 $this->getItem()->getBattleItemInfo() !== null
                 && $this->getItem()->getBattleItemInfo()->getWeaponType() !== null
