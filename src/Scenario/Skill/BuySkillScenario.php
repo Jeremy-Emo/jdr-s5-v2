@@ -47,10 +47,14 @@ class BuySkillScenario extends AbstractScenario
 
     public function handle(int $heroId, ?int $skillId, Account $account, bool $isRandom = false): Response
     {
-        if (!empty(array_intersect(
-            ['ROLE_MJ', 'ROLE_ADMIN'],
-            $account->getRoles())
-        )) {
+        if (
+            !empty(
+                array_intersect(
+                    ['ROLE_MJ', 'ROLE_ADMIN'],
+                    $account->getRoles()
+                )
+            )
+        ) {
             $hero = $this->heroRepository->find($heroId);
         } else {
             $hero = $this->heroRepository->findOneBy([

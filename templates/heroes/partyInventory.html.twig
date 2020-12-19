@@ -38,7 +38,7 @@
                                     <span>{{ item.item.name }}</span>
                                 </td>
                                 <td>
-                                    <a href="{{ path('notImplemented') }}">Prendre</a>
+                                    <a href="{{ path('heroToggleInventory', {'heroId': hero.id, 'stuffId': item.id, 'type': 'party'}) }}">Prendre</a>
                                 </td>
                             </tr>
                         {% endfor %}

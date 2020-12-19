@@ -101,7 +101,12 @@ class ToggleStuffScenario extends AbstractScenario
     {
         if (
             $hero->getFighterInfos() !== $stuff->getHero()
-            && !in_array(['ROLE_ADMIN', 'ROLE_MJ'], $currentUser->getRoles())
+            && !empty(
+                array_intersect(
+                    ['ROLE_MJ', 'ROLE_ADMIN'],
+                    $currentUser->getRoles()
+                )
+            )
         ) {
             throw new AuthorizationException("Bad user for this stuff !");
         }

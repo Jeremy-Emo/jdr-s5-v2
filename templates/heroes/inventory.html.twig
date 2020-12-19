@@ -94,11 +94,11 @@
                         {% for item in heroItems %}
                             <tr class="searchedItem" data-search="{{ item.item.name|lower }}">
                                 <td
-                                        class="cursor-click"
-                                        title="{{ item.item.name }}"
-                                        data-content="{{ item.getFullDescription() }}"
-                                        data-html=true
-                                        data-toggle="popover"
+                                    class="cursor-click"
+                                    title="{{ item.item.name }}"
+                                    data-content="{{ item.getFullDescription() }}"
+                                    data-html=true
+                                    data-toggle="popover"
                                 >
                                     <img class="hf_box" src="{{ item.item.getWebPath() }}">
                                     <span>{{ item.item.name }}</span>
@@ -127,7 +127,7 @@
                                         <a href="{{ path('heroToggleStuff', {'heroId': hero.id, 'stuffId': item.id}) }}">Enlever</a><br>
                                     {% endif %}
                                     {% if hero.party %}
-                                        <a href="{{ path('notImplemented') }}">Mettre en commun</a>
+                                        <a href="{{ path('heroToggleInventory', {'heroId': hero.id, 'stuffId': item.id, 'type': 'hero'}) }}">Mettre en commun</a>
                                     {% endif %}
                                 </td>
                             </tr>
