@@ -103,8 +103,19 @@ abstract class AbstractBattleScenario extends AbstractScenario
             // Check thunder + ice
             if ($element->getNameId() === 'ice' && $this->checkStatus($fighter, 'thunder')) {
                 $fighter['statuses'][] = [
-                    'silence' => 1,
+                    'break_def' => 1,
                 ];
+                $fighter['currentMP'] = $fighter['currentMP'] - floor($fighter['maxMP'] * 0.10);
+                if ($fighter['currentMP'] < 0) {
+                    $fighter['currentMP'] = 0;
+                }
+            }
+            // Check thunder + water
+            if ($element->getNameId() === 'water' && $this->checkStatus($fighter, 'thunder')) {
+                $fighter['currentHP'] = $fighter['currentHP'] - floor($fighter['maxHP'] * 0.15);
+                if ($fighter['currentHP'] < 0) {
+                    $fighter['currentHP'] = 0;
+                }
             }
         }
     }
