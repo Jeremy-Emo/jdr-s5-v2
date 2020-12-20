@@ -16,6 +16,7 @@
                     <thead>
                     <tr>
                         <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Slot de familier</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
@@ -23,6 +24,13 @@
                     {% for itemSlot in itemSlots %}
                         <tr class="searchedItem" data-search="{{ itemSlot.name|lower }}">
                             <td>{{ itemSlot.name }}</td>
+                            <td data-sort-value={{ itemSlot.isForFamiliar ? "1" : "0" }}>
+                                {% if itemSlot.isForFamiliar %}
+                                    <i class="green fas fa-check"></i>
+                                {% else %}
+                                    <i class="red fas fa-times"></i>
+                                {% endif %}
+                            </td>
                             <td>
                                 <a href="{{ path('admin_editItemSlot', {'id': itemSlot.id}) }}">Modifier</a>
                             </td>

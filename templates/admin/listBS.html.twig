@@ -18,6 +18,7 @@
                         <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
                         <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> ID to code</th>
                         <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Transformation</th>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Buff</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
@@ -28,6 +29,13 @@
                             <td>{{ state.nameId }}</td>
                             <td data-sort-value={{ state.isTransformation ? "1" : "0" }}>
                                 {% if state.isTransformation %}
+                                    <i class="green fas fa-check"></i>
+                                {% else %}
+                                    <i class="red fas fa-times"></i>
+                                {% endif %}
+                            </td>
+                            <td data-sort-value={{ state.isBuff ? "1" : "0" }}>
+                                {% if state.isBuff %}
                                     <i class="green fas fa-check"></i>
                                 {% else %}
                                     <i class="red fas fa-times"></i>
