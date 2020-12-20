@@ -87,6 +87,13 @@ abstract class AbstractBattleScenario extends AbstractScenario
                     'slow' => 2,
                 ];
             }
+            // Check waterized + thunder
+            if ($element->getNameId() === 'thunder' && $this->checkStatus($fighter, 'waterized')) {
+                $fighter['currentHP'] = $fighter['currentHP'] - floor($fighter['maxHP'] * 0.15);
+                if ($fighter['currentHP'] < 0) {
+                    $fighter['currentHP'] = 0;
+                }
+            }
             // Check ignite + fire
             if ($element->getNameId() === 'fire' && $this->checkStatus($fighter, 'ignite')) {
                 $fighter['statuses'][] = [
@@ -108,13 +115,6 @@ abstract class AbstractBattleScenario extends AbstractScenario
                 $fighter['currentMP'] = $fighter['currentMP'] - floor($fighter['maxMP'] * 0.10);
                 if ($fighter['currentMP'] < 0) {
                     $fighter['currentMP'] = 0;
-                }
-            }
-            // Check thunder + water
-            if ($element->getNameId() === 'water' && $this->checkStatus($fighter, 'thunder')) {
-                $fighter['currentHP'] = $fighter['currentHP'] - floor($fighter['maxHP'] * 0.15);
-                if ($fighter['currentHP'] < 0) {
-                    $fighter['currentHP'] = 0;
                 }
             }
         }
