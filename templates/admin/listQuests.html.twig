@@ -28,7 +28,15 @@
                     <tbody>
                     {% for quest in quests %}
                         <tr class="searchedItem" data-search="{{ quest.name|lower }}">
-                            <td>{{ quest.name }}</td>
+                            <td
+                                class="cursor-click"
+                                title="{{ quest.name }}"
+                                data-content="{{ quest.getFullDescriptionForMJ() }}"
+                                data-html=true
+                                data-toggle="popover"
+                            >
+                                {{ quest.name }}
+                            </td>
                             <td>{{ quest.getAttribution() }}</td>
                             <td data-sort-value="{{ quest.createdAt|date("U") }}">{{ quest.createdAt|date("d/m/Y") }}</td>
                             <td data-sort-value={{ quest.isCompleted ? "1" : "0" }}>
