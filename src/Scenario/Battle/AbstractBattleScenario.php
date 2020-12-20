@@ -46,6 +46,7 @@ abstract class AbstractBattleScenario extends AbstractScenario
     //BUFFS BONUSES
     public const FIRST_IMMORTAL_KING_MULT = 0.5;
     public const SECOND_IMMORTAL_KING_MULT = 1.5;
+    public const VALKYRIE_ADD_DAMAGES = 30;
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -84,6 +85,25 @@ abstract class AbstractBattleScenario extends AbstractScenario
                 $fighter['statuses'][] = [
                     'frozen' => 1,
                     'slow' => 2,
+                ];
+            }
+            // Check ignite + fire
+            if ($element->getNameId() === 'fire' && $this->checkStatus($fighter, 'ignite')) {
+                $fighter['statuses'][] = [
+                    'ignite' => 5,
+                    'anti_heal' => 1,
+                ];
+            }
+            // Check thunder + thunder
+            if ($element->getNameId() === 'thunder' && $this->checkStatus($fighter, 'thunder')) {
+                $fighter['statuses'][] = [
+                    'stun' => 1,
+                ];
+            }
+            // Check thunder + ice
+            if ($element->getNameId() === 'ice' && $this->checkStatus($fighter, 'thunder')) {
+                $fighter['statuses'][] = [
+                    'silence' => 1,
                 ];
             }
         }

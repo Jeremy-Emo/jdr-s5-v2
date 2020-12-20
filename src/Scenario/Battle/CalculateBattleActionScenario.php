@@ -313,6 +313,10 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
         if ($this->checkStatus($actor, 'immortal_king_undead')) {
             $this->currentDamages *= self::FIRST_IMMORTAL_KING_MULT;
         }
+
+        if ($this->checkStatus($actor, 'valkyrie')) {
+            $this->currentDamages += self::VALKYRIE_ADD_DAMAGES;
+        }
     }
 
     private function calculateDefensivePower(): void
@@ -461,6 +465,13 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                                 }
                             }
                         }
+                    }
+
+                    if (
+                        $this->checkStatus($actor, 'dragonize')
+                        && in_array($element->getNameId(), ['fire', 'wind'])
+                    ) {
+                        $multipliers += 100;
                     }
                 }
 
