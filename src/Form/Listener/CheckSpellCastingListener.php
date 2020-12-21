@@ -81,6 +81,7 @@ class CheckSpellCastingListener implements EventSubscriberInterface
             if (
                 $skill->getFightingSkillInfo() !== null
                 && $skill->getFightingSkillInfo()->getNeedWeaponType() !== null
+                && !$this->actor['ennemy']
             ) {
                 if (isset($this->actor['invokedWeapon'])) {
                     //TODO : implement here when invokedWeapon are released
