@@ -44,6 +44,8 @@ class EditStatsOfHeroController extends AbstractController implements Controller
         $form = $this->createForm(EditStatsOfHeroType::class, $hero->getFighterInfos());
         $form->handleRequest($request);
 
-        return $this->scenario->handle($form, 'edit_hero_mj', 'listParties');
+        return $this->scenario->handle($form, 'edit_hero_mj', 'showParty', [
+            'id' => $hero->getParty()->getId(),
+        ]);
     }
 }

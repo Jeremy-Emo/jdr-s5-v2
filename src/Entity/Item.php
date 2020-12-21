@@ -86,6 +86,11 @@ class Item extends UploadImageEntity
      */
     private ?int $maxDurability;
 
+    /**
+     * @ORM\OneToOne(targetEntity=ConsumableEffect::class, cascade={"persist", "remove"})
+     */
+    private ?ConsumableEffect $consumableEffect;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -188,6 +193,18 @@ class Item extends UploadImageEntity
     public function setMaxDurability(?int $maxDurability): self
     {
         $this->maxDurability = $maxDurability;
+
+        return $this;
+    }
+
+    public function getConsumableEffect(): ?ConsumableEffect
+    {
+        return $this->consumableEffect;
+    }
+
+    public function setConsumableEffect(?ConsumableEffect $consumableEffect): self
+    {
+        $this->consumableEffect = $consumableEffect;
 
         return $this;
     }

@@ -4,6 +4,7 @@ namespace App\Form\Type;
 
 use App\Entity\Item;
 use App\Form\Type\SubType\BattleItemInfoType;
+use App\Form\Type\SubType\ConsumableEffectType;
 use Symfony\Component\Form\AbstractType;
 use Symfony\Component\Form\Extension\Core\Type\CheckboxType;
 use Symfony\Component\Form\Extension\Core\Type\FileType;
@@ -21,16 +22,7 @@ class SaveItemType extends AbstractType
                 'required' => true
             ])
             ->add('rarity')
-            ->add('itemSlot')
-            ->add('isConsumable', CheckboxType::class, [
-                'row_attr' => [
-                    'class' => 'pretty p-default d-block',
-                ],
-                'label' => 'Consommable',
-                'required' => false
-            ])
             ->add('description')
-            ->add('customEffect')
             ->add('maxDurability')
             ->add('file', FileType::class, [
                 'constraints' => [
@@ -51,7 +43,19 @@ class SaveItemType extends AbstractType
                     'data-allowed-file-extensions' => 'jpg jpeg png'
                 ],
             ])
+            ->add('customEffect')
+            ->add('itemSlot')
             ->add('battleItemInfo', BattleItemInfoType::class, [
+                'required' => false,
+            ])
+            ->add('isConsumable', CheckboxType::class, [
+                'row_attr' => [
+                    'class' => 'pretty p-default d-block',
+                ],
+                'label' => 'Consommable',
+                'required' => false
+            ])
+            ->add('consumableEffect', ConsumableEffectType::class, [
                 'required' => false,
             ])
         ;

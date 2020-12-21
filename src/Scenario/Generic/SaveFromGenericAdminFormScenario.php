@@ -26,10 +26,11 @@ class SaveFromGenericAdminFormScenario extends AbstractScenario
      * @param FormInterface $form
      * @param string $title
      * @param string $redirect
+     * @param array $redirectParameters
      * @return Response
      * @throws ScenarioException
      */
-    public function handle(FormInterface $form, string $title, string $redirect): Response
+    public function handle(FormInterface $form, string $title, string $redirect, array $redirectParameters = []): Response
     {
         if($form->isSubmitted() && $form->isValid()) {
             $object = $form->getData();
@@ -37,7 +38,7 @@ class SaveFromGenericAdminFormScenario extends AbstractScenario
             $this->manager->persist($object);
             $this->manager->flush();
 
-            return $this->redirectToRoute($redirect);
+            return $this->redirectToRoute($redirect, $redirectParameters);
         }
 
         return $this->renderNewResponse('admin/defaultGenericForm.html.twig', [
