@@ -3,6 +3,7 @@
 namespace App\Controller\Battles;
 
 use App\AbstractClass\AbstractController;
+use App\Exception\ScenarioException;
 use App\Interfaces\ControllerInterface;
 use App\Repository\BattleRepository;
 use App\Scenario\Battle\EndBattleScenario;
@@ -25,6 +26,11 @@ class EndBattleController extends AbstractController implements ControllerInterf
     /** @required  */
     public BattleRepository $battleRepository;
 
+    /**
+     * @param int $id
+     * @return Response
+     * @throws ScenarioException
+     */
     public function __invoke(int $id): Response
     {
         $battle = $this->battleRepository->findOneBy([

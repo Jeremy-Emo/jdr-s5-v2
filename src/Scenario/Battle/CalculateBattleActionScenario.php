@@ -6,6 +6,7 @@ use App\Entity\Battle;
 use App\Entity\BattleTurn;
 use App\Entity\CustomEffect;
 use App\Entity\FighterItem;
+use App\Entity\FighterSkill;
 use App\Exception\ScenarioException;
 use App\Manager\StatManager;
 use App\Repository\FighterInfosRepository;
@@ -132,6 +133,27 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                     if (!$this->itsADodge) {
                         $this->calculateDefensivePower();
                         $this->calculateDamages($actor, $target);
+
+                        // Check skill taker
+                        if (
+                            $this->fSkill !== null
+                            && $this->fSkill->getSkill()->getFightingSkillInfo() !== null
+                            && $this->fSkill->getSkill()->getFightingSkillInfo()->getCustomEffects() !== null
+                            && $this->fSkill->getSkill()->getFightingSkillInfo()->getCustomEffects()->getNameId() === "skill_taker"
+                        ) {
+                            $targetSkills = $this->currentTarget->getSkills();
+                            if ($targetSkills->count() > 0) {
+                                /** @var FighterSkill $skillTaken */
+                                $skillTaken = $targetSkills->get(rand(0, $targetSkills->count()));
+                                if (
+                                    !isset($actor['gainSkills'])
+                                    || !in_array($skillTaken->getSkill()->getId(), $actor['gainSkills'])
+                                ) {
+                                    $actor['gainSkills'][] = $skillTaken->getSkill()->getId();
+                                }
+                            }
+
+                        }
 
                         $this->checkShield($target);
 

@@ -5,8 +5,11 @@ namespace App\Scenario\Battle;
 use App\AbstractClass\AbstractScenario;
 use App\Entity\Battle;
 use App\Entity\BattleTurn;
+use App\Entity\FighterSkill;
 use App\Entity\Hero;
 use App\Entity\PartyItem;
+use App\Exception\ScenarioException;
+use App\Repository\SkillRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
 use Symfony\Component\HttpFoundation\Response;
@@ -15,6 +18,9 @@ use Twig\Environment;
 
 class EndBattleScenario extends AbstractScenario
 {
+    /** @required  */
+    public SkillRepository $skillRepository;
+
     public function __construct(
         EntityManagerInterface $entityManager,
         UrlGeneratorInterface $urlGenerator,
@@ -24,6 +30,11 @@ class EndBattleScenario extends AbstractScenario
         parent::__construct($entityManager, $urlGenerator, $twig, $logger);
     }
 
+    /**
+     * @param Battle $battle
+     * @return Response
+     * @throws ScenarioException
+     */
     public function handle(Battle $battle): Response
     {
         /** @var BattleTurn $activeTurn */
@@ -45,6 +56,30 @@ class EndBattleScenario extends AbstractScenario
                     ;
                     if ($fighter['currentHP'] <= 0) {
                         $member->setIsDead(true);
+                    }
+                    if (!empty($fighter['gainSkills'])) {
+                        foreach ($fighter['gainSkills'] as $skillId) {
+                            $dbSkill = $this->skillRepository->find($skillId);
+                            if ($dbSkill === null) {
+                                throw new ScenarioException("Skill not found");
+                            }
+                            $currentSkill = false;
+                            foreach ($member->getFighterInfos()->getSkills() as $fSkill) {
+                                if ($fSkill->getSkill() === $dbSkill) {
+                                    $fSkill->setLevel($fSkill->getLevel() + 1);
+                                    $currentSkill = true;
+                                }
+                            }
+                            if (!$currentSkill) {
+                                $newSkill = (new FighterSkill())
+                                    ->setFighter($member->getFighterInfos())
+                                    ->setSkill($dbSkill)
+                                    ->setLevel(1)
+                                ;
+                                $this->manager->persist($newSkill);
+                            }
+
+                        }
                     }
                 }
             }
