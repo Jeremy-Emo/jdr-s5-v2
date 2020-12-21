@@ -243,7 +243,7 @@ class StatManager
             $bonuses = $fighterSkill->getSkill()->getStatBonusPercents();
             foreach ($bonuses as $bonus) {
                 if ($bonus->getStat()->getId() === $stat->getId()) {
-                    $bonusToStat += $bonus->getValue();
+                    $bonusToStat += ($bonus->getValue() * $fighterSkill->getLevel());
                 }
             }
         }

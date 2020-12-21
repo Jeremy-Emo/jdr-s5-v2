@@ -29,6 +29,10 @@ class Skill
 
     public function getFullDescription(?int $level = 1): string
     {
+        if ($level === 0) {
+            $level = 1;
+        }
+
         $full = "<p>" . $this->description .  "</p>";
 
         if ($this->isPassive) {
@@ -52,7 +56,7 @@ class Skill
         }
 
         foreach ($this->getStatBonusPercents() as $bonusPercent) {
-            $full .= "<p>" . $bonusPercent->getStat()->getName() . " +" . $bonusPercent->getValue() . "%</p>";
+            $full .= "<p>" . $bonusPercent->getStat()->getName() . " +" . ($bonusPercent->getValue() * $level) . "%</p>";
         }
 
         $full .= $notUsableInBattle;

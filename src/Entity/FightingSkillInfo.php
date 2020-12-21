@@ -14,6 +14,10 @@ class FightingSkillInfo
 {
     public function generateDescription(?int $level = 1): string
     {
+        if ($level === 0) {
+            $level = 1;
+        }
+        
         $full = "";
 
         $elements = "";
