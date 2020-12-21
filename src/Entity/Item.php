@@ -35,6 +35,38 @@ class Item extends UploadImageEntity
             $full .= "<p>Effet spécial : " . $this->customEffect . "</p>";
         }
 
+        if ($this->getIsConsumable() && $this->getConsumableEffect() !== null) {
+            $full .= "<p>Objet consommable :</p><ul>";
+            if (!empty($this->getConsumableEffect()->getEditHP())) {
+                if ($this->getConsumableEffect()->getEditHP() > 0) {
+                    $full .= "<li>Rend " . $this->getConsumableEffect()->getEditHP() . " PV</li>";
+                } else {
+                    $full .= "<li>Enlève " . abs($this->getConsumableEffect()->getEditHP()) . " PV</li>";
+                }
+            }
+            if (!empty($this->getConsumableEffect()->getEditMP())) {
+                if ($this->getConsumableEffect()->getEditMP() > 0) {
+                    $full .= "<li>Rend " . $this->getConsumableEffect()->getEditMP() . " de Mana</li>";
+                } else {
+                    $full .= "<li>Enlève " . abs($this->getConsumableEffect()->getEditMP()) . " de Mana</li>";
+                }
+            }
+            if (!empty($this->getConsumableEffect()->getEditSP())) {
+                if ($this->getConsumableEffect()->getEditSP() > 0) {
+                    $full .= "<li>Réduis de " . $this->getConsumableEffect()->getEditSP() . " la fatigue</li>";
+                } else {
+                    $full .= "<li>Augmente de " . abs($this->getConsumableEffect()->getEditSP()) . " la fatigue</li>";
+                }
+            }
+            if (!empty($this->getConsumableEffect()->getEditStatPoints())) {
+                $full .= "<li>Ajoute " . $this->getConsumableEffect()->getEditStatPoints() . " points de statistique</li>";
+            }
+            if (!empty($this->getConsumableEffect()->getEditSkillPoints())) {
+                $full .= "<li>Ajoute " . $this->getConsumableEffect()->getEditSkillPoints() . " points de compétences</li>";
+            }
+            $full .= "</ul>";
+        }
+
         return $full;
     }
 
