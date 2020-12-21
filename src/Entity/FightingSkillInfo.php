@@ -17,7 +17,7 @@ class FightingSkillInfo
         if ($level === 0) {
             $level = 1;
         }
-        
+
         $full = "";
 
         $elements = "";
