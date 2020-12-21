@@ -118,8 +118,8 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% if item.item.isConsumable %}
-                                        <a href="{{ path('notImplemented') }}">Utiliser</a><br>
+                                    {% if item.item.isConsumable and item.item.consumableEffect %}
+                                        <a href="{{ path('heroUseItem', {'id': item.id}) }}">Utiliser</a><br>
                                     {% endif %}
                                     {% if not item.isEquipped and item.canBeEquipped() %}
                                         <a href="{{ path('heroToggleStuff', {'heroId': hero.id, 'stuffId': item.id}) }}">Équiper</a><br>
