@@ -39,7 +39,35 @@
                             <p>Fatigue : {{ hero.fighterInfos.getFullSP }}</p>
                         </div>
                         <div class="col-md-6 full-height">
-
+                            <h2>Quêtes en cours :</h2>
+                            <ul>
+                            {% for heroQuest in hero.quests %}
+                                {% if not heroQuest.isCompleted %}
+                                    <li
+                                        class="cursor-click"
+                                        title="{{ heroQuest.name }}"
+                                        data-content="{{ heroQuest.getFullDescriptionForMJ() }}"
+                                        data-html=true
+                                        data-toggle="popover"
+                                    >
+                                        {{ heroQuest.name }}
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            {% for partyQuest in party.quests %}
+                                {% if not partyQuest.isCompleted %}
+                                    <li
+                                        class="cursor-click"
+                                        title="{{ partyQuest.name }}"
+                                        data-content="{{ partyQuest.getFullDescriptionForMJ() }}"
+                                        data-html=true
+                                        data-toggle="popover"
+                                    >
+                                        {{ partyQuest.name }}
+                                    </li>
+                                {% endif %}
+                            {% endfor %}
+                            </ul>
                         </div>
                     </div>
                 </div>
