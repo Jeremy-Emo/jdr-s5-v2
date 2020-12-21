@@ -121,7 +121,7 @@ class CreateTurnScenario extends AbstractScenario
                             $this->action .= " | " . $fighter["name"] . " meurt du poison.";
                         }
                     }
-                    //Embrasement
+                    // Embrasement
                     if ($this->checkStatus($fighter, 'ignite')) {
                         $fighter['currentHP'] -= ceil($fighter['maxHP'] / 10);
                         if ($fighter['currentHP'] <= 0) {
@@ -129,7 +129,7 @@ class CreateTurnScenario extends AbstractScenario
                             $this->action .= " | " . $fighter["name"] . " meurt du feu.";
                         }
                     }
-                    //HoT
+                    // HoT
                     if (
                         $this->checkStatus($fighter, 'heal_on_time')
                         && !$this->checkStatus($fighter, 'anti_heal')
@@ -137,6 +137,14 @@ class CreateTurnScenario extends AbstractScenario
                         $fighter['currentHP'] += ceil($fighter['maxHP'] / 10);
                         if ($fighter['currentHP'] > $fighter['maxHP']) {
                             $fighter['currentHP'] = $fighter['maxHP'];
+                        }
+                    }
+                    // Hémorragie
+                    if ($this->checkStatus($fighter, 'blood_cut')) {
+                        $fighter['currentHP'] -= ceil($fighter['maxHP'] / 8);
+                        if ($fighter['currentHP'] <= 0) {
+                            $fighter['currentHP'] = 0;
+                            $this->action .= " | " . $fighter["name"] . " meurt d'hémorragie.";
                         }
                     }
 
