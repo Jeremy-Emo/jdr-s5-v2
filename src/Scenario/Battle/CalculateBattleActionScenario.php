@@ -406,7 +406,8 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                         $actor['spellUsed'] = null;
                     } else {
                         $reduction = $this->getValueOfPassiveCustomEffect($this->actor, 'speed_casting');
-                        $actor['isCasting'] = $this->fSkill->getSkill()->getFightingSkillInfo()->getCastingTime() - $reduction;
+                        $scared = $this->checkStatus($actor, 'scared') ? 2 : 0;
+                        $actor['isCasting'] = $this->fSkill->getSkill()->getFightingSkillInfo()->getCastingTime() - $reduction + $scared;
                         if ($actor['isCasting'] < 0) {
                             $actor['isCasting'] = 0;
                         }
