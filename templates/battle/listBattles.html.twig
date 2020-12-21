@@ -39,6 +39,8 @@
                                 {% if not battle.isFinished %}
                                 <a href="{{ path('mj_continueBattle', {'id': battle.id}) }}">Poursuivre</a><br>
                                 <a href="{{ path('mj_endBattle', {'id': battle.id}) }}">Terminer</a><br>
+                                {% else %}
+                                    <a href="{{ path('mj_deleteBattle', {'id': battle.id}) }}">Supprimer</a><br>
                                 {% endif %}
                             </td>
                         </tr>
