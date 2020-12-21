@@ -39,7 +39,7 @@
                             <p>Barre d'attaque : {{ fighter.atb }} %</p>
                             {% if fighter.statuses is defined %}
                                 {% for key, status in fighter.statuses %}
-                                    {% for dbStatus in statuses %}
+                                    {% for dbStatus in statuses and status > 0 %}
                                         {% if key == dbStatus.nameId %}
                                             <p><img class="hf_box" src="{{ dbStatus.getWebPath() }}">{{ dbStatus.name }} : {{ status }} tours</p>
                                         {% endif %}
