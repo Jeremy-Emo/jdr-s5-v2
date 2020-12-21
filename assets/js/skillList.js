@@ -5,26 +5,32 @@ import toastr from 'toastr';
 $(document).ready(function () {
     let body = $('body');
 
+    let antiSpam = false;
+
     body.on('click', '.buy-skill', function () {
         let $this = $(this);
         let skillPoints = $("#skillPoints");
         if (parseInt(skillPoints.text()) < $this.data('skillcost')) {
             popErrorMessage("Nombre de points insuffisants !");
         } else {
-            $.post("/heros/acheter-competence", {
-                'heroId' : $this.data('heroid'),
-                'skillId': $this.data('skillid')
-            }).fail(function (data) {
-                popErrorMessage(data.responseJSON.message);
-            }).done(function (data) {
-                let skillBox = $this.closest('.skill_box')
-                let levelBox = skillBox.find('.level_box');
-                levelBox.text(parseInt(levelBox.text()) + 1);
-                skillPoints.text(parseInt(skillPoints.text()) - $this.data('skillcost'));
-                if (!skillBox.hasClass("heroSkill")) {
-                    skillBox.addClass("heroSkill");
-                }
-            });
+            if (!antiSpam) {
+                antiSpam = true;
+                $.post("/heros/acheter-competence", {
+                    'heroId' : $this.data('heroid'),
+                    'skillId': $this.data('skillid')
+                }).fail(function (data) {
+                    popErrorMessage(data.responseJSON.message);
+                }).done(function (data) {
+                    let skillBox = $this.closest('.skill_box')
+                    let levelBox = skillBox.find('.level_box');
+                    levelBox.text(parseInt(levelBox.text()) + 1);
+                    skillPoints.text(parseInt(skillPoints.text()) - $this.data('skillcost'));
+                    if (!skillBox.hasClass("heroSkill")) {
+                        skillBox.addClass("heroSkill");
+                    }
+                    antiSpam = false;
+                });
+            }
         }
     });
 
