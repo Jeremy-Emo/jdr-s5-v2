@@ -151,6 +151,14 @@ class FightingSkillInfo
             $full .= "<p>Temps d'incantation : " . $this->castingTime . " tour(s)</p>";
         }
 
+        if (!empty($this->boostAtb)) {
+            $full .= "<p>Booste l'atb de " . $this->boostAtb . " %</p>";
+        }
+
+        if (!empty($this->reducAtb)) {
+            $full .= "<p>Réduit l'atb de " . $this->reducAtb . " %</p>";
+        }
+
         return $full;
     }
 
@@ -266,6 +274,16 @@ class FightingSkillInfo
      * @ORM\Column(type="boolean")
      */
     private ?bool $isCleanse = false;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $boostAtb = null;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $reducAtb = null;
 
     public function __construct()
     {
@@ -607,6 +625,30 @@ class FightingSkillInfo
     public function setIsCleanse(bool $isCleanse): self
     {
         $this->isCleanse = $isCleanse;
+
+        return $this;
+    }
+
+    public function getBoostAtb(): ?int
+    {
+        return $this->boostAtb;
+    }
+
+    public function setBoostAtb(?int $boostAtb): self
+    {
+        $this->boostAtb = $boostAtb;
+
+        return $this;
+    }
+
+    public function getReducAtb(): ?int
+    {
+        return $this->reducAtb;
+    }
+
+    public function setReducAtb(?int $reducAtb): self
+    {
+        $this->reducAtb = $reducAtb;
 
         return $this;
     }

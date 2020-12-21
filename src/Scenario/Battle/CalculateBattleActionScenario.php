@@ -187,6 +187,16 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                             }
                         }
                     }
+
+                    //Changements atb
+                    $target['changeAtb'] = 0;
+                    if (!empty($this->fSkill->getSkill()->getFightingSkillInfo()->getReducAtb())) {
+                        $target['changeAtb'] = $target['changeAtb'] - $this->fSkill->getSkill()->getFightingSkillInfo()->getReducAtb();
+                    }
+                    if (!empty($this->fSkill->getSkill()->getFightingSkillInfo()->getBoostAtb())) {
+                        $target['changeAtb'] = $target['changeAtb'] + $this->fSkill->getSkill()->getFightingSkillInfo()->getBoostAtb();
+                    }
+
                     //Drain de vie
                     if (
                         !empty($this->fSkill->getSkill()->getFightingSkillInfo()->getDrainLife())
