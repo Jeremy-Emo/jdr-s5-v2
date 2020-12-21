@@ -42,6 +42,7 @@ class ContinueBattleScenario extends AbstractScenario
     private ?Battle $battle = null;
 
     public const ATTACK_WITH_WEAPON = "attack.with.weapon";
+    public const DIE = "die.alone";
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -169,6 +170,7 @@ class ContinueBattleScenario extends AbstractScenario
     {
         $actionsList = [
             'Ne rien faire' => null,
+            'Meurt' => self::DIE,
             'Attaquer avec son arme' => self::ATTACK_WITH_WEAPON,
         ];
 

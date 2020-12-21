@@ -57,7 +57,7 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
             throw new ScenarioException("Actor not found");
         }
 
-        if ($action !== "") {
+        if ($action !== "" && $action !== ContinueBattleScenario::DIE) {
             $this->actionString .= $this->actor->getName();
             if ($this->checkStatus($actor, 'stun')) {
                 $this->actionString .= " est étourdi !";
@@ -69,6 +69,9 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                     $this->actionString .= " prépare le sort " . $this->fSkill->getSkill()->getName() . " pour les prochains tours !";
                 }
             }
+        } elseif ($action === ContinueBattleScenario::DIE) {
+            $this->killActor($fighters, $this->actor->getId());
+            $this->actionString .= $this->actor->getName() . " meurt.";
         } else {
             $this->actionString .= $this->actor->getName() . " ne fait rien.";
         }

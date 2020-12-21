@@ -263,6 +263,16 @@ abstract class AbstractBattleScenario extends AbstractScenario
         }
     }
 
+    protected function killActor(array &$fighters, int $actorId): void
+    {
+        foreach ($fighters as &$fighter) {
+            if ((int)$fighter['id'] === $actorId) {
+                $fighter['currentHP'] = 0;
+            }
+            unset($fighter);
+        }
+    }
+
     /**
      * @param array $target
      */
