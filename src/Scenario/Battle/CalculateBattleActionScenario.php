@@ -124,6 +124,14 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                     $target['statuses'] = [];
                 }
 
+                // Check sloth
+                /** @var CustomEffect $ce */
+                foreach ($this->targetCustomEffects as $ce) {
+                    if ($ce->getNameId() === "sloth") {
+                        $actor['currentSP'] += 100;
+                    }
+                }
+
                 if (!$this->isHeal && !$this->isShield) {
                     //Check Pression
                     $actor['currentSP'] = $actor['currentSP'] + $this->getValueOfPassiveCustomEffect($this->currentTarget, 'pression');
@@ -152,7 +160,6 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                                     $actor['gainSkills'][] = $skillTaken->getSkill()->getId();
                                 }
                             }
-
                         }
 
                         $this->checkShield($target);
