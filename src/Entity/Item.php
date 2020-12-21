@@ -52,7 +52,7 @@ class Item extends UploadImageEntity
                 }
             }
             if (!empty($this->getConsumableEffect()->getEditSP())) {
-                if ($this->getConsumableEffect()->getEditSP() > 0) {
+                if ($this->getConsumableEffect()->getEditSP() < 0) {
                     $full .= "<li>Réduis de " . $this->getConsumableEffect()->getEditSP() . " la fatigue</li>";
                 } else {
                     $full .= "<li>Augmente de " . abs($this->getConsumableEffect()->getEditSP()) . " la fatigue</li>";
