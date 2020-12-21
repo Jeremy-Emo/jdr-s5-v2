@@ -95,7 +95,7 @@ class CreateHeroScenario extends AbstractScenario
             return $this->redirectToRoute('listHeroes');
         }
 
-        return $this->renderNewResponse('heroes/save.twig', [
+        return $this->renderNewResponse('heroes/save.html.twig', [
             'form' => $form->createView()
         ]);
     }
@@ -126,7 +126,9 @@ class CreateHeroScenario extends AbstractScenario
         $bonus = 0;
         foreach ($account->getAccountSkills() as $skill) {
             if (
-                $skill->getSkill()->getFightingSkillInfo()->getCustomEffects()->getNameId() === self::GAIN_STAT_BY_SKILL
+                $skill->getSkill()->getFightingSkillInfo() !== null
+                && $skill->getSkill()->getFightingSkillInfo()->getCustomEffects() !== null
+                && $skill->getSkill()->getFightingSkillInfo()->getCustomEffects()->getNameId() === self::GAIN_STAT_BY_SKILL
             ) {
                 $bonus += $skill->getLevel();
             }
@@ -224,7 +226,9 @@ class CreateHeroScenario extends AbstractScenario
      */
     private function generateDefaultStuff(FighterInfos $fighter): FighterInfos
     {
-        $slots = $this->itemSlotRepository->findAll();
+        $slots = $this->itemSlotRepository->findBy([
+            'isForFamiliar' => false,
+        ]);
         foreach ($slots as $slot) {
             $item = $this->itemRepository->findRandomByItemSlotAndRarity($slot, self::RARITY_BEGINNER_STUFF);
             if ($item !== null) {
