@@ -2,6 +2,7 @@
 
 namespace App\Entity;
 
+use App\Manager\StatManager;
 use App\Repository\FighterInfosRepository;
 use Doctrine\Common\Collections\ArrayCollection;
 use Doctrine\Common\Collections\Collection;
@@ -75,6 +76,33 @@ class FighterInfos
             }
         }
         return $return;
+    }
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    public function getFullHP(): string
+    {
+        return StatManager::returnMetaStat(StatManager::LABEL_HP, $this)['value'];
+    }
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    public function getFullMP(): string
+    {
+        return StatManager::returnMetaStat(StatManager::LABEL_MP, $this)['value'];
+    }
+
+    /**
+     * @return string
+     * @throws \Exception
+     */
+    public function getFullSP(): string
+    {
+        return StatManager::returnMetaStat(StatManager::LABEL_SP, $this)['value'];
     }
 
     /**

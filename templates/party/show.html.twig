@@ -32,7 +32,16 @@
             </div>
             <div class="col-md-9 ma-25-top">
                 <div class="pa-20 bg-white full-height">
-                    TODO : Mettre infos ici
+                    <div class="row full-height">
+                        <div class="col-md-6 border-right full-height">
+                            <p>PV actuels : {{ hero.fighterInfos.getFullHP }}</p>
+                            <p>MP actuels : {{ hero.fighterInfos.getFullMP }}</p>
+                            <p>Fatigue : {{ hero.fighterInfos.getFullSP }}</p>
+                        </div>
+                        <div class="col-md-6 full-height">
+
+                        </div>
+                    </div>
                 </div>
             </div>
         </div>
