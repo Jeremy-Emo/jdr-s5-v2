@@ -32,3 +32,5 @@ edit_hero_mj : Modifier Héros
 add_party_item : Ajouter un item au groupe
 edit_wt : Modifier type d'arme
 create_familiar : Créer un familier
+edit_familiar: Modifier un familier
+familiar_skills : Compétences du familier

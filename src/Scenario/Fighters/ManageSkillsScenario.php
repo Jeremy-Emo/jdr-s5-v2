@@ -25,11 +25,12 @@ class ManageSkillsScenario extends AbstractScenario
 
     /**
      * @param FormInterface $form
-     * @param string $title
+     * @param string|null $title
+     * @param bool $isFamiliar
      * @return Response
      * @throws ScenarioException
      */
-    public function handle(FormInterface $form, $title = ''): Response
+    public function handle(FormInterface $form, ?string $title = '', bool $isFamiliar = false): Response
     {
         if ($form->isSubmitted() && $form->isValid()) {
             /** @var FighterInfos $fighter */
@@ -42,7 +43,11 @@ class ManageSkillsScenario extends AbstractScenario
             $this->manager->persist($fighter);
             $this->manager->flush();
 
-            return $this->redirectToRoute('admin_listMonsters');
+            if ($isFamiliar) {
+                return $this->redirectToRoute('admin_listFamiliars');
+            } else {
+                return $this->redirectToRoute('admin_listMonsters');
+            }
         }
 
         return $this->renderNewResponse('admin/manageMonsterSkills.html.twig', [
