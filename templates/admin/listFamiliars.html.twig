@@ -1,0 +1,45 @@
+{% extends 'main/layout.html.twig' %}
+
+{% block page_title %}Admin - Gestion des familiers{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+            <a href="{{ path('admin_createFamiliar') }}"><button type="button" class="btn btn-primary">Créer un nouveau familier</button></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col ma-25-top">
+            <div class="pa-20 bg-white">
+                <p class="ma-10-bottom">
+                    <span>Nombre de familiers : {{ familiars|length }}</span>
+                    <span class="f-right"><input type="text" id="searchBar"></span>
+                </p>
+                <table class="table" id="stupidTable">
+                    <thead>
+                    <tr>
+                        <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for familiar in familiars %}
+                        <tr class="searchedItem" data-search="{{ familiar.name|lower }}">
+                            <td>{{ familiar.name }}</td>
+                            <td>
+                                <a href="{{ path('notImplemented') }}">Modifier</a><br>
+                                <a href="{{ path('notImplemented') }}">Gérer compétences</a><br>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block moreJS %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('searchBar') }}
+{% endblock %}

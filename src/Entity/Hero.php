@@ -104,10 +104,16 @@ class Hero extends UploadImageEntity
      */
     private Collection $quests;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Familiar::class, mappedBy="master")
+     */
+    private Collection $familiars;
+
     public function __construct()
     {
         $this->heroMoney = new ArrayCollection();
         $this->quests = new ArrayCollection();
+        $this->familiars = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -295,6 +301,36 @@ class Hero extends UploadImageEntity
     public function removeQuest(Quest $quest): self
     {
         $this->quests->removeElement($quest);
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Familiar[]
+     */
+    public function getFamiliars(): Collection
+    {
+        return $this->familiars;
+    }
+
+    public function addFamiliar(Familiar $familiar): self
+    {
+        if (!$this->familiars->contains($familiar)) {
+            $this->familiars[] = $familiar;
+            $familiar->setMaster($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFamiliar(Familiar $familiar): self
+    {
+        if ($this->familiars->removeElement($familiar)) {
+            // set the owning side to null (unless already changed)
+            if ($familiar->getMaster() === $this) {
+                $familiar->setMaster(null);
+            }
+        }
 
         return $this;
     }

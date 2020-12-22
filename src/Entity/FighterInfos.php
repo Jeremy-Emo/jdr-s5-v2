@@ -22,6 +22,9 @@ class FighterInfos
         if ($this->getHero() !== null) {
             return $this->getHero()->getName();
         }
+        if ($this->getFamiliar() !== null) {
+            return $this->getFamiliar()->getName();
+        }
 
         return "Truc inconnu";
     }
@@ -33,6 +36,9 @@ class FighterInfos
         }
         if ($this->getHero() !== null) {
             return $this->getHero()->getElementAffinity();
+        }
+        if ($this->getFamiliar() !== null) {
+            return $this->getFamiliar()->getElementAffinity();
         }
 
         return null;
@@ -166,6 +172,11 @@ class FighterInfos
      * @ORM\Column(type="integer")
      */
     private ?int $currentShieldValue = 0;
+
+    /**
+     * @ORM\OneToOne(targetEntity=Familiar::class, inversedBy="fighterInfos", cascade={"persist", "remove"})
+     */
+    private ?Familiar $familiar;
 
     public function __construct()
     {
@@ -375,6 +386,18 @@ class FighterInfos
     public function setCurrentShieldValue(int $currentShieldValue): self
     {
         $this->currentShieldValue = $currentShieldValue;
+
+        return $this;
+    }
+
+    public function getFamiliar(): ?Familiar
+    {
+        return $this->familiar;
+    }
+
+    public function setFamiliar(?Familiar $familiar): self
+    {
+        $this->familiar = $familiar;
 
         return $this;
     }
