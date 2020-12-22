@@ -57,7 +57,12 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
             throw new ScenarioException("Actor not found");
         }
 
-        if ($action !== "" && $action !== ContinueBattleScenario::DIE) {
+        if (!in_array($action, [
+                "",
+                ContinueBattleScenario::GO_FORTH,
+                ContinueBattleScenario::DIE,
+            ])
+        ) {
             $this->actionString .= $this->actor->getName();
             if ($this->checkStatus($actor, 'stun')) {
                 $this->actionString .= " est étourdi !";
