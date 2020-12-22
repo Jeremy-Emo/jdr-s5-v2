@@ -307,21 +307,32 @@ abstract class AbstractBattleScenario extends AbstractScenario
             $target['currentHP'] += $this->currentDamages;
             $hasSurvived = true;
         } else {
-            //Custom effect
-            $canIgnoreDeath = 0;
-            /** @var CustomEffect $ce */
+            //Custom effect good_luck
             foreach ($this->targetCustomEffects as $ce) {
-                if ($ce->getNameId() === "survive") {
-                    if (!isset($target['surviveDeathCounter'])) {
-                        $target['surviveDeathCounter'] = 0;
+                if ($ce->getNameId() === "good_luck") {
+                    if (rand(1, 100) === 7) {
+                        $hasSurvived = true;
                     }
-                    $canIgnoreDeath ++;
                 }
             }
-            if (isset($target['surviveDeathCounter']) && $target['surviveDeathCounter'] < $canIgnoreDeath ) {
-                $target['surviveDeathCounter'] += 1;
-                $target['currentHP'] += $this->currentDamages;
-                $hasSurvived = true;
+
+            if (!$hasSurvived) {
+                //Custom effect survive
+                $canIgnoreDeath = 0;
+                /** @var CustomEffect $ce */
+                foreach ($this->targetCustomEffects as $ce) {
+                    if ($ce->getNameId() === "survive") {
+                        if (!isset($target['surviveDeathCounter'])) {
+                            $target['surviveDeathCounter'] = 0;
+                        }
+                        $canIgnoreDeath ++;
+                    }
+                }
+                if (isset($target['surviveDeathCounter']) && $target['surviveDeathCounter'] < $canIgnoreDeath ) {
+                    $target['surviveDeathCounter'] += 1;
+                    $target['currentHP'] += $this->currentDamages;
+                    $hasSurvived = true;
+                }
             }
         }
 

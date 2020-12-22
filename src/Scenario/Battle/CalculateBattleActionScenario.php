@@ -313,6 +313,9 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
         if ($this->checkStatus($target, 'break_def')) {
             $this->defensivePower *= 0.5;
         }
+        if ($this->checkStatus($actor, 'werewolf') && $this->checkStatus($target, 'lunar')) {
+            $this->offensivePower *= 2.5;
+        }
 
         //Calculate damages
         if (
