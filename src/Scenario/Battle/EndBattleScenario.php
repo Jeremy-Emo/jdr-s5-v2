@@ -32,10 +32,11 @@ class EndBattleScenario extends AbstractScenario
 
     /**
      * @param Battle $battle
+     * @param bool $isCancelled
      * @return Response
      * @throws ScenarioException
      */
-    public function handle(Battle $battle): Response
+    public function handle(Battle $battle, bool $isCancelled = false): Response
     {
         /** @var BattleTurn $activeTurn */
         $activeTurn = $battle->getTurns()->last();
@@ -56,29 +57,30 @@ class EndBattleScenario extends AbstractScenario
                     ;
                     if ($fighter['currentHP'] <= 0) {
                         $member->setIsDead(true);
-                    }
-                    if (!empty($fighter['gainSkills'])) {
-                        foreach ($fighter['gainSkills'] as $skillId) {
-                            $dbSkill = $this->skillRepository->find($skillId);
-                            if ($dbSkill === null) {
-                                throw new ScenarioException("Skill not found");
-                            }
-                            $currentSkill = false;
-                            foreach ($member->getFighterInfos()->getSkills() as $fSkill) {
-                                if ($fSkill->getSkill() === $dbSkill) {
-                                    $fSkill->setLevel($fSkill->getLevel() + 1);
-                                    $currentSkill = true;
+                    } else {
+                        if (!empty($fighter['gainSkills'])) {
+                            foreach ($fighter['gainSkills'] as $skillId) {
+                                $dbSkill = $this->skillRepository->find($skillId);
+                                if ($dbSkill === null) {
+                                    throw new ScenarioException("Skill not found");
                                 }
-                            }
-                            if (!$currentSkill) {
-                                $newSkill = (new FighterSkill())
-                                    ->setFighter($member->getFighterInfos())
-                                    ->setSkill($dbSkill)
-                                    ->setLevel(1)
-                                ;
-                                $this->manager->persist($newSkill);
-                            }
+                                $currentSkill = false;
+                                foreach ($member->getFighterInfos()->getSkills() as $fSkill) {
+                                    if ($fSkill->getSkill() === $dbSkill) {
+                                        $fSkill->setLevel($fSkill->getLevel() + 1);
+                                        $currentSkill = true;
+                                    }
+                                }
+                                if (!$currentSkill) {
+                                    $newSkill = (new FighterSkill())
+                                        ->setFighter($member->getFighterInfos())
+                                        ->setSkill($dbSkill)
+                                        ->setLevel(1)
+                                    ;
+                                    $this->manager->persist($newSkill);
+                                }
 
+                            }
                         }
                     }
                 }
@@ -87,15 +89,17 @@ class EndBattleScenario extends AbstractScenario
         }
 
         //MAJ loot
-        foreach ($battle->getMonsters() as $monster) {
-            foreach ($monster->getFighterInfos()->getHeroItems() as $item) {
-                $pItem = (new PartyItem())
-                    ->setParty($battle->getParty())
-                    ->setItem($item->getItem())
-                    ->setDurability($item->getDurability())
-                ;
-                $party->addPartyItem($pItem);
-                $this->manager->persist($pItem);
+        if (!$isCancelled) {
+            foreach ($battle->getMonsters() as $monster) {
+                foreach ($monster->getFighterInfos()->getHeroItems() as $item) {
+                    $pItem = (new PartyItem())
+                        ->setParty($battle->getParty())
+                        ->setItem($item->getItem())
+                        ->setDurability($item->getDurability())
+                    ;
+                    $party->addPartyItem($pItem);
+                    $this->manager->persist($pItem);
+                }
             }
         }
 
