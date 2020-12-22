@@ -22,6 +22,7 @@
                         <li><a href="{{ path('partyInventory', {'id': app.user.getCurrentHero.id}) }}" class="text-uppercase">Inventaire du groupe</a></li>
                     {% endif %}
                     <li><a href="{{ path('listHeroSkills', {'id': app.user.getCurrentHero.id}) }}" class="text-uppercase">Compétences</a></li>
+                    <li><a href="{{ path('listHeroQuests', {'id': app.user.getCurrentHero.id}) }}" class="text-uppercase">Quêtes</a></li>
                 </ul>
             </li>
             {% endif %}
