@@ -72,6 +72,8 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
         } elseif ($action === ContinueBattleScenario::DIE) {
             $this->killActor($fighters, $this->actor->getId());
             $this->actionString .= $this->actor->getName() . " meurt.";
+        } elseif ($action === ContinueBattleScenario::GO_FORTH) {
+            $this->actionString .= $this->actor->getName() . " se rapproche.";
         } else {
             $this->actionString .= $this->actor->getName() . " ne fait rien.";
         }

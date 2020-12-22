@@ -47,8 +47,11 @@ class CheckSpellCastingListener implements EventSubscriberInterface
 
         if (
             $turnAction["action"] !== null
-            && $turnAction["action"] !== ContinueBattleScenario::ATTACK_WITH_WEAPON
-            && $turnAction["action"] !== ContinueBattleScenario::DIE
+            && !in_array($turnAction["action"], [
+                ContinueBattleScenario::ATTACK_WITH_WEAPON,
+                ContinueBattleScenario::GO_FORTH,
+                ContinueBattleScenario::DIE,
+            ])
         ) {
             //Check silence
             if (
