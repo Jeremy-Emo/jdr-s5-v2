@@ -6,8 +6,17 @@
     <div class="row">
         <div class="col ma-25-top">
             <div class="pa-20 bg-white full-height">
+                <h2 class="ma-15-bottom">Actions de groupe :</h2>
+                <a href="{{ path('notImplemented') }}" class="ma-5-right ma-5-bottom d-inline-block"><button type="button" class="btn btn-primary">Dormir</button></a>
+            </div>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col ma-25-top">
+            <div class="pa-20 bg-white full-height">
+                <h2 class="ma-15-bottom">Héros :</h2>
                 {% for hero in party.heroes %}
-                    <button class="btn btn-primary btn-show-hero" data-target="{{ hero.id }}">{{ hero }}</button>
+                    <button class="btn btn-primary btn-show-hero ma-5-right ma-5-bottom d-inline-block" data-target="{{ hero.id }}">{{ hero }}</button>
                 {% endfor %}
             </div>
         </div>
