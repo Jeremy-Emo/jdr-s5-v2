@@ -109,3 +109,4 @@ Heal s p : Soigne fatigue
 Hit s p : Inflige fatigue
 Heal m p : Restaure mana
 Hit m p : Inflige mana
+Rejoue instantanément : Rejoue instantanément

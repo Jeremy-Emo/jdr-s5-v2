@@ -159,6 +159,10 @@ class FightingSkillInfo
             $full .= "<p>Réduit l'atb de " . $this->reducAtb . " %</p>";
         }
 
+        if ($this->isReplayAttack) {
+            $full .= "<p>Rejoue un tour après celui-ci.</p>";
+        }
+
         if (!empty($this->healSP)) {
             $full .= "<p>Soigne la fatigue de " . $this->healSP . "</p>";
         }
@@ -320,6 +324,11 @@ class FightingSkillInfo
      * @ORM\Column(type="integer", nullable=true)
      */
     private ?int $hitMP = 0;
+
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $isReplayAttack = false;
 
     public function __construct()
     {
@@ -733,6 +742,18 @@ class FightingSkillInfo
     public function setHitMP(?int $hitMP): self
     {
         $this->hitMP = $hitMP;
+
+        return $this;
+    }
+
+    public function getIsReplayAttack(): ?bool
+    {
+        return $this->isReplayAttack;
+    }
+
+    public function setIsReplayAttack(bool $isReplayAttack): self
+    {
+        $this->isReplayAttack = $isReplayAttack;
 
         return $this;
     }

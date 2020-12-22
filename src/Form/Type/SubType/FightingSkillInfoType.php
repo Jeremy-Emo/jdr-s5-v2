@@ -88,6 +88,13 @@ class FightingSkillInfoType extends AbstractType
                 'label' => 'Retire les statuts',
                 'required' => false
             ])
+            ->add('isReplayAttack', CheckboxType::class, [
+                'row_attr' => [
+                    'class' => 'pretty p-default d-block',
+                ],
+                'label' => 'Rejoue instantanément',
+                'required' => false
+            ])
             ->add('elementsMultipliers', CollectionType::class, [
                 'entry_type' => ElementMultiplierType::class,
                 'entry_options' => ['label' => false],
