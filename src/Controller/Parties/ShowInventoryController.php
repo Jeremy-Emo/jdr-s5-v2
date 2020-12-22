@@ -29,7 +29,8 @@ class ShowInventoryController extends AbstractController implements ControllerIn
         }
 
         return $this->render('party/inventory.html.twig', [
-            'partyItems' => $party->getPartyItems()
+            'partyItems' => $party->getPartyItems(),
+            'party' => $party,
         ]);
     }
 }

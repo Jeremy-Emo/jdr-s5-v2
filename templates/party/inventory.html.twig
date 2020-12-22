@@ -5,6 +5,11 @@
 {% block content %}
     <div class="row">
         <div class="col ma-25-top">
+            <a href="{{ path('mj_partyAddItem', {'id': party.id}) }}"><button type="button" class="btn btn-primary">Ajouter un objet</button></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col ma-25-top">
             <div class="pa-20 bg-white">
                 <h1 class="ma-20-bottom d-flex align-items-center">
                     <a class="toggle-angle no-hover" data-toggle="collapse" href="#groupInventory" aria-expanded="true" aria-controls="groupInventory">
