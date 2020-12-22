@@ -43,7 +43,7 @@
                                     <span>{{ item.item.name }}</span>
                                 </td>
                                 <td>
-                                    <a href="{{ path('notImplemented') }}">Supprimer</a>
+                                    <a href="{{ path('mj_partyRemoveItem', {'id': item.id}) }}">Supprimer</a>
                                 </td>
                             </tr>
                         {% endfor %}
