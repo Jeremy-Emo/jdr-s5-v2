@@ -51,6 +51,7 @@ class CheckSpellCastingListener implements EventSubscriberInterface
                 ContinueBattleScenario::ATTACK_WITH_WEAPON,
                 ContinueBattleScenario::GO_FORTH,
                 ContinueBattleScenario::DIE,
+                ContinueBattleScenario::CUSTOM_ACTION,
             ])
         ) {
             //Check silence

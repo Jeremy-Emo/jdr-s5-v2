@@ -57,10 +57,12 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
             throw new ScenarioException("Actor not found");
         }
 
-        if (!in_array($action, [
+        if (!in_array(
+            $action, [
                 "",
                 ContinueBattleScenario::GO_FORTH,
                 ContinueBattleScenario::DIE,
+                ContinueBattleScenario::CUSTOM_ACTION,
             ])
         ) {
             $this->actionString .= $this->actor->getName();
@@ -79,6 +81,8 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
             $this->actionString .= $this->actor->getName() . " meurt.";
         } elseif ($action === ContinueBattleScenario::GO_FORTH) {
             $this->actionString .= $this->actor->getName() . " se rapproche.";
+        } elseif ($action === ContinueBattleScenario::CUSTOM_ACTION) {
+            $this->actionString .= "";
         } else {
             $this->actionString .= $this->actor->getName() . " ne fait rien.";
         }

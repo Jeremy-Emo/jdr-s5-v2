@@ -44,6 +44,7 @@ class ContinueBattleScenario extends AbstractScenario
     public const ATTACK_WITH_WEAPON = "attack.with.weapon";
     public const DIE = "die.alone";
     public const GO_FORTH = "go.forth";
+    public const CUSTOM_ACTION = "custom.action";
 
     public function __construct(
         EntityManagerInterface $entityManager,
@@ -86,6 +87,10 @@ class ContinueBattleScenario extends AbstractScenario
             $turn = $this->calculateBattleScenario->handle($this->battle, (string)$targetId, (string)$action);
             $this->manager->persist($turn->setBattle($this->battle));
             $this->manager->flush();
+
+            if ($action === self::CUSTOM_ACTION) {
+                return $this->redirectToRoute('mj_customActionBattle', ['id' => $turn->getId()]);
+            }
 
             return $this->redirectToRoute('mj_continueBattle', [
                 'id' => $this->battle->getId(),
@@ -174,6 +179,7 @@ class ContinueBattleScenario extends AbstractScenario
             'Mourir' => self::DIE,
             'Se rapprocher' => self::GO_FORTH,
             'Attaquer avec son arme' => self::ATTACK_WITH_WEAPON,
+            'Action personnalisée' => self::CUSTOM_ACTION,
         ];
 
         $dbActor = $this->fighterRepository->find($actor['id']);

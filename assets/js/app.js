@@ -21,7 +21,9 @@ require('../scss/nav.scss');
 require('../scss/my.scss');
 
 
-$(document).ready(function() {
+$(document).ready(function () {
+
+    let $body = $('body');
 
     $('[data-toggle="popover"]').popover();
 
@@ -29,7 +31,7 @@ $(document).ready(function() {
         $('[data-toggle=popover]').not(this).popover('hide');
     });
 
-    $('body').on("click", ".popover", function (){
+    $body.on("click", ".popover", function (){
         $('[aria-describedby="'+$(this).attr('id')+'"]').popover('hide');
     });
 
@@ -50,7 +52,7 @@ $(document).ready(function() {
 
     $("select").select2();
 
-    $("body").on('click', '.toggle-angle', function () {
+    $body.on('click', '.toggle-angle', function () {
         let icon = $(this).find('.icon-toggler');
         if (icon.hasClass('fa-angle-down')) {
             icon.removeClass('fa-angle-down').addClass('fa-angle-up');
@@ -58,6 +60,13 @@ $(document).ready(function() {
             icon.removeClass('fa-angle-up').addClass('fa-angle-down');
         }
 
-    })
+    });
+
+    $('.jsonPrettify').each(function (index) {
+        console.log($(this).text())
+        let obj = JSON.parse( $(this).text() );
+        let pretty = JSON.stringify(obj, undefined, 4);
+        $(this).text(pretty);
+    });
 
 });
