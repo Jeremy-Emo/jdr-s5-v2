@@ -18,6 +18,7 @@
                 <ul role="menu" class="dropdown-menu">
                     <li><a href="{{ path('showHero', {'id': app.user.getCurrentHero.id}) }}" class="text-uppercase">Fiche Principale</a></li>
                     <li><a href="{{ path('heroInventory', {'id': app.user.getCurrentHero.id}) }}" class="text-uppercase">Inventaire</a></li>
+                    <li><a href="{{ path('heroFamiliars', {'id': app.user.getCurrentHero.id}) }}" class="text-uppercase">Familiers</a></li>
                     {% if app.user.getCurrentHero.party %}
                         <li><a href="{{ path('partyInventory', {'id': app.user.getCurrentHero.id}) }}" class="text-uppercase">Inventaire du groupe</a></li>
                     {% endif %}

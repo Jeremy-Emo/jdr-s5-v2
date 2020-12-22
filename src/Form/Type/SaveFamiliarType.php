@@ -13,7 +13,7 @@ class SaveFamiliarType extends AbstractType
     public function buildForm(FormBuilderInterface $builder, array $options)
     {
         $builder
-            ->add('name')
+            ->add('specie')
             ->add('elementAffinity')
             ->add('needLeaderShip')
             ->add('fighterInfos', FighterInfosType::class, [

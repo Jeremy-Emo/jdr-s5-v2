@@ -1,0 +1,18 @@
+{% extends 'main/layout.html.twig' %}
+
+{% block page_title %}Familiers{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col ma-25-top">
+            <div class="pa-20 bg-white">
+
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block moreJS %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('searchBar') }}
+{% endblock %}

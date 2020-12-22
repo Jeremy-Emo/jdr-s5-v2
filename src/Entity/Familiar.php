@@ -46,7 +46,12 @@ class Familiar
     /**
      * @ORM\Column(type="string", length=255)
      */
-    private ?string $name;
+    private ?string $name = '';
+
+    /**
+     * @ORM\Column(type="string", length=255)
+     */
+    private ?string $specie;
 
     public function getId(): ?int
     {
@@ -127,6 +132,18 @@ class Familiar
     public function setName(string $name): self
     {
         $this->name = $name;
+
+        return $this;
+    }
+
+    public function getSpecie(): ?string
+    {
+        return $this->specie;
+    }
+
+    public function setSpecie(string $specie): self
+    {
+        $this->specie = $specie;
 
         return $this;
     }
