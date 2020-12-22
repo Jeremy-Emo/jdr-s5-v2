@@ -1,0 +1,38 @@
+{% block content %}
+    <div class="row">
+        <div class="col ma-25-top">
+            <a href="{{ path('admin_createWT') }}"><button type="button" class="btn btn-primary f-right">Créer un nouveau type d'arme</button></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col ma-25-top">
+            <div class="pa-20 bg-white">
+                <h1 class="ma-20-bottom">Liste des types d'arme :</h1>
+                <p class="ma-10-bottom">
+                    <span>Nombre de statistiques : {{ weaponTypes|length }}</span>
+                    <span class="f-right"><input type="text" id="searchBar"></span>
+                </p>
+                <table class="table" id="stupidTable">
+                    <thead>
+                    <tr>
+                        <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
+                        <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> ID to code</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for wt in weaponTypes %}
+                        <tr class="searchedItem" data-search="{{ wt.name|lower }}">
+                            <td>{{ wt.name }}</td>
+                            <td>{{ wt.nameId }}</td>
+                            <td>
+                                <a href="{{ path('admin_editWT', {'id': wt.id}) }}">Modifier</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
