@@ -27,6 +27,7 @@
                         <p><span class="bold red"><i class="w-20 fas fa-skull-crossbones"></i> Mort</span></p>
                     {% endif %}
                     <p><a href="{{ path('showHero', {'id': hero.id}) }}" target="_blank">Voir le détail</a></p>
+                    <p><a href="{{ path('heroInventory', {'id': hero.id}) }}" target="_blank">Voir l'inventaire</a></p>
                     <p><a href="{{ path('editHeroMJStats', {'id': hero.id}) }}">Mettre à jour</a></p>
                 </div>
             </div>
