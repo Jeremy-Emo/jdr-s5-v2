@@ -114,6 +114,10 @@ class FightingSkillInfoType extends AbstractType
             ->add('needStatusToCast')
             ->add('criticalDamages')
             ->add('drainLife')
+            ->add('healSP')
+            ->add('hitSP')
+            ->add('healMP')
+            ->add('hitMP')
         ;
     }
 

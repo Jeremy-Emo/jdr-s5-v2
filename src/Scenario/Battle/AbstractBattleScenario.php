@@ -59,15 +59,7 @@ abstract class AbstractBattleScenario extends AbstractScenario
 
     protected function applyCustomEffectsOnTarget(array &$target, CustomEffect $ce): void
     {
-        if ($ce->getNameId() === 'hit_sp') {
-            $target['currentSP'] += $ce->getValue();
-        }
-        if ($ce->getNameId() === 'heal_sp') {
-            $target['currentSP'] = $target['currentSP'] + $ce->getValue();
-            if ($target['currentSP'] < 0) {
-                $target['currentSP'] = 0;
-            }
-        }
+        //TODO : implement here special custom effects on target
     }
 
     /**

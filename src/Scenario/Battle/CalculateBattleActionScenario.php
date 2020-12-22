@@ -239,6 +239,29 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                             $actor['currentHP'] = $actor['maxHP'];
                         }
                     }
+
+                    //Hit/Heal SP/MP
+                    if (!empty($this->fSkill->getSkill()->getFightingSkillInfo()->getHitSP())) {
+                        $target['currentSP'] += $this->fSkill->getSkill()->getFightingSkillInfo()->getHitSP();
+                    }
+                    if (!empty($this->fSkill->getSkill()->getFightingSkillInfo()->getHitMP())) {
+                        $target['currentMP'] -= $this->fSkill->getSkill()->getFightingSkillInfo()->getHitMP();
+                        if ($target['currentMP'] < 0) {
+                            $target['currentMP'] = 0;
+                        }
+                    }
+                    if (!empty($this->fSkill->getSkill()->getFightingSkillInfo()->getHealSP())) {
+                        $target['currentSP'] -= $this->fSkill->getSkill()->getFightingSkillInfo()->getHealSP();
+                        if ($target['currentSP'] < 0) {
+                            $target['currentSP'] = 0;
+                        }
+                    }
+                    if (!empty($this->fSkill->getSkill()->getFightingSkillInfo()->getHealMP())) {
+                        $target['currentMP'] += $this->fSkill->getSkill()->getFightingSkillInfo()->getHealMP();
+                        if ($target['currentMP'] > $target['maxMP']) {
+                            $target['currentMP'] = $target['maxMP'];
+                        }
+                    }
                 }
                 unset($target);
             }

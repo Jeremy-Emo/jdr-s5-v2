@@ -159,6 +159,22 @@ class FightingSkillInfo
             $full .= "<p>Réduit l'atb de " . $this->reducAtb . " %</p>";
         }
 
+        if (!empty($this->healSP)) {
+            $full .= "<p>Soigne la fatigue de " . $this->healSP . "</p>";
+        }
+
+        if (!empty($this->hitSP)) {
+            $full .= "<p>Inflige " . $this->hitSP . " de fatigue</p>";
+        }
+
+        if (!empty($this->healMP)) {
+            $full .= "<p>Restaure le mana de " . $this->healMP . "</p>";
+        }
+
+        if (!empty($this->hitMP)) {
+            $full .= "<p>Inflige " . $this->hitMP . " de mana</p>";
+        }
+
         return $full;
     }
 
@@ -284,6 +300,26 @@ class FightingSkillInfo
      * @ORM\Column(type="integer", nullable=true)
      */
     private ?int $reducAtb = null;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $healSP = 0;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $hitSP = 0;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $healMP = 0;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $hitMP = 0;
 
     public function __construct()
     {
@@ -649,6 +685,54 @@ class FightingSkillInfo
     public function setReducAtb(?int $reducAtb): self
     {
         $this->reducAtb = $reducAtb;
+
+        return $this;
+    }
+
+    public function getHealSP(): ?int
+    {
+        return $this->healSP;
+    }
+
+    public function setHealSP(?int $healSP): self
+    {
+        $this->healSP = $healSP;
+
+        return $this;
+    }
+
+    public function getHitSP(): ?int
+    {
+        return $this->hitSP;
+    }
+
+    public function setHitSP(?int $hitSP): self
+    {
+        $this->hitSP = $hitSP;
+
+        return $this;
+    }
+
+    public function getHealMP(): ?int
+    {
+        return $this->healMP;
+    }
+
+    public function setHealMP(?int $healMP): self
+    {
+        $this->healMP = $healMP;
+
+        return $this;
+    }
+
+    public function getHitMP(): ?int
+    {
+        return $this->hitMP;
+    }
+
+    public function setHitMP(?int $hitMP): self
+    {
+        $this->hitMP = $hitMP;
 
         return $this;
     }
