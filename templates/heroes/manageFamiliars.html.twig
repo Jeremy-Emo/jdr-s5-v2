@@ -5,14 +5,34 @@
 {% block content %}
     <div class="row">
         <div class="col ma-25-top">
-            <div class="pa-20 bg-white">
-
+            <div class="pa-20 bg-white full-height">
+                <p>Commandement : <span id="usedLS">{{ usedLS }}</span> / {{ leadership }}</p>
             </div>
         </div>
+    </div>
+    <div class="row">
+        {% for familiar in hero.familiars %}
+            <div class="col-md-4 ma-25-top">
+                <div class="pa-20 bg-white full-height">
+                    <p><span class="bold">Nom</span> : {{ familiar.name }}</p>
+                    <p><span class="bold">Espèce</span> : {{ familiar.specie }}</p>
+                    <p><span class="bold">Commandement nécessaire</span> : {{ familiar.needLeaderShip }}</p>
+                    <p class="border-bottom pa-10-bottom"><span class="bold">Rareté</span> : <span class="{{ familiar.rarity.color }}">{{ familiar.rarity }}</span></p>
+                    <p><span class="bold">PV</span> : {{ familiar.fighterInfos.getFullHP }}</p>
+                    <p><span class="bold">MP</span> : {{ familiar.fighterInfos.getFullMP }}</p>
+                    <p><span class="bold">Fatigue</span> : {{ familiar.fighterInfos.getFullSP }}</p>
+                    {% if familiar.isInvoked %}
+                        <p><span class="bold green cursor-click toggleInvocation" data-id="{{ familiar.id }}">Utilisé</span></p>
+                    {% else %}
+                        <p><span class="bold grey cursor-click toggleInvocation" data-id="{{ familiar.id }}">Non-utilisé</span></p>
+                    {% endif %}
+                </div>
+            </div>
+        {% endfor %}
     </div>
 {% endblock %}
 
 {% block moreJS %}
     {{ parent() }}
-    {{ encore_entry_script_tags('searchBar') }}
+    {{ encore_entry_script_tags('manageFamiliars') }}
 {% endblock %}

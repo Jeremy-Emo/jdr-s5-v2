@@ -4,6 +4,7 @@ namespace App\Controller\Heroes\Familiars;
 
 use App\AbstractClass\AbstractController;
 use App\Interfaces\ControllerInterface;
+use App\Manager\StatManager;
 use App\Repository\HeroRepository;
 use Sensio\Bundle\FrameworkExtraBundle\Configuration\IsGranted;
 use Symfony\Component\HttpFoundation\Response;
@@ -28,8 +29,18 @@ class ManageFamiliarsController extends AbstractController implements Controller
             throw new NotFoundHttpException("Hero not found");
         }
 
+        $leadership = StatManager::returnTotalStat(StatManager::LEADERSHIP, $hero->getFighterInfos())['value'];
+        $usedLeaderShip = 0;
+        foreach ($hero->getFamiliars() as $object) {
+            if ($object->getIsInvoked()) {
+                $usedLeaderShip += $object->getNeedLeaderShip();
+            }
+        }
+
         return $this->render('heroes/manageFamiliars.html.twig', [
             'hero' => $hero,
+            'leadership' => $leadership,
+            'usedLS' => $usedLeaderShip,
         ]);
     }
 }

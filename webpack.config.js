@@ -19,6 +19,7 @@ Encore
     .addEntry('showHero', './assets/js/showHero.js')
     .addEntry('showParty', './assets/js/showParty.js')
     .addEntry('createMonster', './assets/js/createMonster.js')
+    .addEntry('manageFamiliars', './assets/js/manageFamiliars.js')
 
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
