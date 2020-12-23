@@ -53,6 +53,12 @@ class Familiar
      */
     private ?string $specie;
 
+    /**
+     * @ORM\ManyToOne(targetEntity=Rarity::class, inversedBy="familiars")
+     * @ORM\JoinColumn(nullable=false)
+     */
+    private ?Rarity $rarity;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -144,6 +150,18 @@ class Familiar
     public function setSpecie(string $specie): self
     {
         $this->specie = $specie;
+
+        return $this;
+    }
+
+    public function getRarity(): ?Rarity
+    {
+        return $this->rarity;
+    }
+
+    public function setRarity(?Rarity $rarity): self
+    {
+        $this->rarity = $rarity;
 
         return $this;
     }

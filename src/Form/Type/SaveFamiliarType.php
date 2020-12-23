@@ -15,6 +15,7 @@ class SaveFamiliarType extends AbstractType
         $builder
             ->add('specie')
             ->add('elementAffinity')
+            ->add('rarity')
             ->add('needLeaderShip')
             ->add('fighterInfos', FighterInfosType::class, [
                 'label' => false,

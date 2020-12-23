@@ -39,9 +39,15 @@ class Rarity
      */
     private Collection $items;
 
+    /**
+     * @ORM\OneToMany(targetEntity=Familiar::class, mappedBy="rarity")
+     */
+    private $familiars;
+
     public function __construct()
     {
         $this->items = new ArrayCollection();
+        $this->familiars = new ArrayCollection();
     }
 
     public function getId(): ?int
@@ -104,6 +110,36 @@ class Rarity
             // set the owning side to null (unless already changed)
             if ($item->getRarity() === $this) {
                 $item->setRarity(null);
+            }
+        }
+
+        return $this;
+    }
+
+    /**
+     * @return Collection|Familiar[]
+     */
+    public function getFamiliars(): Collection
+    {
+        return $this->familiars;
+    }
+
+    public function addFamiliar(Familiar $familiar): self
+    {
+        if (!$this->familiars->contains($familiar)) {
+            $this->familiars[] = $familiar;
+            $familiar->setRarity($this);
+        }
+
+        return $this;
+    }
+
+    public function removeFamiliar(Familiar $familiar): self
+    {
+        if ($this->familiars->removeElement($familiar)) {
+            // set the owning side to null (unless already changed)
+            if ($familiar->getRarity() === $this) {
+                $familiar->setRarity(null);
             }
         }
 

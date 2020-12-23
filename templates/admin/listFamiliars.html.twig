@@ -21,6 +21,7 @@
                         <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
                         <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Espèce</th>
                         <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Invoqué</th>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Rareté</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
@@ -36,6 +37,7 @@
                                     <i class="red fas fa-times"></i>
                                 {% endif %}
                             </td>
+                            <td class="{{ familiar.rarity.color }}">{{ familiar.rarity }}</td>
                             <td>
                                 <a href="{{ path('admin_editFamiliar', {'id': familiar.id}) }}">Modifier</a><br>
                                 <a href="{{ path('admin_skillsFamiliar', {'id': familiar.id}) }}">Gérer compétences</a><br>
