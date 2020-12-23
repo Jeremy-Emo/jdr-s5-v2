@@ -96,13 +96,12 @@ class CreateBattleScenario extends AbstractScenario
                     $fighter['maxSP'] = explode(" / ", $stat['value'])[1];
                 }
             }
-            if ($dbFighter->getHero() !== null) {
+            if ($dbFighter->getHero() !== null || $dbFighter->getFamiliar() !== null) {
                 $fighter['ennemy'] = false;
-                $fighter['name'] = $dbFighter->getHero()->getName();
             } else {
                 $fighter['ennemy'] = true;
-                $fighter['name'] = $dbFighter->getMonster()->getName();
             }
+            $fighter['name'] = $dbFighter->getName();
             unset($fighter);
         }
         return $fighters;

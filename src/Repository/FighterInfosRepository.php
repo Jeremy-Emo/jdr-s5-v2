@@ -63,6 +63,9 @@ class FighterInfosRepository extends ServiceEntityRepository
         $listIds = [];
         foreach ($battle->getParty()->getHeroes() as $hero) {
             $listIds[] = $hero->getFighterInfos()->getId();
+            foreach ($hero->getFamiliars() as $familiar) {
+                $listIds[] = $familiar->getFighterInfos()->getId();
+            }
         }
         foreach ($battle->getMonsters() as $monster) {
             $listIds[] = $monster->getFighterInfos()->getId();
