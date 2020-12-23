@@ -22,20 +22,17 @@ class FighterItem
         return $full;
     }
 
-    public function canBeEquipped(): bool
+    public function canBeEquipped(?bool $isForFamiliar = false): bool
     {
         return (
             (
                 $this->getItem()->getItemSlot() !== null
-                && !$this->getItem()->getItemSlot()->getIsForFamiliar()
-                && (
-                    $this->getHero()->getHero() !== null
-                    || $this->getHero()->getMonster() !== null
-                )
+                && $this->getItem()->getItemSlot()->getIsForFamiliar() === $isForFamiliar
             )
             || (
                 $this->getItem()->getBattleItemInfo() !== null
                 && $this->getItem()->getBattleItemInfo()->getWeaponType() !== null
+                && !$isForFamiliar
             )
         );
     }

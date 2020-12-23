@@ -45,24 +45,6 @@
                             {% endif %}
                         {% endfor %}
                     </div>
-                    <div class="col-md-6">
-                        <h2 class="ma-20-bottom">Armes :</h2>
-                        {% for item in stuff.weapons %}
-                            <p>
-                                <span class="bold">{{ item.item.battleItemInfo.weaponType }} : </span>
-                                <img class="hf_box" src="{{ item.item.getWebPath() }}">
-                                <span
-                                        class="{{ item.item.rarity.color }} cursor-click"
-                                        title="{{ item.item.name }}"
-                                        data-content="{{ item.getFullDescription() }}"
-                                        data-html=true
-                                        data-toggle="popover"
-                                >
-                                    {{ item.item.name }}
-                                </span>
-                            </p>
-                        {% endfor %}
-                    </div>
                 </div>
             </div>
         </div>
@@ -74,11 +56,11 @@
                     <a class="toggle-angle no-hover" data-toggle="collapse" href="#personalInventory" aria-expanded="true" aria-controls="personalInventory">
                         <i class="fas fa-angle-up icon-toggler"></i>
                     </a>
-                    <span>Inventaire personnel</span>
+                    <span>Inventaire</span>
                 </h1>
                 <div class="collapse show border-top pa-20-top" id="personalInventory">
                     <p class="ma-10-bottom">
-                        <span>Nombre d'objets : {{ heroItems|length }}</span>
+                        <span>Nombre d'objets : {{ familiarItems|length }}</span>
                         <span class="f-right"><input type="text" id="searchBar"></span>
                     </p>
                     <table class="table" id="stupidTable">
@@ -91,7 +73,7 @@
                         </tr>
                         </thead>
                         <tbody>
-                        {% for item in heroItems %}
+                        {% for item in familiarItems %}
                             <tr class="searchedItem" data-search="{{ item.item.name|lower }}">
                                 <td
                                     class="cursor-click"
@@ -103,8 +85,8 @@
                                     <img class="hf_box" src="{{ item.item.getWebPath() }}">
                                     <span>{{ item.item.name }}</span>
                                 </td>
-                                <td data-sort-value={{ item.canBeEquipped() ? "1" : "0" }}>
-                                    {% if item.canBeEquipped() %}
+                                <td data-sort-value={{ item.canBeEquipped(true) ? "1" : "0" }}>
+                                    {% if item.canBeEquipped(true) %}
                                         <i class="green fas fa-check"></i>
                                     {% else %}
                                         <i class="red fas fa-times"></i>
@@ -118,40 +100,14 @@
                                     {% endif %}
                                 </td>
                                 <td>
-                                    {% if item.item.isConsumable and item.item.consumableEffect %}
-                                        <a href="{{ path('heroUseItem', {'id': item.id}) }}">Utiliser</a><br>
-                                    {% endif %}
-                                    {% if not item.isEquipped and item.canBeEquipped() %}
-                                        <a href="{{ path('heroToggleStuff', {'heroId': hero.id, 'stuffId': item.id}) }}">Équiper</a><br>
+                                    {% if not item.isEquipped and item.canBeEquipped(true) %}
+                                        <a href="{{ path('equipFamiliar', {'id': item.id}) }}">Équiper</a><br>
                                     {% elseif item.isEquipped %}
-                                        <a href="{{ path('heroToggleStuff', {'heroId': hero.id, 'stuffId': item.id}) }}">Enlever</a><br>
+                                        <a href="{{ path('equipFamiliar', {'id': item.id}) }}">Enlever</a><br>
                                     {% endif %}
-                                    {% if hero.party %}
-                                        <a href="{{ path('heroToggleInventory', {'heroId': hero.id, 'stuffId': item.id, 'type': 'hero'}) }}">Mettre en commun</a>
-                                    {% endif %}
-                                    <span class="like-a-link" data-toggle="modal" data-target="#giveToFamiliarModal{{ item.id }}">Donner à un familier</span>
+                                    <a href="{{ path('notImplemented') }}">Reprendre</a>
                                 </td>
                             </tr>
-                            <div class="modal fade" id="giveToFamiliarModal{{ item.id }}" tabindex="-1" role="dialog" aria-labelledby="giveToFamiliarModalLabel{{ item.id }}" aria-hidden="true">
-                                <div class="modal-dialog modal-dialog-centered" role="document">
-                                    <div class="modal-content">
-                                        <div class="modal-header">
-                                            <h5 class="modal-title" id="giveToFamiliarModal{{ item.id }}">Donner {{ item.item }} à un familier</h5>
-                                            <button type="button" class="close" data-dismiss="modal" aria-label="Close">
-                                                <span aria-hidden="true">&times;</span>
-                                            </button>
-                                        </div>
-                                        <div class="modal-body">
-                                            {% for familiar in hero.familiars %}
-                                            <a href="{{ path('giveItemToFamiliar', {'familiarId': familiar.id, 'id': item.id}) }}">Donner à {{ familiar.name }} - {{ familiar.specie }}</a><br>
-                                            {% endfor %}
-                                        </div>
-                                        <div class="modal-footer">
-                                            <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
-                                        </div>
-                                    </div>
-                                </div>
-                            </div>
                         {% endfor %}
                         </tbody>
                     </table>

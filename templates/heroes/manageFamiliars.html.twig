@@ -20,12 +20,28 @@
                     <p class="border-bottom pa-10-bottom"><span class="bold">Rareté</span> : <span class="{{ familiar.rarity.color }}">{{ familiar.rarity }}</span></p>
                     <p><span class="bold">PV</span> : {{ familiar.fighterInfos.getFullHP }}</p>
                     <p><span class="bold">MP</span> : {{ familiar.fighterInfos.getFullMP }}</p>
-                    <p><span class="bold">Fatigue</span> : {{ familiar.fighterInfos.getFullSP }}</p>
+                    <p class="border-bottom pa-10-bottom"><span class="bold">Fatigue</span> : {{ familiar.fighterInfos.getFullSP }}</p>
+                    <p class="bold">Compétences :</p>
+                    {% for skill in familiar.fighterInfos.skills %}
+                        <p
+                            class="cursor-click ma-5-left"
+                            title="{{ skill.skill.name }}"
+                            data-content="{{ skill.skill.getFullDescription(skill.level) }}"
+                            data-html=true
+                            data-toggle="popover"
+                        >
+                            {{ skill.skill.name }}
+                        </p>
+                    {% endfor %}
                     {% if familiar.isInvoked %}
                         <p><span class="bold green cursor-click toggleInvocation" data-id="{{ familiar.id }}">Utilisé</span></p>
                     {% else %}
                         <p><span class="bold grey cursor-click toggleInvocation" data-id="{{ familiar.id }}">Non-utilisé</span></p>
                     {% endif %}
+
+                    <p class="t-align-right">
+                        <a href="{{ path('stuffFamiliar', {'id': familiar.id}) }}">Inventaire</a>
+                    </p>
                 </div>
             </div>
         {% endfor %}

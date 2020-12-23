@@ -53,6 +53,6 @@ class EquipMonsterController extends AbstractController implements ControllerInt
         ]);
         $form->handleRequest($request);
 
-        return $this->scenario->handle($form, $monster);
+        return $this->scenario->handle($form, $monster->getFighterInfos());
     }
 }

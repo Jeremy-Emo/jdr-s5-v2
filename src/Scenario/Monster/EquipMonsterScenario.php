@@ -3,6 +3,7 @@
 namespace App\Scenario\Monster;
 
 use App\AbstractClass\AbstractScenario;
+use App\Entity\FighterInfos;
 use App\Entity\FighterItem;
 use App\Entity\Monster;
 use App\Exception\ScenarioException;
@@ -34,14 +35,14 @@ class EquipMonsterScenario extends AbstractScenario
 
     /**
      * @param FormInterface $form
-     * @param Monster $monster
+     * @param FighterInfos $fighter
+     * @param string|null $title
+     * @param string|null $redirect
      * @return Response
      * @throws ScenarioException
      */
-    public function handle(FormInterface $form, Monster $monster): Response
+    public function handle(FormInterface $form, FighterInfos $fighter, ?string $title = 'equip_monster', ?string $redirect = 'admin_listMonsters'): Response
     {
-        $fighter = $monster->getFighterInfos();
-
         if ($form->isSubmitted() && $form->isValid()) {
             //Delete existing equipped stuff, we will recreate all
             foreach ($fighter->getHeroItems() as $existingItem) {
@@ -64,20 +65,20 @@ class EquipMonsterScenario extends AbstractScenario
             //Get and persist weapons
             $weaponsToEquip = $form->get('weapons')->getData();
             foreach ($weaponsToEquip as $weapon) {
-                $monsterItem = (new FighterItem())
+                $fItem = (new FighterItem())
                     ->setHero($fighter)
                     ->setItem($weapon)
                     ->setIsEquipped(true);
-                $this->manager->persist($monsterItem);
+                $this->manager->persist($fItem);
             }
 
             $this->manager->flush();
-            return $this->redirectToRoute('admin_listMonsters');
+            return $this->redirectToRoute($redirect);
         }
 
         return $this->renderNewResponse('admin/defaultGenericForm.html.twig', [
             'form' => $form->createView(),
-            'title' => 'equip_monster',
+            'title' => $title,
         ]);
     }
 }
