@@ -160,9 +160,17 @@ class ContinueBattleScenario extends AbstractScenario
             if ($dbFighter === null) {
                 throw new ScenarioException("Fighter not found.");
             }
-            $fightersChoiceList[
-                $dbFighter->getHero() ? "Héros - " . $dbFighter->getHero()->getName() : "Ennemi - " . $dbFighter->getMonster()->getName()
-            ] = $fighter['id'];
+
+            if ($dbFighter->getHero() !== null) {
+                $key = "Héros - " . $dbFighter->getName();
+            } elseif ($dbFighter->getFamiliar() !== null) {
+                $key = "Familier - " . $dbFighter->getName();
+            } elseif ($dbFighter->getMonster() !== null) {
+                $key = "Ennemi - " . $dbFighter->getName();
+            } else {
+                throw new ScenarioException("Type not found");
+            }
+            $fightersChoiceList[$key] = $fighter['id'];
         }
         return $fightersChoiceList;
     }

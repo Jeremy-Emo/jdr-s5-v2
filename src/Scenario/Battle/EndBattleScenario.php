@@ -84,9 +84,33 @@ class EndBattleScenario extends AbstractScenario
                         }
                     }
                 }
+
+                //MAJ Familiers
+                foreach ($member->getFamiliars() as $familiar) {
+                    $familiarFighter = $familiar->getFighterInfos();
+                    if ((int)$fighter['id'] === $familiarFighter->getId()) {
+                        $familiarFighter
+                            ->setCurrentSP($fighter['currentSP'])
+                            ->setCurrentHP($fighter['currentHP'])
+                            ->setCurrentMP($fighter['currentMP'])
+                            ->setCurrentShieldValue($fighter['currentShieldValue'])
+                        ;
+                        if ($fighter['currentHP'] <= 0) {
+                            $familiar->setMaster(null);
+                            $familiarFighter
+                                ->setCurrentSP(0)
+                                ->setCurrentHP($fighter['maxHP'])
+                                ->setCurrentMP($fighter['maxMP'])
+                                ->setCurrentShieldValue(0)
+                            ;
+                        }
+                    }
+                    $this->manager->persist($familiar);
+                }
             }
             $this->manager->persist($member);
         }
+
 
         //MAJ loot
         if (!$isCancelled) {
