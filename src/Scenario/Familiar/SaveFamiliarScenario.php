@@ -72,7 +72,7 @@ class SaveFamiliarScenario extends AbstractScenario
                 (new FighterStat())
                     ->setStat($stat)
                     ->setFighter($fighterInfos)
-                    ->setValue(0)
+                    ->setValue(10)
             );
         }
 
