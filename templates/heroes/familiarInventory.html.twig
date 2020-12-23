@@ -14,7 +14,6 @@
                 </h1>
                 <div class="row collapse show border-top pa-20-top" id="stuff">
                     <div class="col-md-6">
-                        <h2 class="ma-20-bottom">Armures :</h2>
                         {% for key, item in stuff.gears %}
                             {% if item %}
                                 <p>
@@ -105,7 +104,7 @@
                                     {% elseif item.isEquipped %}
                                         <a href="{{ path('equipFamiliar', {'id': item.id}) }}">Enlever</a><br>
                                     {% endif %}
-                                    <a href="{{ path('notImplemented') }}">Reprendre</a>
+                                    <a href="{{ path('takeItemOfFamiliar', {'id': item.id}) }}">Reprendre</a>
                                 </td>
                             </tr>
                         {% endfor %}

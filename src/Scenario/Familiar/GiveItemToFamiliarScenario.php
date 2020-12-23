@@ -26,12 +26,15 @@ class GiveItemToFamiliarScenario extends AbstractScenario
     {
         if ($toFamiliar) {
             $fighterItem->setHero($familiar->getFighterInfos());
+
+            $this->persistItem($fighterItem);
+            return $this->redirectToRoute('heroInventory', ['id' => $familiar->getMaster()->getId()]);
         } else {
             $fighterItem->setHero($familiar->getMaster()->getFighterInfos());
-        }
 
-        $this->persistItem($fighterItem);
-        return $this->redirectToRoute('heroInventory', ['id' => $familiar->getMaster()->getId()]);
+            $this->persistItem($fighterItem);
+            return $this->redirectToRoute('stuffFamiliar', ['id' => $familiar->getId()]);
+        }
     }
 
     private function persistItem(FighterItem $fItem): void
