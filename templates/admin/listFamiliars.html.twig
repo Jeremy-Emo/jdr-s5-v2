@@ -41,6 +41,9 @@
                             <td>
                                 <a href="{{ path('admin_editFamiliar', {'id': familiar.id}) }}">Modifier</a><br>
                                 <a href="{{ path('admin_skillsFamiliar', {'id': familiar.id}) }}">Gérer compétences</a><br>
+                                {% if not familiar.master %}
+                                    <a href="{{ path('admin_giveFamiliar', {'id': familiar.id}) }}">Attribuer</a><br>
+                                {% endif %}
                             </td>
                         </tr>
                     {% endfor %}
