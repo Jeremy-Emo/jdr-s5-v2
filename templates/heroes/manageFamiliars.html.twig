@@ -21,18 +21,6 @@
                     <p><span class="bold">PV</span> : {{ familiar.fighterInfos.getFullHP }}</p>
                     <p><span class="bold">MP</span> : {{ familiar.fighterInfos.getFullMP }}</p>
                     <p class="border-bottom pa-10-bottom"><span class="bold">Fatigue</span> : {{ familiar.fighterInfos.getFullSP }}</p>
-                    <p class="bold">Compétences :</p>
-                    {% for skill in familiar.fighterInfos.skills %}
-                        <p
-                            class="cursor-click ma-5-left"
-                            title="{{ skill.skill.name }}"
-                            data-content="{{ skill.skill.getFullDescription(skill.level) }}"
-                            data-html=true
-                            data-toggle="popover"
-                        >
-                            {{ skill.skill.name }}
-                        </p>
-                    {% endfor %}
                     {% if familiar.isInvoked %}
                         <p><span class="bold green cursor-click toggleInvocation" data-id="{{ familiar.id }}">Utilisé</span></p>
                     {% else %}
@@ -40,8 +28,49 @@
                     {% endif %}
 
                     <p class="t-align-right">
+                        <span class="like-a-link" data-toggle="modal" data-target="#showDetails{{ familiar.id }}">Voir détail</span>
+                    </p>
+
+                    <p class="t-align-right">
                         <a href="{{ path('stuffFamiliar', {'id': familiar.id}) }}">Inventaire</a>
                     </p>
+
+
+                    <div class="modal fade" id="showDetails{{ familiar.id }}" tabindex="-1" role="dialog" aria-labelledby="showDetails{{ familiar.id }}" aria-hidden="true">
+                        <div class="modal-dialog modal-dialog-centered" role="document">
+                            <div class="modal-content">
+                                <div class="modal-header">
+                                    <h5 class="modal-title" id="showDetails{{ familiar.id }}">Détail de {{ familiar.name }}</h5>
+                                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                                        <span aria-hidden="true">&times;</span>
+                                    </button>
+                                </div>
+                                <div class="modal-body">
+                                    <p class="bold">Compétences :</p>
+                                    {% for skill in familiar.fighterInfos.skills %}
+                                        <p
+                                            class="cursor-click ma-5-left"
+                                            title="{{ skill.skill.name }}"
+                                            data-content="{{ skill.skill.getFullDescription(skill.level) }}"
+                                            data-html=true
+                                            data-toggle="popover"
+                                        >
+                                            {{ skill.skill.name }}
+                                        </p>
+                                    {% endfor %}
+                                    <p class="bold">Stats :</p>
+                                    <div class="row">
+                                        {% for stat in familiar.fighterInfos.getStatsInTemplate() %}
+                                            <p class="col-md-6">{{ stat }}</p>
+                                        {% endfor %}
+                                    </div>
+                                </div>
+                                <div class="modal-footer">
+                                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Fermer</button>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
                 </div>
             </div>
         {% endfor %}

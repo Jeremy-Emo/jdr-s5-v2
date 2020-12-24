@@ -111,6 +111,16 @@ class FighterInfos
         return StatManager::returnMetaStat(StatManager::LABEL_SP, $this)['value'];
     }
 
+    public function getStatsInTemplate(): array
+    {
+        $return = [];
+        $stats = StatManager::returnTotalStats($this);
+        foreach ($stats as $stat) {
+            $return[] = $stat['name'] . " : " . $stat['value'];
+        }
+        return $return;
+    }
+
     /**
      * @ORM\Id
      * @ORM\GeneratedValue
