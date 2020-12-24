@@ -89,7 +89,7 @@ class CheckSpellCastingListener implements EventSubscriberInterface
             if (
                 $skill->getFightingSkillInfo() !== null
                 && $skill->getFightingSkillInfo()->getNeedWeaponType() !== null
-                && !$this->actor['ennemy']
+                && $this->actor['isHuman']
             ) {
                 if (isset($this->actor['invokedWeapon'])) {
                     //TODO : implement here when invokedWeapon are released
@@ -117,7 +117,7 @@ class CheckSpellCastingListener implements EventSubscriberInterface
             if (
                 $skill->getFightingSkillInfo() !== null
                 && $skill->getFightingSkillInfo()->getNeedStatusToCast()->count() > 0
-                && !$this->actor['ennemy']
+                && $this->actor['isHuman']
             ) {
                 $isGood = true;
                 if (isset($this->actor['statuses'])) {
@@ -144,7 +144,7 @@ class CheckSpellCastingListener implements EventSubscriberInterface
             if (
                 $skill->getNeedSkill() !== null
                 && !empty($skill->getNeededSkillLevel())
-                && !$this->actor['ennemy']
+                && $this->actor['isHuman']
             ) {
                 $dbActor = $this->fighterRepository->find($this->actor['id']);
                 if ($dbActor === null) {

@@ -98,8 +98,10 @@ class CreateBattleScenario extends AbstractScenario
             }
             if ($dbFighter->getHero() !== null || $dbFighter->getFamiliar() !== null) {
                 $fighter['ennemy'] = false;
+                $fighter['isHuman'] = ($dbFighter->getHero() !== null);
             } else {
                 $fighter['ennemy'] = true;
+                $fighter['isHuman'] = false;
             }
             $fighter['name'] = $dbFighter->getName();
             unset($fighter);

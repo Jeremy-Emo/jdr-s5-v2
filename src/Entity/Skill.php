@@ -27,7 +27,7 @@ class Skill
         return $tags;
     }
 
-    public function getFullDescription(?int $level = 1): string
+    public function getFullDescription(?int $level = 1, ?bool $needFullDescription = true): string
     {
         if ($level === 0) {
             $level = 1;
@@ -41,7 +41,7 @@ class Skill
 
         $notUsableInBattle = "";
         if ($this->isUsableInBattle) {
-            $full .= $this->getFightingSkillInfo()->generateDescription($level);
+            $full .= $this->getFightingSkillInfo()->generateDescription($level, $needFullDescription);
         } else {
             $notUsableInBattle .= "<p class='red'>Non utilisable en combat</p>";
         }
@@ -61,7 +61,7 @@ class Skill
 
         $full .= $notUsableInBattle;
 
-        if ($this->needSkill !== null && $this->neededSkillLevel > 0) {
+        if ($this->needSkill !== null && $this->neededSkillLevel > 0 && $needFullDescription) {
             $full .= "<p class='red'>Nécessite la compétence " . $this->needSkill . " au niveau " . $this->neededSkillLevel . "</p>";
         }
 

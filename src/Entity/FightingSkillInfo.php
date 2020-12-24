@@ -12,7 +12,7 @@ use Doctrine\ORM\Mapping as ORM;
  */
 class FightingSkillInfo
 {
-    public function generateDescription(?int $level = 1): string
+    public function generateDescription(?int $level = 1, ?bool $needFullDescription = true): string
     {
         if ($level === 0) {
             $level = 1;
@@ -132,11 +132,11 @@ class FightingSkillInfo
             $full .= "<p>" . $add . "</p>";
         }
 
-        if ($this->needWeaponType !== null) {
+        if ($this->needWeaponType !== null && $needFullDescription) {
             $full .= "<p class='red'>Nécessite une arme de type : " . $this->needWeaponType . "</p>";
         }
 
-        if ($this->needStatusToCast->count() > 0) {
+        if ($this->needStatusToCast->count() > 0 && $needFullDescription) {
             $full .= "<p>Nécessite d'être affecté par ";
             foreach ($this->needStatusToCast as $status) {
                 $full .= $status;
