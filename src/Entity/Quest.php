@@ -44,32 +44,29 @@ class Quest
     {
         $return = "<p class='border-bottom ma-10-bottom pa-10-bottom'>" . $this->getDescription() . "</p>";
         foreach ($this->getRewards() as $reward) {
-            $return .= "<p class='bold'>Récompenses de rang " . $reward->getCompletionRank() . " : </p><ul class='border-bottom ma-10-bottom pa-10-bottom'>";
-            if (!empty($reward->getStatPoints())) {
-                $return .= "<li>Points de stats : " . $reward->getStatPoints() . "</li>";
-            }
-            if (!empty($reward->getSkillPoints())) {
-                $return .= "<li>Points de skills : " . $reward->getSkillPoints() . "</li>";
-            }
-            if ($reward->getRandomItem() !== null) {
-                $return .= "<li>Objet aléatoire de rang " . $reward->getRandomItem() . "</li>";
-            }
-            if ($reward->getSkills()->count() > 0) {
-                $return .= "<li>Compétences transcendantes : <br>";
-                foreach ($reward->getSkills() as $skill) {
-                    $return .= "- " .$skill->getName() . "<br>";
-                }
-                $return .= "</li>";
-            }
-            if ($reward->getItems()->count() > 0) {
-                $return .= "<li>Objets : <br>";
-                foreach ($reward->getItems() as $item) {
-                    $return .= "- " .$item->getName() . "<br>";
-                }
-                $return .= "</li>";
-            }
-            $return .= "</ul>";
+            $return .= $reward->getRewardDescription();
         }
+        return $return;
+    }
+
+    /**
+     * @return string
+     */
+    public function getFullDescriptionForHero(): string
+    {
+        $return = "<p class='border-bottom ma-10-bottom pa-10-bottom'>" . $this->getDescription() . "</p>";
+        if ($this->isCompleted) {
+            if ($this->isFailed) {
+                $return .= "<p class='red bold'>Quête échouée</p>";
+            } else {
+                foreach ($this->getRewards() as $reward) {
+                    if ($reward->getCompletionRank() === $this->completionRank) {
+                        $return .= $reward->getRewardDescription();
+                    }
+                }
+            }
+        }
+
         return $return;
     }
 

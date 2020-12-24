@@ -24,7 +24,7 @@
                             <td
                                 class="cursor-click"
                                 title="{{ quest.name }}"
-                                data-content="{{ quest.description }}"
+                                data-content="{{ quest.getFullDescriptionForHero() }}"
                                 data-html=true
                                 data-toggle="popover"
                             >
@@ -48,7 +48,7 @@
                                 <td
                                     class="cursor-click"
                                     title="{{ quest.name }}"
-                                    data-content="{{ quest.description }}"
+                                    data-content="{{ quest.getFullDescriptionForHero() }}"
                                     data-html=true
                                     data-toggle="popover"
                                 >

@@ -13,6 +13,40 @@ use Doctrine\ORM\Mapping as ORM;
 class Reward
 {
     /**
+     * @return string
+     */
+    public function getRewardDescription(): string
+    {
+        $return = "<p class='bold'>Récompenses de rang " . $this->getCompletionRank() . " : </p><ul class='border-bottom ma-10-bottom pa-10-bottom'>";
+        if (!empty($this->getStatPoints())) {
+            $return .= "<li>Points de stats : " . $this->getStatPoints() . "</li>";
+        }
+        if (!empty($this->getSkillPoints())) {
+            $return .= "<li>Points de skills : " . $this->getSkillPoints() . "</li>";
+        }
+        if ($this->getRandomItem() !== null) {
+            $return .= "<li>Objet aléatoire de rang " . $this->getRandomItem() . "</li>";
+        }
+        if ($this->getSkills()->count() > 0) {
+            $return .= "<li>Compétences transcendantes : <br>";
+            foreach ($this->getSkills() as $skill) {
+                $return .= "- " .$skill->getName() . "<br>";
+            }
+            $return .= "</li>";
+        }
+        if ($this->getItems()->count() > 0) {
+            $return .= "<li>Objets : <br>";
+            foreach ($this->getItems() as $item) {
+                $return .= "- " .$item->getName() . "<br>";
+            }
+            $return .= "</li>";
+        }
+        $return .= "</ul>";
+
+        return $return;
+    }
+
+    /**
      * @ORM\Id
      * @ORM\GeneratedValue
      * @ORM\Column(type="integer")
