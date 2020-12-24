@@ -111,12 +111,26 @@ class FighterInfos
         return StatManager::returnMetaStat(StatManager::LABEL_SP, $this)['value'];
     }
 
+    /**
+     * @return array
+     */
     public function getStatsInTemplate(): array
     {
         $return = [];
         $stats = StatManager::returnTotalStats($this);
         foreach ($stats as $stat) {
             $return[] = $stat['name'] . " : " . $stat['value'];
+        }
+        return $return;
+    }
+
+    public function getSkillsForDisplay(?bool $isPassive = false): array
+    {
+        $return = [];
+        foreach ($this->getSkills() as $fSkill) {
+            if ($fSkill->getSkill()->getIsPassive() === $isPassive) {
+                $return[] = $fSkill;
+            }
         }
         return $return;
     }

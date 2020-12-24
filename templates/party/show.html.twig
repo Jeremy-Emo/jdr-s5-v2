@@ -46,7 +46,35 @@
                         <div class="col-md-6 border-right full-height">
                             <p>PV actuels : {{ hero.fighterInfos.getFullHP }}</p>
                             <p>MP actuels : {{ hero.fighterInfos.getFullMP }}</p>
-                            <p>Fatigue : {{ hero.fighterInfos.getFullSP }}</p>
+                            <p class="border-bottom pa-15-bottom">Fatigue : {{ hero.fighterInfos.getFullSP }}</p>
+                            {% if hero.fighterInfos.getSkillsForDisplay(true)|length > 0 %}
+                                <h2>Compétences passives :</h2>
+                                {% for skill in hero.fighterInfos.getSkillsForDisplay(true) %}
+                                    <p
+                                        class="cursor-click ma-5-left"
+                                        title="{{ skill.skill.name }}"
+                                        data-content="{{ skill.skill.getFullDescription(skill.level) }}"
+                                        data-html=true
+                                        data-toggle="popover"
+                                    >
+                                        {{ skill.skill.name }} - Niv. {{ skill.level }}
+                                    </p>
+                                {% endfor %}
+                            {% endif %}
+                            {% if hero.fighterInfos.getSkillsForDisplay()|length > 0 %}
+                                <h2>Compétences actives :</h2>
+                                {% for skill in hero.fighterInfos.getSkillsForDisplay() %}
+                                    <p
+                                        class="cursor-click ma-5-left"
+                                        title="{{ skill.skill.name }}"
+                                        data-content="{{ skill.skill.getFullDescription(skill.level) }}"
+                                        data-html=true
+                                        data-toggle="popover"
+                                    >
+                                        {{ skill.skill.name }} - Niv. {{ skill.level }}
+                                    </p>
+                                {% endfor %}
+                            {% endif %}
                         </div>
                         <div class="col-md-6 full-height">
                             <h2>Quêtes en cours :</h2>
