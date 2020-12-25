@@ -1,0 +1,49 @@
+{% extends 'main/layout.html.twig' %}
+
+{% block page_title %}Admin - Gestion des compétences transcendantes{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col">
+            <a href="{{ path('admin_createAccountSkill', {'id': account.id}) }}"><button type="button" class="btn btn-primary">Ajouter une compétence transcendante</button></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col ma-25-top">
+            <div class="pa-20 bg-white">
+                <p class="ma-10-bottom">
+                    <span>Nombre de compétences : {{ accountSkills|length }}</span>
+                    <span class="f-right ma-5-right"><input type="text" id="searchBar"></span>
+                </p>
+                <table class="table" id="stupidTable">
+                    <thead>
+                    <tr>
+                        <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Niveau</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for skill in accountSkills %}
+                        <tr class="searchedItem" data-search="{{ skill.skill.name|lower }}">
+                            <td class="cursor-click" title="{{ skill.skill.name }}" data-content="{{ skill.skill.getFullDescription() }}" data-html=true data-toggle="popover">{{ skill.skill.name }}</td>
+                            <td data-sort-value="{{ skill.level }}">
+                                {{ skill.level }}
+                            </td>
+                            <td>
+                                <a href="{{ path('admin_editAccountSkill', {'id': skill.id}) }}">Modifier</a><br>
+                                <a href="{{ path('admin_deleteAccountSkill', {'id': skill.id}) }}">Supprimer</a><br>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
+
+{% block moreJS %}
+    {{ parent() }}
+    {{ encore_entry_script_tags('searchBar') }}
+{% endblock %}

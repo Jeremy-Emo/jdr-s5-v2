@@ -31,6 +31,7 @@
                             <td>
                                 <a href="{{ path('admin_resetPassword', {'id':user.id}) }}">Changer mot de passe</a><br>
                                 <a href="{{ path('admin_editAccount', {'id':user.id}) }}">Modifier</a><br>
+                                <a href="{{ path('admin_listAccountSkills', {'id':user.id}) }}">Modifier compétences</a><br>
                                 <a href="{{ path('index', {'_compte': user.username}) }}">Utiliser</a><br>
                                 <span class="like-a-link" data-toggle="modal" data-target="#deleteModal{{ user.id }}">Supprimer</span>
                             </td>
