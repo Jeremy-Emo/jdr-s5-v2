@@ -161,6 +161,10 @@ abstract class AbstractBattleScenario extends AbstractScenario
         }
     }
 
+    /**
+     * @param bool $checkDodgeStat
+     * @throws \Exception
+     */
     protected function checkIfDodged(bool $checkDodgeStat = true): void
     {
         if ($checkDodgeStat) {

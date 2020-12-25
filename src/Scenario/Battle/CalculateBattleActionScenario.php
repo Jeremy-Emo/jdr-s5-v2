@@ -151,6 +151,9 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                     $actor['currentSP'] = $actor['currentSP'] + $this->getValueOfPassiveCustomEffect($this->currentTarget, 'pression');
 
                     //Check esquive
+                    if ($this->checkStatus($actor, 'debuff_accuracy') && rand(1, 2) === 1) {
+                        $this->itsADodge = true;
+                    }
                     $this->checkIfDodged();
                     if (!$this->itsADodge) {
                         $this->calculateDefensivePower();
