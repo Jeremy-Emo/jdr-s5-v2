@@ -35,3 +35,5 @@ create_familiar : Créer un familier
 edit_familiar: Modifier un familier
 familiar_skills : Compétences du familier
 give_familiar : Donner familier
+add_account_skill : Ajouter compétence transcendante
+edit_account_skill: Modifier compétence transcendante

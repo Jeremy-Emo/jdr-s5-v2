@@ -65,6 +65,7 @@ class CompleteQuestScenario extends AbstractScenario
 
     /**
      * @param Quest $quest
+     * @throws ScenarioException
      */
     private function giveRewards(Quest $quest): void
     {
@@ -105,11 +106,15 @@ class CompleteQuestScenario extends AbstractScenario
     /**
      * @param Hero $hero
      * @param Reward $reward
+     * @throws ScenarioException
      */
     private function giveRewardsOfOnePersonExceptFixedItem(Hero $hero, Reward $reward): void
     {
         if ($reward->getRandomItem() !== null) {
             $item = $this->itemRepository->findRandomByRarity($reward->getRandomItem());
+            if ($item === null) {
+                throw new ScenarioException("Random item not found");
+            }
             $hero->getFighterInfos()->addHeroItem(
                 (new FighterItem())->setItem($item)->setHero($hero->getFighterInfos())
             );

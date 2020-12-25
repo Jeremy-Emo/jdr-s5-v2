@@ -55,6 +55,13 @@ class SaveItemType extends AbstractType
                 'label' => 'Consommable',
                 'required' => false
             ])
+            ->add('isNotRandomizable', CheckboxType::class, [
+                'row_attr' => [
+                    'class' => 'pretty p-default d-block',
+                ],
+                'label' => 'Ne peut être obtenu aléatoirement',
+                'required' => false
+            ])
             ->add('consumableEffect', ConsumableEffectType::class, [
                 'required' => false,
             ])

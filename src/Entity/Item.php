@@ -123,6 +123,11 @@ class Item extends UploadImageEntity
      */
     private ?ConsumableEffect $consumableEffect;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $isNotRandomizable;
+
     public function getId(): ?int
     {
         return $this->id;
@@ -237,6 +242,18 @@ class Item extends UploadImageEntity
     public function setConsumableEffect(?ConsumableEffect $consumableEffect): self
     {
         $this->consumableEffect = $consumableEffect;
+
+        return $this;
+    }
+
+    public function getIsNotRandomizable(): ?bool
+    {
+        return $this->isNotRandomizable;
+    }
+
+    public function setIsNotRandomizable(bool $isNotRandomizable): self
+    {
+        $this->isNotRandomizable = $isNotRandomizable;
 
         return $this;
     }

@@ -57,6 +57,7 @@ class ItemRepository extends ServiceEntityRepository
         $items = $this->createQueryBuilder('i')
             ->join('i.rarity', 'r')
             ->andWhere('r.id = :rarity')
+            ->andWhere('i.isNotRandomizable = false')
             ->setParameter('rarity', $rarity->getId())
             ->getQuery()
             ->getResult()
