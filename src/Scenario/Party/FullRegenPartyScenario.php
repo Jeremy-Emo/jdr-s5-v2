@@ -3,6 +3,7 @@
 namespace App\Scenario\Party;
 
 use App\AbstractClass\AbstractScenario;
+use App\Entity\FighterInfos;
 use App\Entity\Party;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -30,15 +31,23 @@ class FullRegenPartyScenario extends AbstractScenario
     {
         foreach ($party->getHeroes() as $hero) {
             $fighter = $hero->getFighterInfos();
-            $fighter
-                ->setCurrentSP(0)
-                ->setCurrentMP(explode(" / ", $fighter->getFullMP())[1])
-                ->setCurrentHP(explode(" / ", $fighter->getFullHP())[1])
-            ;
-            $this->manager->persist($fighter);
+            $this->fullHealFighter($fighter);
+            foreach ($hero->getFamiliars() as $familiar) {
+                $this->fullHealFighter($familiar->getFighterInfos());
+            }
         }
         $this->manager->flush();
 
         return $this->redirectToRoute('showParty', ['id' => $party->getId()]);
+    }
+
+    private function fullHealFighter(FighterInfos $fighter): void
+    {
+        $fighter
+            ->setCurrentSP(0)
+            ->setCurrentMP(explode(" / ", $fighter->getFullMP())[1])
+            ->setCurrentHP(explode(" / ", $fighter->getFullHP())[1])
+        ;
+        $this->manager->persist($fighter);
     }
 }
