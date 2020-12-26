@@ -147,6 +147,11 @@ class Skill
      */
     private Collection $statBonusPercents;
 
+    /**
+     * @ORM\Column(type="boolean")
+     */
+    private ?bool $isNotReleased = true;
+
     public function __construct()
     {
         $this->accountSkills = new ArrayCollection();
@@ -373,6 +378,18 @@ class Skill
         if ($this->statBonusPercents->removeElement($statBonusPercent)) {
             $statBonusPercent->removeSkill($this);
         }
+
+        return $this;
+    }
+
+    public function getIsNotReleased(): ?bool
+    {
+        return $this->isNotReleased;
+    }
+
+    public function setIsNotReleased(bool $isNotReleased): self
+    {
+        $this->isNotReleased = $isNotReleased;
 
         return $this;
     }

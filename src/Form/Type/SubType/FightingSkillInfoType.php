@@ -18,6 +18,7 @@ class FightingSkillInfoType extends AbstractType
             ->add('customEffects')
             ->add('boostAtb')
             ->add('reducAtb')
+            ->add('autoAtbBoost')
             ->add('castingTime', IntegerType::class, [
                 'required' => false,
                 'empty_data' => "0"

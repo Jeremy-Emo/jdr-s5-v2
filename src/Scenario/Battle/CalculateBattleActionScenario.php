@@ -245,6 +245,9 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                     if (!empty($this->fSkill->getSkill()->getFightingSkillInfo()->getIsReplayAttack())) {
                         $actor['changeAtb'] = 9999;
                     }
+                    if (!empty($this->fSkill->getSkill()->getFightingSkillInfo()->getAutoAtbBoost())) {
+                        $actor['changeAtb'] = $actor['changeAtb'] + $this->fSkill->getSkill()->getFightingSkillInfo()->getAutoAtbBoost();;
+                    }
 
                     //Drain de vie
                     if (

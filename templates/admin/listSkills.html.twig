@@ -34,6 +34,7 @@
                         <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Coût d'achat</th>
                         <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nécessite</th>
                         <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Tags</th>
+                        <th scope="col" data-sort="int" class="cursor-click"><i class="fas fa-caret-down"></i> Est disponible</th>
                         <th scope="col">Actions</th>
                     </tr>
                     </thead>
@@ -65,6 +66,13 @@
                             </td>
                             <td data-sort-value={{ skill.tags|length > 0 ? "1" : "0" }}>
                                 {% if skill.tags|length > 0 %}
+                                    <i class="green fas fa-check"></i>
+                                {% else %}
+                                    <i class="red fas fa-times"></i>
+                                {% endif %}
+                            </td>
+                            <td data-sort-value={{ skill.isNotReleased ? "0" : "1" }}>
+                                {% if not skill.isNotReleased %}
                                     <i class="green fas fa-check"></i>
                                 {% else %}
                                     <i class="red fas fa-times"></i>

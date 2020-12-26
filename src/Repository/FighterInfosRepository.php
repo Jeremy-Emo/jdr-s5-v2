@@ -29,6 +29,7 @@ class FighterInfosRepository extends ServiceEntityRepository
             ->select('s3')
             ->from(Skill::class, 's3')
             ->where('s3.needSkill is not null')
+            ->andWhere('s3.isNotReleased = false')
         ;
         $skillsToFilter = $qb1->getQuery()->getResult();
 
@@ -37,6 +38,7 @@ class FighterInfosRepository extends ServiceEntityRepository
             ->select('s2')
             ->from(Skill::class, 's2')
             ->where('s2.needSkill is null')
+            ->andWhere('s2.isNotReleased = false')
         ;
         $allSkills = $qb2->getQuery()->getResult();
 

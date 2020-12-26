@@ -155,6 +155,10 @@ class FightingSkillInfo
             $full .= "<p>Booste l'atb de " . $this->boostAtb . " %</p>";
         }
 
+        if (!empty($this->autoAtbBoost)) {
+            $full .= "<p>Booste votre atb de " . $this->boostAtb . " %</p>";
+        }
+
         if (!empty($this->reducAtb)) {
             $full .= "<p>Réduit l'atb de " . $this->reducAtb . " %</p>";
         }
@@ -329,6 +333,11 @@ class FightingSkillInfo
      * @ORM\Column(type="boolean")
      */
     private ?bool $isReplayAttack = false;
+
+    /**
+     * @ORM\Column(type="integer", nullable=true)
+     */
+    private ?int $autoAtbBoost;
 
     public function __construct()
     {
@@ -754,6 +763,18 @@ class FightingSkillInfo
     public function setIsReplayAttack(bool $isReplayAttack): self
     {
         $this->isReplayAttack = $isReplayAttack;
+
+        return $this;
+    }
+
+    public function getAutoAtbBoost(): ?int
+    {
+        return $this->autoAtbBoost;
+    }
+
+    public function setAutoAtbBoost(?int $autoAtbBoost): self
+    {
+        $this->autoAtbBoost = $autoAtbBoost;
 
         return $this;
     }
