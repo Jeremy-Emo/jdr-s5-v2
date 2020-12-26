@@ -1,0 +1,16 @@
+{% extends 'main/layout.html.twig' %}
+
+{% block page_title %}Compétences devenues disponibles{% endblock %}
+
+{% block content %}
+<div class="row">
+    <div class="col ma-25-top">
+        <div class="pa-20 bg-white full-height">
+            <h2>Compétences rendues disponibles :</h2>
+            {% for skill in skills %}
+                <p>{{ skill.getTagsForRelease() }}{{ skill.name }}</p>
+            {% endfor %}
+        </div>
+    </div>
+</div>
+{% endblock %}

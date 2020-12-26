@@ -27,6 +27,21 @@ class Skill
         return $tags;
     }
 
+    public function getTagsForRelease(): string
+    {
+        $tags = "";
+        foreach ($this->getTags() as $tag) {
+            $tags .= $tag->getName();
+            if ($tag !== $this->getTags()->last()) {
+                $tags .= " / ";
+            }
+        }
+        if ($this->getTags()->count() > 0) {
+            $tags .= " - ";
+        }
+        return $tags;
+    }
+
     public function getFullDescription(?int $level = 1, ?bool $needFullDescription = true): string
     {
         if ($level === 0) {
