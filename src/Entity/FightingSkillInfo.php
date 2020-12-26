@@ -156,7 +156,7 @@ class FightingSkillInfo
         }
 
         if (!empty($this->autoAtbBoost)) {
-            $full .= "<p>Booste votre atb de " . $this->boostAtb . " %</p>";
+            $full .= "<p>Booste votre atb de " . $this->autoAtbBoost . " %</p>";
         }
 
         if (!empty($this->reducAtb)) {
