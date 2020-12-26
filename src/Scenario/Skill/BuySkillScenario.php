@@ -133,7 +133,7 @@ class BuySkillScenario extends AbstractScenario
         $skills = [];
         /** @var Skill $potentialSkill */
         foreach ($availableSkills as $potentialSkill) {
-            if ($potentialSkill->getCost() <= $fighter->getStatPoints()) {
+            if ($potentialSkill->getCost() <= $fighter->getSkillPoints()) {
                 $skills[] = $potentialSkill;
             }
         }
