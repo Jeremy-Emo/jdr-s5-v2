@@ -20,6 +20,7 @@ $(document).ready(function () {
                     'skillId': $this.data('skillid')
                 }).fail(function (data) {
                     popErrorMessage(data.responseJSON.message);
+                    antiSpam = false;
                 }).done(function (data) {
                     let skillBox = $this.closest('.skill_box')
                     let levelBox = skillBox.find('.level_box');
@@ -40,19 +41,24 @@ $(document).ready(function () {
         if (parseInt(skillPoints.text()) < 1) {
             popErrorMessage("Nombre de points insuffisants !");
         } else {
-            $.post("/heros/acheter-competence-aleatoire", {
-                'heroId' : $this.data('heroid'),
-            }).fail(function (data) {
-                popErrorMessage(data.responseJSON.message);
-            }).done(function (data) {
-                let skillBox = $('[data-idforrandom=' + data.data.id +']');
-                let levelBox = skillBox.find('.level_box');
-                levelBox.text(parseInt(levelBox.text()) + 1);
-                skillPoints.text(parseInt(skillPoints.text()) - data.data.cost);
-                if (!skillBox.hasClass("heroSkill")) {
-                    skillBox.addClass("heroSkill");
-                }
-            });
+            if (!antiSpam) {
+                antiSpam = true;
+                $.post("/heros/acheter-competence-aleatoire", {
+                    'heroId': $this.data('heroid'),
+                }).fail(function (data) {
+                    popErrorMessage(data.responseJSON.message);
+                    antiSpam = false;
+                }).done(function (data) {
+                    let skillBox = $('[data-idforrandom=' + data.data.id + ']');
+                    let levelBox = skillBox.find('.level_box');
+                    levelBox.text(parseInt(levelBox.text()) + 1);
+                    skillPoints.text(parseInt(skillPoints.text()) - data.data.cost);
+                    if (!skillBox.hasClass("heroSkill")) {
+                        skillBox.addClass("heroSkill");
+                    }
+                    antiSpam = false;
+                });
+            }
         }
     });
 

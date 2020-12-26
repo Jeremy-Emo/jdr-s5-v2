@@ -19,6 +19,7 @@ $(document).ready(function () {
                     'statId': $this.data('statid')
                 }).fail(function (data) {
                     popErrorMessage(data.responseJSON.message);
+                    antiSpam = false;
                 }).done(function (data) {
                     let statBox = $this.closest('.stat-box')
                     let levelBox = statBox.find('.stat-value');

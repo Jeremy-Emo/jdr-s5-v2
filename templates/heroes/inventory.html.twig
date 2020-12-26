@@ -127,7 +127,7 @@
                                         <a href="{{ path('heroToggleStuff', {'heroId': hero.id, 'stuffId': item.id}) }}">Enlever</a><br>
                                     {% endif %}
                                     {% if hero.party %}
-                                        <a href="{{ path('heroToggleInventory', {'heroId': hero.id, 'stuffId': item.id, 'type': 'hero'}) }}">Mettre en commun</a>
+                                        <a href="{{ path('heroToggleInventory', {'heroId': hero.id, 'stuffId': item.id, 'type': 'hero'}) }}">Mettre en commun</a><br>
                                     {% endif %}
                                     <span class="like-a-link" data-toggle="modal" data-target="#giveToFamiliarModal{{ item.id }}">Donner à un familier</span>
                                 </td>

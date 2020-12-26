@@ -15,6 +15,7 @@ $(document).ready(function () {
                 "/familier/" + $this.data('id') + "/changer-invocation"
             ).fail(function (data) {
                 popErrorMessage(data.responseJSON.message);
+                antiSpam = false;
             }).done(function (data) {
                 if ($this.hasClass('grey')) {
                     $this.addClass('green').removeClass('grey');
