@@ -63,10 +63,15 @@ $(document).ready(function () {
     });
 
     $('.jsonPrettify').each(function (index) {
-        console.log($(this).text())
         let obj = JSON.parse( $(this).text() );
         let pretty = JSON.stringify(obj, undefined, 4);
         $(this).text(pretty);
+    });
+
+    $body.on('click', '.rollTheDice', function () {
+        let diceNumber = parseInt($(this).data('number'));
+        let result = Math.floor((Math.random() * diceNumber) + 1);
+        $(this).find('span').text(result);
     });
 
 });

@@ -66,3 +66,16 @@
   max-height: 450px;
   overflow-y: scroll;
 }
+
+#diceBox {
+  padding : 10px;
+  position : absolute;
+  bottom : 75px;
+  right : 25px;
+  border : 2px solid black;
+  user-select: none;
+  font-weight: bold;
+  & span {
+    font-weight: normal;
+  }
+}

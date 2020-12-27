@@ -20,6 +20,24 @@
         </div>
     </div>
 
+    {% if is_granted("ROLE_MJ") %}
+        <div id="diceBox" class="column bg-white">
+            <p>Roll the dice !</p>
+            <div class="rollTheDice cursor-click" data-number="6">
+                D6 => <span></span>
+            </div>
+            <div class="rollTheDice cursor-click" data-number="10">
+                D10 => <span></span>
+            </div>
+            <div class="rollTheDice cursor-click" data-number="20">
+                D20 => <span></span>
+            </div>
+            <div class="rollTheDice cursor-click" data-number="100">
+                D100 => <span></span>
+            </div>
+        </div>
+    {% endif %}
+
     <footer>
         <p class="t-align-center">Jeremy Emo - 2017-{{ "now"|date("Y") }}</p>
     </footer>
