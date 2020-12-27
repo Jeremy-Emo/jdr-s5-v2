@@ -32,7 +32,11 @@ class Item extends UploadImageEntity
         }
 
         if (!empty($this->customEffect)) {
-            $full .= "<p>Effet spécial : " . $this->customEffect . "</p>";
+            $full .= "<p>Effet spécial : " . $this->customEffect;
+            if (!empty($this->customEffect->getAdvancedDescription())) {
+                $full .= "<br>" . $this->customEffect->getAdvancedDescription();
+            }
+            $full.= "</p>";
         }
 
         if ($this->getIsConsumable() && $this->getConsumableEffect() !== null) {
