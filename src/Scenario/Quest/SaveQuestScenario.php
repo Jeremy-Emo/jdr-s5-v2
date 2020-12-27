@@ -4,6 +4,7 @@ namespace App\Scenario\Quest;
 
 use App\AbstractClass\AbstractScenario;
 use App\Entity\Quest;
+use App\Entity\Reward;
 use App\Exception\ScenarioException;
 use Doctrine\ORM\EntityManagerInterface;
 use Psr\Log\LoggerInterface;
@@ -34,6 +35,11 @@ class SaveQuestScenario extends AbstractScenario
         if($form->isSubmitted() && $form->isValid()) {
             /** @var Quest $quest */
             $quest = $form->getData();
+            $rewards = $form->get('rewards')->getData();
+            /** @var Reward $reward */
+            foreach ($rewards as $reward) {
+                $this->manager->persist($reward->setQuest($quest));
+            }
 
             $this->manager->persist($quest);
             $this->manager->flush();
