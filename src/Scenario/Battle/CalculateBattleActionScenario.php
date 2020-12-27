@@ -211,14 +211,17 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                 }
 
                 //Vérifications customEffect de l'attaquant
-                /** @var CustomEffect $ce */
-                foreach ($this->customEffects as $ce) {
-                    $this->applyCustomEffectsOnTarget($target, $ce);
+                if (!$this->itsADodge) {
+                    /** @var CustomEffect $ce */
+                    foreach ($this->customEffects as $ce) {
+                        $this->applyCustomEffectsOnTarget($target, $ce);
+                    }
                 }
 
                 if (
                     $this->fSkill !== null
                     && $this->fSkill->getSkill()->getFightingSkillInfo() !== null
+                    && !$this->itsADodge
                 ) {
                     //Application réactions élémentaires
                     $this->checkElementalReactions($target);
@@ -233,6 +236,8 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
                             }
                         }
                     }
+
+
 
                     //Changements atb
                     $target['changeAtb'] = 0;
