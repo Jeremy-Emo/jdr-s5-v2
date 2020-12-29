@@ -113,17 +113,31 @@ class BuySkillScenario extends AbstractScenario
 
         $this->manager->flush();
 
+        $unlockedSkills = $this->skillRepository->findBy([
+            'needSkill' => $existingSkill->getSkill(),
+            'neededSkillLevel' => $existingSkill->getLevel()
+        ]);
+
+        $unlocked = [];
+        foreach ($unlockedSkills as $unlockedSkill) {
+            $unlocked[] = $unlockedSkill->getName();
+        }
+
         if ($isRandom) {
             return new JsonResponse([
                 'success' => true,
                 'data' => [
                     'id' => $skill->getId(),
-                    'cost' => $cost
+                    'cost' => $cost,
+                    'unlockedSkills' => $unlocked,
                 ]
             ]);
         }
         return new JsonResponse([
-            'success' => true
+            'success' => true,
+            'data' => [
+                'unlockedSkills' => $unlocked,
+            ]
         ]);
     }
 

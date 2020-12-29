@@ -29,6 +29,10 @@ $(document).ready(function () {
                     if (!skillBox.hasClass("heroSkill")) {
                         skillBox.addClass("heroSkill");
                     }
+                    if (data.data.unlockedSkills.length > 0) {
+                        localStorage.setItem('unlockedSkills', JSON.stringify(data.data.unlockedSkills));
+                        location.reload()
+                    }
                     antiSpam = false;
                 });
             }
@@ -55,6 +59,10 @@ $(document).ready(function () {
                     skillPoints.text(parseInt(skillPoints.text()) - data.data.cost);
                     if (!skillBox.hasClass("heroSkill")) {
                         skillBox.addClass("heroSkill");
+                    }
+                    if (data.data.unlockedSkills.length > 0) {
+                        localStorage.setItem('unlockedSkills', JSON.stringify(data.data.unlockedSkills));
+                        location.reload()
                     }
                     antiSpam = false;
                 });
@@ -90,6 +98,15 @@ $(document).ready(function () {
             "positionClass": positionClass
         }
         toastr.error(message);
+    }
+
+    if (localStorage.getItem('unlockedSkills')) {
+        let text = "<span class='bold'>Compétences débloquées : </span><br>";
+        JSON.parse(localStorage.getItem('unlockedSkills')).forEach(function (index) {
+            text += " - " + index + "<br>";
+        });
+        $("#unlockedSkills").html(text);
+        localStorage.removeItem('unlockedSkills');
     }
 
 });
