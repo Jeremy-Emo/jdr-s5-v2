@@ -18,6 +18,7 @@
         <p id="unlockedSkills"></p>
     </div>
     <div class="row bg-white pa-20">
+        <p class="col-12"><input type="text" id="searchBar"></p>
         {% for skill in skills %}
             {% set level = 0 %}
             {% for heroSkill in heroSkills %}
@@ -25,7 +26,7 @@
                     {% set level = heroSkill.level %}
                 {% endif %}
             {% endfor %}
-            <div class="col-md-3 skill_box {{ level > 0 ? "heroSkill" : "" }}" data-idforrandom="{{ skill.id }}">
+            <div class="col-md-3 skill_box searchedItem {{ level > 0 ? "heroSkill" : "" }}" data-idforrandom="{{ skill.id }}" data-search="{{ skill.name|lower }}">
                 <span
                     class="cursor-click"
                     title="{{ skill.name }}"

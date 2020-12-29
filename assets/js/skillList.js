@@ -89,6 +89,20 @@ $(document).ready(function () {
         }
     });
 
+    body.on('change input', "#searchBar", function(){
+        let search = $("#searchBar").val();
+        let allRows = body.find(".searchedItem");
+        allRows.each(function(index, row) {
+            $(row).show();
+        });
+        if (search !== "") {
+            let rows = $(".searchedItem").not("[data-search*='" + search.toLowerCase() + "']");
+            rows.each(function(index, row) {
+                $(row).hide();
+            });
+        }
+    });
+
     function popErrorMessage(message){
         let positionClass = "toast-top-left";
         if(screen.width <= 768){
