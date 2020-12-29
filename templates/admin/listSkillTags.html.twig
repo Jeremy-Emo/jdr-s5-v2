@@ -28,7 +28,8 @@
                             </td>
                             <td>{{ tag.nameId }}</td>
                             <td>
-                                <a href="{{ path('admin_editSkillTag', {'id': tag.id}) }}">Modifier</a>
+                                <a href="{{ path('admin_editSkillTag', {'id': tag.id}) }}">Modifier</a><br>
+                                <a href="{{ path('admin_deleteSkillTag', {'id': tag.id}) }}">Supprimer</a>
                             </td>
                         </tr>
                     {% endfor %}
