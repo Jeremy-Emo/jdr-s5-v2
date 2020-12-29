@@ -15,6 +15,7 @@
                 <a href="{{ path('admin_listCompletionRanks') }}" class="ma-5-right ma-5-bottom d-inline-block"><button type="button" class="btn btn-primary">Rangs de complétion</button></a>
                 <a href="{{ path('admin_listItemSlots') }}" class="ma-5-right ma-5-bottom d-inline-block"><button type="button" class="btn btn-primary">Slots d'équipement</button></a>
                 <a href="{{ path('admin_listWeaponTypes') }}" class="ma-5-right ma-5-bottom d-inline-block"><button type="button" class="btn btn-primary">Types d'arme</button></a>
+                <a href="{{ path('admin_listSkillTags') }}" class="ma-5-right ma-5-bottom d-inline-block"><button type="button" class="btn btn-primary">Archétypes</button></a>
             </div>
         </div>
     </div>
@@ -53,6 +54,10 @@
 
     {% if weaponTypes is defined %}
         {% include 'admin/listWeaponTypes.html.twig' %}
+    {% endif %}
+
+    {% if tags is defined %}
+        {% include 'admin/listSkillTags.html.twig' %}
     {% endif %}
 
 {% endblock %}

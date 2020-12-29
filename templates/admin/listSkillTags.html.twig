@@ -1,0 +1,40 @@
+{% block content %}
+    <div class="row">
+        <div class="col ma-25-top">
+            <a href="{{ path('admin_createSkillTag') }}"><button type="button" class="btn btn-primary">Créer un archétype</button></a>
+        </div>
+    </div>
+    <div class="row">
+        <div class="col ma-25-top">
+            <div class="pa-20 bg-white">
+                <h1 class="ma-20-bottom">Liste des archétypes :</h1>
+                <p class="ma-10-bottom">
+                    <span>Nombre d'archétypes : {{ tags|length }}</span>
+                    <span class="f-right"><input type="text" id="searchBar"></span>
+                </p>
+                <table class="table" id="stupidTable">
+                    <thead>
+                    <tr>
+                        <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> Nom</th>
+                        <th scope="col" data-sort="string" class="cursor-click"><i class="fas fa-caret-down"></i> ID to code</th>
+                        <th scope="col">Actions</th>
+                    </tr>
+                    </thead>
+                    <tbody>
+                    {% for tag in tags %}
+                        <tr class="searchedItem" data-search="{{ tag.name|lower }}">
+                            <td>
+                                {{ tag.name }}
+                            </td>
+                            <td>{{ tag.nameId }}</td>
+                            <td>
+                                <a href="{{ path('admin_editSkillTag', {'id': tag.id}) }}">Modifier</a>
+                            </td>
+                        </tr>
+                    {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+{% endblock %}
