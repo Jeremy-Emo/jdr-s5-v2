@@ -9,6 +9,7 @@
                 <h1 class="ma-20-bottom">Arcana - Archétype de {{ skillTag.name }}</h1>
                 <ul>
                     {% for skill in skillTag.skills %}
+                        {% if not skill.isNotReleased %}
                         <li class="ma-10-bottom">
                             <span
                                 class="cursor-click"
@@ -20,6 +21,7 @@
                                 {{ skill.name }}
                             </span>
                         </li>
+                        {% endif %}
                     {% endfor %}
                 </ul>
             </div>
