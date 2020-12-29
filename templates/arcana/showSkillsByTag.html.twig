@@ -1,0 +1,28 @@
+{% extends 'main/layout.html.twig' %}
+
+{% block page_title %}Arcana - Archétype de {{ skillTag.name }}{% endblock %}
+
+{% block content %}
+    <div class="row">
+        <div class="col ma-25-top">
+            <div class="pa-20 bg-white full-height">
+                <h1 class="ma-20-bottom">Arcana - Archétype de {{ skillTag.name }}</h1>
+                <ul>
+                    {% for skill in skillTag.skills %}
+                        <li class="ma-10-bottom">
+                            <span
+                                class="cursor-click"
+                                title="{{ skill.name }}"
+                                data-content="{{ skill.getFullDescription() }}"
+                                data-html=true
+                                data-toggle="popover"
+                            >
+                                {{ skill.name }}
+                            </span>
+                        </li>
+                    {% endfor %}
+                </ul>
+            </div>
+        </div>
+    </div>
+{% endblock %}
