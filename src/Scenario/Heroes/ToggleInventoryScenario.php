@@ -51,7 +51,6 @@ class ToggleInventoryScenario extends AbstractScenario
                 ]);
                 break;
             case 'hero':
-                dump($stuffId);
                 $stuff = $this->fighterItemRepo->findOneBy([
                     'id' => $stuffId,
                     'hero' => $hero->getFighterInfos(),
