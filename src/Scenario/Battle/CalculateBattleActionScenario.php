@@ -346,7 +346,7 @@ class CalculateBattleActionScenario extends AbstractBattleScenario
         ) {
             $cr += 30;
         }
-        $criticalHit = StatManager::calculateCriticalRate($cr) >= rand(0, 100);
+        $criticalHit = $cr >= rand(0, 100);
 
         //Check statuses
         if ($this->checkStatus($actor, 'buff_atk')) {
