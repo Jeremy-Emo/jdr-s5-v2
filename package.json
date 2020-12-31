@@ -20,6 +20,7 @@
         "compression-webpack-plugin": "^6.0.5",
         "dropify": "^0.2.2",
         "jquery": "^3.5.1",
+        "konami": "^1.6.2",
         "node-sass": "4.14.1",
         "popper.js": "^1.16.1",
         "pretty-checkbox": "^3.0.3",

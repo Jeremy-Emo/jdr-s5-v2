@@ -20,6 +20,7 @@ Encore
     .addEntry('showParty', './assets/js/showParty.js')
     .addEntry('createMonster', './assets/js/createMonster.js')
     .addEntry('manageFamiliars', './assets/js/manageFamiliars.js')
+    .addEntry('konami', './assets/js/konami.js')
 
     .splitEntryChunks()
     .enableSingleRuntimeChunk()
